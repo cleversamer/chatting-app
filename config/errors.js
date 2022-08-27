@@ -8,6 +8,7 @@ const auth = {
 
 const user = {
   notFound: "User was not found.",
+  alreadyVerified: "User is already verified.",
 };
 
 module.exports = {
