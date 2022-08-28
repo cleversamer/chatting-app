@@ -25,7 +25,7 @@ module.exports.verifyAccount = async (req, res, next) => {
     user.verified = true;
     await user.save();
 
-    res.status(httpStatus.CREATED).json(user);
+    res.render("success");
   } catch (err) {
     next(err);
   }
@@ -59,12 +59,12 @@ module.exports.getResetPasswordPage = async (req, res, next) => {
     const user = await usersService.findUserById(token.sub);
 
     if (!user) {
-      return res.render("user-not-found");
+      return res.render("error-reset-password");
     }
 
     res.render("reset-password");
   } catch (err) {
-    res.render("user-not-found");
+    res.render("error-reset-password");
   }
 };
 
@@ -74,22 +74,26 @@ module.exports.resetPassword = async (req, res, next) => {
     const { password1, password2 } = req.body;
 
     if (password1 !== password2) {
-      return res.render("invalid-password");
+      return res.render("error-reset-password");
+    }
+
+    if (password1.length < 8 || password1.length > 32) {
+      return res.render("error-reset-password");
     }
 
     const token = usersService.validateToken(key);
     const user = await usersService.findUserById(token.sub);
     if (!user) {
-      return res.render("user-not-found");
+      return res.render("error-reset-password");
     }
 
     const salt = await bcrypt.genSalt(10);
     const hashed = await bcrypt.hash(password1, salt);
     user.password = hashed;
-    const updatedUser = await user.save();
+    await user.save();
 
-    res.status(httpStatus.OK).json(updatedUser);
+    res.render("success");
   } catch (err) {
-    res.render("invalid-password");
+    res.render("error-reset-password");
   }
 };
