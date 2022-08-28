@@ -4,6 +4,7 @@ const auth = {
   emailNotUsed: "Email is not used.",
   emailUsed: "Email is already used.",
   incorrectCredentials: "Incorrect email or password.",
+  passwordsNotEqual: "Passwords are not the same.",
 };
 
 const user = {

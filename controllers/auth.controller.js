@@ -1,6 +1,5 @@
-const { authService, emailService, usersService } = require("../services");
+const { authService, emailService } = require("../services");
 const httpStatus = require("http-status");
-const errors = require("../config/errors");
 
 module.exports.register = async (req, res, next) => {
   try {
@@ -39,32 +38,6 @@ module.exports.signin = async (req, res, next) => {
 module.exports.isAuth = async (req, res, next) => {
   try {
     res.status(200).json(req.user);
-  } catch (err) {
-    next(err);
-  }
-};
-
-module.exports.verifyAccount = async (req, res, next) => {
-  try {
-    const token = await usersService.validateToken(req.query.key);
-    const user = await usersService.findUserById(token.sub);
-
-    if (!user) {
-      const statusCode = httpStatus.NOT_FOUND;
-      const message = errors.user.notFound;
-      throw new ApiError(statusCode, message);
-    }
-
-    if (user.verified) {
-      const statusCode = httpStatus.BAD_REQUEST;
-      const message = errors.user.alreadyVerified;
-      throw new ApiError(statusCode, message);
-    }
-
-    user.verified = true;
-    await user.save();
-
-    res.status(httpStatus.CREATED).json(user);
   } catch (err) {
     next(err);
   }

@@ -67,6 +67,15 @@ userSchema.methods.genRegisterToken = function () {
   return token;
 };
 
+userSchema.methods.genPasswordResetToken = function () {
+  const body = { sub: this._id.toHexString() };
+  const token = jwt.sign(body, process.env["JWT_PRIVATE_KEY"], {
+    expiresIn: "15m",
+  });
+
+  return token;
+};
+
 const User = mongoose.model("User", userSchema);
 
 module.exports = {

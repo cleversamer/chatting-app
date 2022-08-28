@@ -19,7 +19,7 @@ module.exports.findUserById = async (userId) => {
   }
 };
 
-module.exports.validateToken = async (token) => {
+module.exports.validateToken = (token) => {
   try {
     return jwt.verify(token, process.env["JWT_PRIVATE_KEY"]);
   } catch (err) {
