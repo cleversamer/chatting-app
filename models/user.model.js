@@ -9,11 +9,11 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: true,
     trim: true,
-    validate: (value) => {
-      if (!validator.isEmail(value)) {
-        throw new Error("Invalid email address.");
-      }
-    },
+    // validate: (value) => {
+    //   if (!validator.isEmail(value)) {
+    //     throw new Error("Invalid email address.");
+    //   }
+    // },
   },
   password: {
     type: String,
@@ -28,14 +28,14 @@ const userSchema = new mongoose.Schema({
   firstname: {
     type: String,
     minLength: 1,
-    maxLength: 32,
+    maxLength: 64,
     trim: true,
     required: true,
   },
   lastname: {
     type: String,
     minLength: 1,
-    maxLength: 32,
+    maxLength: 64,
     trim: true,
     required: true,
   },
