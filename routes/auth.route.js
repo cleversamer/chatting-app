@@ -10,7 +10,7 @@ router.post(
   authController.register
 );
 
-router.post("/login", authController.signin);
+router.post("/login", [validator.loginValidator], authController.signin);
 
 router.get("/isauth", [auth("readOwn", "user")], authController.isAuth);
 

@@ -3,13 +3,31 @@ const httpStatus = require("http-status");
 const { ApiError } = require("../apiError");
 const { auth: errors } = require("../../config/errors");
 
-const registerValidator = [
+const handler = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const statusCode = httpStatus.BAD_REQUEST;
+    const message = errors.array()[0].msg;
+    const error = new ApiError(statusCode, message);
+    return next(error);
+  }
+
+  next();
+};
+
+const loginValidator = [
   check("email").trim().isEmail().withMessage(errors.invalidEmail).bail(),
 
   check("password")
     .trim()
     .isLength({ min: 8, max: 32 })
     .withMessage(errors.invalidPassword),
+
+  handler,
+];
+
+const registerValidator = [
+  ...loginValidator,
 
   check("firstname")
     .trim()
@@ -21,19 +39,10 @@ const registerValidator = [
     .isLength({ min: 1, max: 64 })
     .withMessage(errors.invalidName),
 
-  (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return next(new ApiError(httpStatus.BAD_REQUEST, errors.array()[0].msg));
-      //   return res.status(httpStatus.BAD_REQUEST).json({
-      //     errors: errors.array(),
-      //   });
-    }
-
-    next();
-  },
+  handler,
 ];
 
 module.exports = {
+  loginValidator,
   registerValidator,
 };
