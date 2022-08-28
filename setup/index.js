@@ -2,9 +2,13 @@ const setupSanitization = require("./sanitize");
 const setupMongoDB = require("./db");
 const routes = require("../routes");
 const config = require("../config.json");
-const { errorHandler, errorConverter } = require("../middleware/apiError");
 const passport = require("passport");
 const { jwtStrategy } = require("../middleware/passport");
+const {
+  errorHandler,
+  errorConverter,
+  unsupportedRouteHandler,
+} = require("../middleware/apiError");
 
 module.exports = (app) => {
   setupMongoDB();
@@ -12,6 +16,7 @@ module.exports = (app) => {
   app.use(passport.initialize());
   passport.use("jwt", jwtStrategy);
   app.use("/api", routes);
+  app.use(unsupportedRouteHandler);
   app.use(errorConverter);
   app.use(errorHandler);
 

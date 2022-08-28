@@ -1,3 +1,9 @@
+const system = {
+  internal:
+    "An un expected error happened on the server. That's not your fault.",
+  unsupportedRoute: "Unsupported route.",
+};
+
 const auth = {
   invalidToken: "You're unauthorized.",
   hasNoRights: "You don't have enough rights.",
@@ -16,6 +22,7 @@ const user = {
 };
 
 module.exports = {
+  system,
   auth,
   user,
 };
