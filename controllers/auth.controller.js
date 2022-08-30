@@ -1,5 +1,7 @@
 const { authService, emailService } = require("../services");
 const httpStatus = require("http-status");
+const { clientSchema } = require("../models/user.model");
+const _ = require("lodash");
 
 module.exports.register = async (req, res, next) => {
   try {
@@ -14,10 +16,12 @@ module.exports.register = async (req, res, next) => {
 
     await emailService.registerEmail(email, user);
 
-    res
-      .cookie("x-access-token", token)
-      .status(httpStatus.CREATED)
-      .json({ user, token });
+    const body = {
+      user: _.pick(user, clientSchema),
+      token,
+    };
+
+    res.cookie("x-access-token", token).status(httpStatus.CREATED).json(body);
   } catch (err) {
     next(err);
   }
@@ -29,15 +33,11 @@ module.exports.signin = async (req, res, next) => {
     const user = await authService.signInWithEmailAndPassword(email, password);
     const token = user.genAuthToken();
 
-    res.cookie("x-access-token", token).status(200).json({ user, token });
-  } catch (err) {
-    next(err);
-  }
-};
-
-module.exports.isAuth = async (req, res, next) => {
-  try {
-    res.status(200).json(req.user);
+    const body = {
+      user: _.pick(user, clientSchema),
+      token,
+    };
+    res.cookie("x-access-token", token).status(200).json(body);
   } catch (err) {
     next(err);
   }

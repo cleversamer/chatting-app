@@ -8,8 +8,14 @@ const allRights = {
 };
 
 let grantsObject = {
-  admin: {},
-  user: {},
+  teacher: {
+    user: allRights,
+  },
+  student: {
+    user: {
+      "read:own": ["*"],
+    },
+  },
 };
 
 const roles = new AccessControl(grantsObject);

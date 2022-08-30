@@ -3,17 +3,21 @@ const validator = require("validator");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
+const clientSchema = [
+  "_id",
+  "email",
+  "role",
+  "firstname",
+  "lastname",
+  "verified",
+];
+
 const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
     unique: true,
     trim: true,
-    // validate: (value) => {
-    //   if (!validator.isEmail(value)) {
-    //     throw new Error("Invalid email address.");
-    //   }
-    // },
   },
   password: {
     type: String,
@@ -80,4 +84,5 @@ const User = mongoose.model("User", userSchema);
 
 module.exports = {
   User,
+  clientSchema,
 };

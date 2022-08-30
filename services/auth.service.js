@@ -7,11 +7,6 @@ const userService = require("./users.service");
 
 module.exports.createUser = async (email, password, firstname, lastname) => {
   try {
-    const registeredUser = await User.findOne({ email });
-    if (registeredUser) {
-      throw new ApiError(httpStatus.BAD_REQUEST, errors.auth.emailUsed);
-    }
-
     const salt = await bcrypt.genSalt(10);
     const hashed = await bcrypt.hash(password, salt);
 

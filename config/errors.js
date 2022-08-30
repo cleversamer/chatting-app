@@ -1,28 +1,67 @@
-const system = {
-  internal:
-    "An un expected error happened on the server. That's not your fault.",
-  unsupportedRoute: "Unsupported route.",
-};
+const system = Object.freeze({
+  internal: {
+    en: "An un expected error happened on the server",
+    ar: "حصل خطأ في السيرفر الداخلي",
+  },
+  unsupportedRoute: {
+    en: "Unsupported route",
+    ar: "الرابط غير مدعوم",
+  },
+});
 
-const auth = {
-  invalidToken: "You're unauthorized.",
-  hasNoRights: "You don't have enough rights.",
-  emailNotUsed: "Email is not used.",
-  emailUsed: "Email is already used.",
-  incorrectCredentials: "Incorrect email or password.",
-  passwordsNotEqual: "Passwords are not the same.",
-  invalidEmail: "Invalid email address.",
-  invalidPassword: "Password should be (8 ~ 32 characters) length.",
-  invalidName: "Firstname and lastname should be (1 ~ 64 characters) length.",
-};
+const auth = Object.freeze({
+  invalidToken: {
+    en: "You're unauthorized",
+    ar: "يجب عليك تسجيل الدخول",
+  },
+  hasNoRights: {
+    en: "You don't have enough rights",
+    ar: "ليس لديك الصلاحيات الكافية",
+  },
+  emailNotUsed: {
+    en: "Email is not used",
+    ar: "البريد الإلكتروني غير مستخدم",
+  },
+  emailUsed: {
+    en: "Email is already used",
+    ar: "البريد مسجل بالفعل",
+  },
+  incorrectCredentials: {
+    en: "Incorrect email or password",
+    ar: "البريد الإلكتروني أو كلمة المرور غير صحيح",
+  },
+  invalidEmail: {
+    en: "Invalid email address",
+    ar: "البريد الإلكتروني غير صالح",
+  },
+  invalidPassword: {
+    en: "Password should be (8 ~ 32 characters) length",
+    ar: "كلمة المرور يجب أن تكون بين 8-32 حرفا",
+  },
+  invalidName: {
+    en: "Name should be (1 ~ 64 characters) length",
+    ar: "الإسم يجب أن يكون بين 1-64 حرفا",
+  },
+});
 
-const user = {
-  notFound: "User was not found.",
-  alreadyVerified: "User is already verified.",
-};
+const user = Object.freeze({
+  notFound: {
+    en: "User was not found",
+    ar: "المستخدم غير موجود",
+  },
+  alreadyVerified: {
+    en: "User is already verified",
+    ar: "تم التحقق من البريد مسبقا",
+  },
+});
+
+const codes = Object.freeze({
+  duplicateIndexKey: 11000,
+});
 
 module.exports = {
   system,
   auth,
   user,
+  codes,
 };

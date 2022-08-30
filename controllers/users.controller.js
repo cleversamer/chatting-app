@@ -4,6 +4,16 @@ const { ApiError } = require("../middleware/apiError");
 const bcrypt = require("bcrypt");
 const errors = require("../config/errors");
 const success = require("../config/success");
+const { clientSchema } = require("../models/user.model");
+const _ = require("lodash");
+
+module.exports.isAuth = async (req, res, next) => {
+  try {
+    res.status(200).json(_.pick(req.user, clientSchema));
+  } catch (err) {
+    next(err);
+  }
+};
 
 module.exports.verifyAccount = async (req, res, next) => {
   try {
