@@ -30,6 +30,10 @@ const auth = Object.freeze({
     en: "You don't have enough rights",
     ar: "ليس لديك الصلاحيات الكافية",
   },
+  notVerified: {
+    en: "Your account is not verified",
+    ar: "حسابك ليس مفعل",
+  },
   emailNotUsed: {
     en: "Email is not used",
     ar: "البريد الإلكتروني غير مستخدم",

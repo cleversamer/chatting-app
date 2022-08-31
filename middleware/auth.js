@@ -13,6 +13,14 @@ const verify = (req, res, resolve, reject, rights) => async (err, user) => {
 
   req.user = user;
 
+  const requireNoVerified = rights[2];
+
+  if (!requireNoVerified && !user.verified) {
+    const statusCode = httpStatus.FORBIDDEN;
+    const message = errors.auth.notVerified;
+    return reject(new ApiError(statusCode, message));
+  }
+
   if (rights.length) {
     const action = rights[0];
     const resource = rights[1];

@@ -9,10 +9,13 @@ router.get("/isauth", [auth("readOwn", "user")], usersController.isAuth);
 router
   .route("/verify")
   .get(
-    [auth("updateOwn", "verificationCode")],
+    [auth("updateOwn", "verificationCode", true)],
     usersController.resendVerificationCode
   )
-  .post([auth("updateOwn", "verificationCode")], usersController.verifyUser);
+  .post(
+    [auth("updateOwn", "verificationCode", true)],
+    usersController.verifyUser
+  );
 
 router.post(
   "/reset-password",
