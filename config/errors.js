@@ -10,6 +10,18 @@ const system = Object.freeze({
 });
 
 const auth = Object.freeze({
+  invalidCode: {
+    en: "Invalid verification code",
+    ar: "كود التفعيل غير صالح",
+  },
+  incorrectCode: {
+    en: "Incorrect verification code",
+    ar: "كود التفعيل خاطئ",
+  },
+  expiredCode: {
+    en: "Verification code is expired",
+    ar: "كود التفعيل منتهي الصلاحية",
+  },
   invalidToken: {
     en: "You're unauthorized",
     ar: "يجب عليك تسجيل الدخول",

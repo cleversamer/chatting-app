@@ -13,78 +13,34 @@ const transporter = nodemailer.createTransport({
 
 module.exports.registerEmail = async (email, user) => {
   try {
-    const emailToken = user.genRegisterToken();
-
     const mailGenerator = new Mailgen({
       theme: "default",
       product: {
-        name: mail.content.register.name,
-        link: mail.auth.emailURL,
+        name: "المعلم التكنولوجي",
+        link: "#",
+        copyright: "Copyright © 2022 Technology Teacher. All rights reserved.",
       },
     });
 
     const emailBody = mailGenerator.generate({
       body: {
-        ...mail.content.register,
-        name: user.firstname,
-        action: {
-          ...mail.content.register.action,
-          button: {
-            ...mail.content.register.action.button,
-            link: `${mail.auth.siteDomain.verifyEmail}?key=${emailToken}`,
-          },
-        },
+        title: `هذا هو الكود الخاص بتفعيل الحساب صالح لمدة 10 دقائق: ${user.verificationCode.code}`,
+        greeting: "Dear",
+        signature: `${user.firstname} ${user.lastname}`,
       },
     });
 
     const message = {
-      ...mail.message.register,
       to: email,
+      from: "المعلم التكنولوجي",
       html: emailBody,
+      subject: "أهلاً بك في المعلم التكنولوجي",
     };
 
     await transporter.sendMail(message);
     return true;
   } catch (err) {
-    throw err;
-  }
-};
-
-module.exports.resetPassword = async (email, user) => {
-  try {
-    const emailToken = user.genPasswordResetToken();
-
-    const mailGenerator = new Mailgen({
-      theme: "default",
-      product: {
-        name: mail.content.resetPassword.name,
-        link: mail.auth.emailURL,
-      },
-    });
-
-    const emailBody = mailGenerator.generate({
-      body: {
-        ...mail.content.resetPassword,
-        name: user.firstname,
-        action: {
-          ...mail.content.resetPassword.action,
-          button: {
-            ...mail.content.resetPassword.action.button,
-            link: `${mail.auth.siteDomain.resetPassword}${emailToken}`,
-          },
-        },
-      },
-    });
-
-    const message = {
-      ...mail.message.resetPassword,
-      to: email,
-      html: emailBody,
-    };
-
-    await transporter.sendMail(message);
-    return true;
-  } catch (err) {
+    console.log(err);
     throw err;
   }
 };

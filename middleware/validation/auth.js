@@ -42,7 +42,17 @@ const registerValidator = [
   handler,
 ];
 
+const resetPasswordValidator = [
+  check("newPassword")
+    .trim()
+    .isLength({ min: 8, max: 32 })
+    .withMessage(errors.invalidPassword),
+
+  handler,
+];
+
 module.exports = {
   loginValidator,
   registerValidator,
+  resetPasswordValidator,
 };

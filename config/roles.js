@@ -10,10 +10,18 @@ const allRights = {
 let grantsObject = {
   teacher: {
     user: allRights,
+    verificationCode: allRights,
+    password: allRights,
   },
   student: {
     user: {
       "read:own": ["*"],
+    },
+    verificationCode: {
+      "update:own": ["*"],
+    },
+    password: {
+      "update:own": ["*"],
     },
   },
 };

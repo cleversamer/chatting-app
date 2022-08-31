@@ -21,7 +21,7 @@ module.exports.register = async (req, res, next) => {
       token,
     };
 
-    res.cookie("x-access-token", token).status(httpStatus.CREATED).json(body);
+    res.status(httpStatus.CREATED).json(body);
   } catch (err) {
     next(err);
   }

@@ -2,15 +2,22 @@ const { Router } = require("express");
 const router = Router();
 const { usersController } = require("../controllers");
 const auth = require("../middleware/auth");
+const { resetPasswordValidator } = require("../middleware/validation/auth");
 
 router.get("/isauth", [auth("readOwn", "user")], usersController.isAuth);
 
-router.get("/verify-email", usersController.verifyAccount);
+router
+  .route("/verify")
+  .get(
+    [auth("updateOwn", "verificationCode")],
+    usersController.resendVerificationCode
+  )
+  .post([auth("updateOwn", "verificationCode")], usersController.verifyUser);
 
-router.post("/forgot-password", usersController.sendPasswordResetEmail);
-
-router.get("/reset-password/:key", usersController.getResetPasswordPage);
-
-router.post("/reset-password/:key", usersController.resetPassword);
+router.post(
+  "/reset-password",
+  [auth("updateOwn", "password"), resetPasswordValidator],
+  usersController.resetPassword
+);
 
 module.exports = router;

@@ -1,11 +1,10 @@
-const { usersService, emailService } = require("../services");
 const httpStatus = require("http-status");
-const { ApiError } = require("../middleware/apiError");
-const bcrypt = require("bcrypt");
-const errors = require("../config/errors");
-const success = require("../config/success");
 const { clientSchema } = require("../models/user.model");
+const { emailService } = require("../services");
+const { ApiError } = require("../middleware/apiError");
+const errors = require("../config/errors");
 const _ = require("lodash");
+const bcrypt = require("bcrypt");
 
 module.exports.isAuth = async (req, res, next) => {
   try {
@@ -15,16 +14,10 @@ module.exports.isAuth = async (req, res, next) => {
   }
 };
 
-module.exports.verifyAccount = async (req, res, next) => {
+module.exports.verifyUser = async (req, res, next) => {
   try {
-    const token = usersService.validateToken(req.query.key);
-    const user = await usersService.findUserById(token.sub);
-
-    if (!user) {
-      const statusCode = httpStatus.NOT_FOUND;
-      const message = errors.user.notFound;
-      throw new ApiError(statusCode, message);
-    }
+    const { code } = req.body;
+    const user = req.user;
 
     if (user.verified) {
       const statusCode = httpStatus.BAD_REQUEST;
@@ -32,78 +25,67 @@ module.exports.verifyAccount = async (req, res, next) => {
       throw new ApiError(statusCode, message);
     }
 
-    user.verified = true;
-    await user.save();
-
-    res.render("success");
-  } catch (err) {
-    next(err);
-  }
-};
-
-module.exports.sendPasswordResetEmail = async (req, res, next) => {
-  try {
-    const { email } = req.body;
-    const user = await usersService.findUserByEmail(email);
-    if (!user) {
+    if ((!code && code != 0) || code.toString().length !== 4) {
       const statusCode = httpStatus.BAD_REQUEST;
-      const message = errors.user.notFound;
+      const message = errors.auth.invalidCode;
       throw new ApiError(statusCode, message);
     }
 
-    await emailService.resetPassword(email, user);
+    if (user.verificationCode.code === code) {
+      const diff = new Date() - new Date(user.verificationCode.expiresAt);
+      console.log(diff);
+      const condition = diff < 10 * 60 * 1000;
+      if (!condition) {
+        const statusCode = httpStatus.BAD_REQUEST;
+        const message = errors.auth.expiredCode;
+        throw new ApiError(statusCode, message);
+      }
 
-    res
-      .status(httpStatus.OK)
-      .json({ status: "ok", mssg: success.auth.passwordResetEmailSent });
+      user.verifyEmail();
+      await user.save();
+
+      return res.status(httpStatus.OK).json(_.pick(user, clientSchema));
+    }
+
+    const statusCode = httpStatus.BAD_REQUEST;
+    const message = errors.auth.incorrectCode;
+    throw new ApiError(statusCode, message);
   } catch (err) {
     next(err);
   }
 };
 
-module.exports.getResetPasswordPage = async (req, res, next) => {
+module.exports.resendVerificationCode = async (req, res, next) => {
   try {
-    const { key } = req.params;
+    const user = req.user;
 
-    const token = usersService.validateToken(key);
-    const user = await usersService.findUserById(token.sub);
-
-    if (!user) {
-      return res.render("error-reset-password");
+    if (user.verified) {
+      const statusCode = httpStatus.BAD_REQUEST;
+      const message = errors.user.alreadyVerified;
+      throw new ApiError(statusCode, message);
     }
 
-    res.render("reset-password");
+    user.updateVerificationCode();
+    await user.save();
+
+    await emailService.registerEmail(user.email, user);
   } catch (err) {
-    res.render("error-reset-password");
+    next(err);
   }
 };
 
 module.exports.resetPassword = async (req, res, next) => {
   try {
-    const { key } = req.params;
-    const { password1, password2 } = req.body;
-
-    if (password1 !== password2) {
-      return res.render("error-reset-password");
-    }
-
-    if (password1.length < 8 || password1.length > 32) {
-      return res.render("error-reset-password");
-    }
-
-    const token = usersService.validateToken(key);
-    const user = await usersService.findUserById(token.sub);
-    if (!user) {
-      return res.render("error-reset-password");
-    }
+    const { newPassword } = req.body;
+    const user = req.user;
 
     const salt = await bcrypt.genSalt(10);
-    const hashed = await bcrypt.hash(password1, salt);
+    const hashed = await bcrypt.hash(newPassword, salt);
     user.password = hashed;
     await user.save();
 
-    res.render("success");
+    res.status(httpStatus.CREATED).json(_.pick(req.user, clientSchema));
   } catch (err) {
-    res.render("error-reset-password");
+    next(err);
   }
 };
