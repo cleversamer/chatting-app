@@ -1,7 +1,8 @@
 const setupSanitization = require("./sanitize");
 const setupMongoDB = require("./db");
+const socket = require("./socket");
 const routes = require("../routes");
-const config = require("../config.json");
+const host = require("../config/host");
 const passport = require("passport");
 const { jwtStrategy } = require("../middleware/passport");
 const {
@@ -20,8 +21,10 @@ module.exports = (app) => {
   app.use(errorConverter);
   app.use(errorHandler);
 
-  const PORT = process.env.PORT || config.development.port;
-  app.listen(PORT, () => {
+  const PORT = process.env.PORT || host.server.port;
+  const server = app.listen(PORT, () => {
     console.log(`App is listening on port ${PORT}`);
   });
+
+  socket(server);
 };

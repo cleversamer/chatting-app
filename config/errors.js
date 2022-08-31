@@ -65,6 +65,49 @@ const user = Object.freeze({
     en: "User is already verified",
     ar: "تم التحقق من البريد مسبقا",
   },
+  noRooms: {
+    en: "You're not a member in any room",
+    ar: "أنت لست منضماً لأي غرفة",
+  },
+});
+
+const rooms = Object.freeze({
+  noRooms: {
+    en: "There are no rooms out there",
+    ar: "لا يوجد غرف مسجلة",
+  },
+  unauthorized: {
+    en: "You don't have admin rights",
+    ar: "ليس لديك صلاحيات الآدمن",
+  },
+  invalidName: {
+    en: "Room's name should be (1 ~ 64 characters) length",
+    ar: "إسم الغرفة يجب أن يكون بين 1-64 حرفا",
+  },
+  invalidStatus: {
+    en: "Status should be either public or private",
+    ar: "يجب أن تكون الغرفة إما خاصة أو عامة",
+  },
+  invalidCode: {
+    en: "Activation code should be (1 ~ 16 characters) length",
+    ar: "كود التسجيل يحب أن يكون بين 1-16 حرفا",
+  },
+  notFound: {
+    en: "Room was not found",
+    ar: "الغرفة غير موجودة",
+  },
+  alreadyJoined: {
+    en: "You're already joined",
+    ar: "أنت منضم للغرفة بالفعل",
+  },
+  incorrectCode: {
+    en: "Incorrect registeration code",
+    ar: "كود التسجيل خاطئ",
+  },
+  alreadyExist: {
+    en: "Room name is already exist",
+    ar: "اسم الغرفة موجود بالفعل",
+  },
 });
 
 const codes = Object.freeze({
@@ -76,4 +119,5 @@ module.exports = {
   auth,
   user,
   codes,
+  rooms,
 };

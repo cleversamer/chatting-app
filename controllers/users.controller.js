@@ -32,7 +32,7 @@ module.exports.verifyUser = async (req, res, next) => {
       throw new ApiError(statusCode, message);
     }
 
-    if (user.verificationCode.code === code) {
+    if (user.verificationCode.code == code) {
       const diff = new Date() - new Date(user.verificationCode.expiresAt);
       console.log(diff);
       const condition = diff < 10 * 60 * 1000;

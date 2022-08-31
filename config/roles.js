@@ -12,6 +12,7 @@ let grantsObject = {
     user: allRights,
     verificationCode: allRights,
     password: allRights,
+    room: allRights,
   },
   student: {
     user: {
@@ -21,6 +22,10 @@ let grantsObject = {
       "update:own": ["*"],
     },
     password: {
+      "update:own": ["*"],
+    },
+    room: {
+      "read:any": ["*"],
       "update:own": ["*"],
     },
   },

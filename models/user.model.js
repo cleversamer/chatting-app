@@ -9,6 +9,7 @@ const clientSchema = [
   "firstname",
   "lastname",
   "verified",
+  "rooms",
 ];
 
 const userSchema = new mongoose.Schema(
@@ -31,15 +32,11 @@ const userSchema = new mongoose.Schema(
     },
     firstname: {
       type: String,
-      minLength: 1,
-      maxLength: 64,
       trim: true,
       required: true,
     },
     lastname: {
       type: String,
-      minLength: 1,
-      maxLength: 64,
       trim: true,
       required: true,
     },
@@ -49,6 +46,9 @@ const userSchema = new mongoose.Schema(
     verified: {
       type: Boolean,
       default: false,
+    },
+    rooms: {
+      type: Array,
     },
   },
   { minimize: false }
