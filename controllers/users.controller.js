@@ -3,12 +3,13 @@ const { clientSchema } = require("../models/user.model");
 const { emailService } = require("../services");
 const { ApiError } = require("../middleware/apiError");
 const errors = require("../config/errors");
+const success = require("../config/success");
 const _ = require("lodash");
 const bcrypt = require("bcrypt");
 
 module.exports.isAuth = async (req, res, next) => {
   try {
-    res.status(200).json(_.pick(req.user, clientSchema));
+    res.status(httpStatus.OK).json(_.pick(req.user, clientSchema));
   } catch (err) {
     next(err);
   }
@@ -69,6 +70,10 @@ module.exports.resendVerificationCode = async (req, res, next) => {
     await user.save();
 
     await emailService.registerEmail(user.email, user);
+
+    res
+      .status(httpStatus.OK)
+      .json({ ok: true, message: success.auth.verificationCodeSent });
   } catch (err) {
     next(err);
   }

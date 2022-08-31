@@ -37,7 +37,8 @@ module.exports.signin = async (req, res, next) => {
       user: _.pick(user, clientSchema),
       token,
     };
-    res.cookie("x-access-token", token).status(200).json(body);
+
+    res.status(200).json(body);
   } catch (err) {
     next(err);
   }
