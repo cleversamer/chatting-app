@@ -20,8 +20,8 @@ module.exports.getAllPublicRooms = async (req, res, next) => {
 
 module.exports.resetRoom = async (req, res, next) => {
   try {
-    const room = await roomsService.resetRoom(req);
-    res.status(httpStatus.CREATED).json(room);
+    const data = await roomsService.resetRoom(req);
+    res.status(httpStatus.CREATED).json(data);
   } catch (err) {
     next(err);
   }

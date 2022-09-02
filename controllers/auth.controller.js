@@ -1,6 +1,8 @@
-const { authService, emailService } = require("../services");
+const { authService, emailService, usersService } = require("../services");
 const httpStatus = require("http-status");
+const { ApiError } = require("../middleware/apiError");
 const { clientSchema } = require("../models/user.model");
+const errors = require("../config/errors");
 const _ = require("lodash");
 
 module.exports.register = async (req, res, next) => {
@@ -23,6 +25,12 @@ module.exports.register = async (req, res, next) => {
 
     res.status(httpStatus.CREATED).json(body);
   } catch (err) {
+    if (err.code === errors.codes.duplicateIndexKey) {
+      const statusCode = httpStatus.BAD_REQUEST;
+      const message = errors.auth.emailUsed;
+      err = new ApiError(statusCode, message);
+    }
+
     next(err);
   }
 };
@@ -38,7 +46,7 @@ module.exports.signin = async (req, res, next) => {
       token,
     };
 
-    res.status(200).json(body);
+    res.status(httpStatus.OK).json(body);
   } catch (err) {
     next(err);
   }

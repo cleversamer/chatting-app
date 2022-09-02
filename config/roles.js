@@ -14,6 +14,12 @@ let grantsObject = {
     password: allRights,
     room: allRights,
   },
+  stdteacher: {
+    user: allRights,
+    verificationCode: allRights,
+    password: allRights,
+    room: allRights,
+  },
   student: {
     user: {
       "read:own": ["*"],

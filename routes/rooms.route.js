@@ -18,6 +18,7 @@ router.get(
   roomsController.getSuggestedRooms
 );
 
+// Incomplete => validate message schema before saving its _id
 router.post(
   "/:id/add-pinned-message",
   [auth("updateOwn", "room")],

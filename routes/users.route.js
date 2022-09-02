@@ -2,7 +2,7 @@ const { Router } = require("express");
 const router = Router();
 const { usersController } = require("../controllers");
 const auth = require("../middleware/auth");
-const { resetPasswordValidator } = require("../middleware/validation/auth");
+const validator = require("../middleware/validation/auth");
 
 router.get("/isauth", [auth("readOwn", "user")], usersController.isAuth);
 
@@ -17,9 +17,23 @@ router
     usersController.verifyUser
   );
 
+router.get(
+  "/my-rooms",
+  [auth("readOwn", "room")],
+  usersController.getUserRooms
+);
+
+router
+  .route("/forgot-password")
+  .get([validator.emailValidator], usersController.sendForgotPasswordCode)
+  .post(
+    [validator.forgotPasswordValidator],
+    usersController.handleForgotPassword
+  );
+
 router.post(
   "/reset-password",
-  [auth("updateOwn", "password"), resetPasswordValidator],
+  [auth("updateOwn", "password"), validator.resetPasswordValidator],
   usersController.resetPassword
 );
 

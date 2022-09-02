@@ -44,3 +44,37 @@ module.exports.registerEmail = async (email, user) => {
     throw err;
   }
 };
+
+module.exports.forgotPasswordEmail = async (email, user) => {
+  try {
+    const mailGenerator = new Mailgen({
+      theme: "default",
+      product: {
+        name: "المعلم التكنولوجي",
+        link: "#",
+        copyright: "Copyright © 2022 Technology Teacher. All rights reserved.",
+      },
+    });
+
+    const emailBody = mailGenerator.generate({
+      body: {
+        title: `هذا هو الكود الخاص باستعادة كلمة المرور صالح لمدة 10 دقائق: ${user.resetPasswordCode.code}`,
+        greeting: "Dear",
+        signature: `${user.firstname} ${user.lastname}`,
+      },
+    });
+
+    const message = {
+      to: email,
+      from: "المعلم التكنولوجي",
+      html: emailBody,
+      subject: "إعادة تعيين كلمة المرور",
+    };
+
+    await transporter.sendMail(message);
+    return true;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};

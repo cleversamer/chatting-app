@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const { User } = require("../models/user.model");
 const jwt = require("jsonwebtoken");
 
@@ -22,6 +23,18 @@ module.exports.findUserById = async (userId) => {
 module.exports.validateToken = (token) => {
   try {
     return jwt.verify(token, process.env["JWT_PRIVATE_KEY"]);
+  } catch (err) {
+    throw err;
+  }
+};
+
+module.exports.unjoinUsersFromRoom = async (userIds, roomId) => {
+  try {
+    await User.updateMany(
+      { _id: { $in: userIds } },
+      { $pull: { rooms: mongoose.Types.ObjectId(roomId) } },
+      { new: true }
+    );
   } catch (err) {
     throw err;
   }

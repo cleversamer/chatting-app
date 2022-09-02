@@ -9,7 +9,6 @@ const clientSchema = [
   "firstname",
   "lastname",
   "verified",
-  "rooms",
 ];
 
 const userSchema = new mongoose.Schema(
@@ -27,7 +26,7 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ["student", "teacher"],
+      enum: ["student", "teacher", "stdteacher"],
       default: "student",
     },
     firstname: {
@@ -50,6 +49,15 @@ const userSchema = new mongoose.Schema(
     rooms: {
       type: Array,
     },
+    resetPasswordCode: {
+      code: {
+        type: String,
+      },
+      expiresAt: {
+        type: String,
+      },
+      default: { code: "", expiresAt: "" },
+    },
   },
   { minimize: false }
 );
@@ -58,6 +66,7 @@ userSchema.pre("save", function (next) {
   const code = Math.floor(1000 + Math.random() * 9000);
   const expiresAt = new Date() + 10 * 60 * 1000;
   this.verificationCode = { code, expiresAt };
+
   next();
 });
 
@@ -65,6 +74,12 @@ userSchema.methods.updateVerificationCode = function () {
   const code = Math.floor(1000 + Math.random() * 9000);
   const expiresAt = new Date() + 10 * 60 * 1000;
   this.verificationCode = { code, expiresAt };
+};
+
+userSchema.methods.generatePasswordResetCode = function () {
+  const code = Math.floor(1000 + Math.random() * 9000);
+  const expiresAt = new Date() + 10 * 60 * 1000;
+  this.resetPasswordCode = { code, expiresAt };
 };
 
 userSchema.methods.verifyEmail = function () {

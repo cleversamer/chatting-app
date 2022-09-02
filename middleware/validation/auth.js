@@ -51,8 +51,25 @@ const resetPasswordValidator = [
   handler,
 ];
 
+const forgotPasswordValidator = [
+  check("email").trim().isEmail().withMessage(errors.invalidEmail).bail(),
+
+  check("newPassword")
+    .trim()
+    .isLength({ min: 8, max: 32 })
+    .withMessage(errors.invalidPassword),
+
+  handler,
+];
+
+const emailValidator = [
+  check("email").trim().isEmail().withMessage(errors.invalidEmail).bail(),
+];
+
 module.exports = {
   loginValidator,
   registerValidator,
   resetPasswordValidator,
+  forgotPasswordValidator,
+  emailValidator,
 };

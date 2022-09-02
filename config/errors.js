@@ -12,15 +12,15 @@ const system = Object.freeze({
 const auth = Object.freeze({
   invalidCode: {
     en: "Invalid verification code",
-    ar: "كود التفعيل غير صالح",
+    ar: "الكود غير صالح",
   },
   incorrectCode: {
     en: "Incorrect verification code",
-    ar: "كود التفعيل خاطئ",
+    ar: "الكود خاطئ",
   },
   expiredCode: {
     en: "Verification code is expired",
-    ar: "كود التفعيل منتهي الصلاحية",
+    ar: "الكود منتهي الصلاحية",
   },
   invalidToken: {
     en: "You're unauthorized",
@@ -72,6 +72,10 @@ const user = Object.freeze({
   noRooms: {
     en: "You're not a member in any room",
     ar: "أنت لست منضماً لأي غرفة",
+  },
+  hasNoRooms: {
+    en: "You're not a member in any room",
+    ar: "أنت لست عضوا في أي غرفة",
   },
 });
 

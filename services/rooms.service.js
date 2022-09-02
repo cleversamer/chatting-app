@@ -1,11 +1,63 @@
 const { Room } = require("../models/room.model");
+const usersService = require("./users.service");
 const { ApiError } = require("../middleware/apiError");
 const httpStatus = require("http-status");
 const errors = require("../config/errors");
+const mongoose = require("mongoose");
 
 module.exports.findRoomById = async (roomId) => {
   try {
-    return await Room.findById(roomId);
+    return await Room.findOne({ _id: roomId });
+  } catch (err) {
+    throw err;
+  }
+};
+
+module.exports.getMappedRooms = async (roomIds = []) => {
+  roomIds = roomIds.map((i) => mongoose.Types.ObjectId(i));
+
+  try {
+    return await Room.aggregate([
+      { $match: { _id: { $in: roomIds } } },
+      {
+        $lookup: {
+          from: "users",
+          localField: "members",
+          foreignField: "_id",
+          as: "members",
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "author",
+          foreignField: "_id",
+          as: "author",
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          pinnedMessages: 1,
+          messages: 1,
+          chatDisabled: 1,
+          status: 1,
+          author: {
+            _id: 1,
+            firstname: 1,
+            lastname: 1,
+            role: 1,
+          },
+          members: {
+            _id: 1,
+            firstname: 1,
+            lastname: 1,
+            role: 1,
+          },
+        },
+      },
+    ]);
   } catch (err) {
     throw err;
   }
@@ -13,7 +65,47 @@ module.exports.findRoomById = async (roomId) => {
 
 module.exports.getAllPublicRooms = async () => {
   try {
-    return await Room.find({ status: "public" });
+    return await Room.aggregate([
+      { $match: { status: "public" } },
+      {
+        $lookup: {
+          from: "users",
+          localField: "members",
+          foreignField: "_id",
+          as: "members",
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "author",
+          foreignField: "_id",
+          as: "author",
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          pinnedMessages: 1,
+          messages: 1,
+          chatDisabled: 1,
+          status: 1,
+          author: {
+            _id: 1,
+            firstname: 1,
+            lastname: 1,
+            role: 1,
+          },
+          members: {
+            _id: 1,
+            firstname: 1,
+            lastname: 1,
+            role: 1,
+          },
+        },
+      },
+    ]);
   } catch (err) {
     throw err;
   }
@@ -41,6 +133,44 @@ module.exports.getSuggestedRooms = async () => {
       },
       { $sort: { length: -1 } },
       { $limit: 5 },
+      {
+        $lookup: {
+          from: "users",
+          localField: "members",
+          foreignField: "_id",
+          as: "members",
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "author",
+          foreignField: "_id",
+          as: "author",
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          pinnedMessages: 1,
+          messages: 1,
+          chatDisabled: 1,
+          status: 1,
+          author: {
+            _id: 1,
+            firstname: 1,
+            lastname: 1,
+            role: 1,
+          },
+          members: {
+            _id: 1,
+            firstname: 1,
+            lastname: 1,
+            role: 1,
+          },
+        },
+      },
     ]);
   } catch (err) {
     throw err;
@@ -77,10 +207,13 @@ module.exports.createRoom = async (req) => {
       status === "private" ? privateRoomSchema : publicRoomSchema
     );
 
+    const newRoom = await room.save();
+
     user.rooms.push(room._id);
     await user.save();
 
-    return await room.save();
+    const mappedRoom = await this.getMappedRooms([newRoom._id]);
+    return mappedRoom[0];
   } catch (err) {
     throw err;
   }
@@ -105,7 +238,10 @@ module.exports.toggleChatDisabled = async (req) => {
     }
 
     room.chatDisabled = !room.chatDisabled;
-    return await room.save();
+    await room.save();
+
+    const mappedRoom = await this.getMappedRooms([room._id]);
+    return mappedRoom[0];
   } catch (err) {
     throw err;
   }
@@ -129,11 +265,14 @@ module.exports.resetRoom = async (req) => {
       throw new ApiError(statusCode, message);
     }
 
-    room.messages = [];
-    room.members = [];
-    room.assignments = [];
+    await usersService.unjoinUsersFromRoom(room.members, roomId);
 
-    return await room.save();
+    room.pinnedMessages = [];
+    room.members = [];
+    await room.save();
+
+    const mappedRoom = await this.getMappedRooms([room._id]);
+    return mappedRoom[0];
   } catch (err) {
     throw err;
   }
@@ -161,8 +300,10 @@ module.exports.addPinnedMessage = async (req) => {
     // Check if message id exists...
 
     room.pinnedMessages.push(message);
+    await room.save();
 
-    return await room.save();
+    const mappedRoom = await this.getMappedRooms([room._id]);
+    return mappedRoom[0];
   } catch (err) {
     throw err;
   }
@@ -190,7 +331,7 @@ module.exports.joinRoom = async (req) => {
       throw new ApiError(statusCode, message);
     }
 
-    if (room.code !== code) {
+    if (room.status === "private" && room.code !== code) {
       const statusCode = httpStatus.BAD_REQUEST;
       const message = errors.rooms.incorrectCode;
       throw new ApiError(statusCode, message);
@@ -203,7 +344,7 @@ module.exports.joinRoom = async (req) => {
     }
 
     if (user.rooms.includes(room._id)) {
-      const statusCode = httpStatus.BAD_GATEWAY;
+      const statusCode = httpStatus.BAD_REQUEST;
       const message = errors.rooms.alreadyJoined;
       throw new ApiError(statusCode, message);
     }
@@ -213,7 +354,10 @@ module.exports.joinRoom = async (req) => {
     user.rooms.push(room._id);
     await user.save();
 
-    return await room.save();
+    await room.save();
+
+    const mappedRoom = await this.getMappedRooms([room._id]);
+    return mappedRoom[0];
   } catch (err) {
     throw err;
   }
