@@ -22,12 +22,18 @@ module.exports.sendMessage = async (req) => {
       throw new ApiError(statusCode, message);
     }
 
-    const notRooMember =
+    const notRoomMember =
       !room.members.includes(user._id.toString()) &&
       room.author.toString() !== user._id.toString();
-    if (notRooMember) {
+    if (notRoomMember) {
       const statusCode = httpStatus.BAD_REQUEST;
       const message = errors.rooms.notJoined;
+      throw new ApiError(statusCode, message);
+    }
+
+    if (room.chatDisabled && user._id.toString() !== room.author.toString()) {
+      const statusCode = httpStatus.BAD_REQUEST;
+      const message = errors.rooms.chatDisabled;
       throw new ApiError(statusCode, message);
     }
 

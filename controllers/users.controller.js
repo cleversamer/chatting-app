@@ -111,7 +111,7 @@ module.exports.getUserRooms = async (req, res, next) => {
 
 module.exports.sendForgotPasswordCode = async (req, res, next) => {
   try {
-    const { email } = req.body;
+    const { email } = req.query;
     const user = await usersService.findUserByEmail(email);
     if (!user) {
       const statusCode = httpStatus.NOT_FOUND;

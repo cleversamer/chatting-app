@@ -131,3 +131,65 @@ module.exports.addSubmission = async (req, res, next) => {
     next(err);
   }
 };
+
+module.exports.getAssignmentSubmissions = async (req, res, next) => {
+  try {
+    const user = req.user;
+    const assignmentId = req.params.id;
+    const { roomId } = req.query;
+
+    const room = await roomsService.findRoomById(roomId);
+    if (!room) {
+      const statusCode = httpStatus.NOT_FOUND;
+      const message = errors.rooms.notFound;
+      throw new ApiError(statusCode, message);
+    }
+
+    if (room.author.toString() !== user._id.toString()) {
+      const statusCode = httpStatus.UNAUTHORIZED;
+      const message = errors.rooms.unauthorized;
+      throw new ApiError(statusCode, message);
+    }
+
+    const assignment = await Assignment.findById(assignmentId);
+    if (!assignment || !room.assignments.includes(assignmentId)) {
+      const statusCode = httpStatus.NOT_FOUND;
+      const message = errors.assignments.notFound;
+      throw new ApiError(statusCode, message);
+    }
+
+    let submissions = await Assignment.aggregate([
+      { $match: { room: roomId } },
+      { $unwind: "$submissions" },
+      {
+        $lookup: {
+          from: "users",
+          let: { from: "$submissions.from" },
+          pipeline: [{ $match: { $expr: { $eq: ["$_id", "$$from"] } } }],
+          as: "submissions.from",
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          submissions: {
+            date: 1,
+            fileUrl: 1,
+            from: {
+              _id: 1,
+              firstname: 1,
+              lastname: 1,
+              email: 1,
+            },
+          },
+        },
+      },
+    ]);
+
+    submissions = submissions.map((s) => s.submissions);
+
+    res.status(httpStatus.OK).json(submissions);
+  } catch (err) {
+    next(err);
+  }
+};

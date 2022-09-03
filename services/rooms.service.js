@@ -353,7 +353,7 @@ module.exports.addPinnedMessage = async (req) => {
 module.exports.joinRoom = async (req) => {
   try {
     const user = req.user;
-    const { name, code } = req.body;
+    const { name, code } = req.query;
 
     const room = await this.findRoomByName(name);
     if (!room) {

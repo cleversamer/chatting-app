@@ -132,6 +132,10 @@ const rooms = Object.freeze({
     en: "Room name is already exist",
     ar: "اسم الغرفة موجود بالفعل",
   },
+  chatDisabled: {
+    en: "Chatting is disabled by admin",
+    ar: "تم إيقاء الرسائل من طرف الآدمن",
+  },
 });
 
 const assignments = Object.freeze({

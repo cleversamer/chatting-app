@@ -15,4 +15,10 @@ router.post(
   assignmentsController.addSubmission
 );
 
+router.get(
+  "/:id/submissions",
+  [auth("readAny", "submission")],
+  assignmentsController.getAssignmentSubmissions
+);
+
 module.exports = router;

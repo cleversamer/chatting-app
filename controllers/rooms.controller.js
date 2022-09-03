@@ -86,7 +86,7 @@ module.exports.joinRoom = async (req, res, next) => {
 
 module.exports.searchRooms = async (req, res, next) => {
   try {
-    const { name } = req.body;
+    const { name } = req.query;
     const rooms = await roomsService.searchRooms(name);
     if (!rooms || !rooms.length) {
       const statusCode = httpStatus.NOT_FOUND;
