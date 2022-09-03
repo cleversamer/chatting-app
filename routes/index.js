@@ -3,6 +3,8 @@ const router = Router();
 const authRoute = require("./auth.route");
 const usersRoute = require("./users.route");
 const roomsRoute = require("./rooms.route");
+const messagesRoute = require("./messages.route");
+const assignmentsRoute = require("./assignment.route");
 
 const routes = [
   {
@@ -16,6 +18,14 @@ const routes = [
   {
     path: "/rooms",
     route: roomsRoute,
+  },
+  {
+    path: "/messages",
+    route: messagesRoute,
+  },
+  {
+    path: "/assignments",
+    route: assignmentsRoute,
   },
 ];
 

@@ -13,12 +13,18 @@ let grantsObject = {
     verificationCode: allRights,
     password: allRights,
     room: allRights,
+    message: allRights,
+    assignment: allRights,
+    submission: allRights,
   },
   stdteacher: {
     user: allRights,
     verificationCode: allRights,
     password: allRights,
     room: allRights,
+    message: allRights,
+    assignment: allRights,
+    submission: allRights,
   },
   student: {
     user: {
@@ -33,6 +39,16 @@ let grantsObject = {
     room: {
       "read:any": ["*"],
       "update:own": ["*"],
+    },
+    message: {
+      "create:own": ["*"],
+    },
+    assignment: {
+      "read:any": ["*"],
+    },
+    submission: {
+      "create:own": ["*"],
+      "read:own": ["*"],
     },
   },
 };

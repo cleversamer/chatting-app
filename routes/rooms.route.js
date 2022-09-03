@@ -37,6 +37,8 @@ router.put(
   roomsController.resetRoom
 );
 
-router.get("/:id/join", [auth("updateOwn", "room")], roomsController.joinRoom);
+router.get("/join", [auth("updateOwn", "room")], roomsController.joinRoom);
+
+router.get("/search", [auth("readAny", "room")], roomsController.searchRooms);
 
 module.exports = router;

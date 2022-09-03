@@ -7,15 +7,31 @@ const assignmentSchema = new mongoose.Schema({
   },
   fileUrl: {
     type: String,
+  },
+  date: {
+    type: String,
     required: true,
   },
   expiresAt: {
     type: String,
     required: true,
   },
-  submissions: {
-    type: Array,
-  },
+  submissions: [
+    {
+      from: {
+        type: Object,
+        ref: "users",
+        required: true,
+      },
+      fileUrl: {
+        type: String,
+      },
+      date: {
+        type: String,
+        required: true,
+      },
+    },
+  ],
 });
 
 const Assignment = mongoose.model("Assignment", assignmentSchema);

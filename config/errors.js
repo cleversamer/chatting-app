@@ -7,6 +7,14 @@ const system = Object.freeze({
     en: "Unsupported route",
     ar: "الرابط غير مدعوم",
   },
+  largeFile: {
+    en: "Max file size is 20MB",
+    ar: "أقصى حجم للملف هو 20 ميجا بايت",
+  },
+  noFile: {
+    en: "Submission file is not included",
+    ar: "ملف التسليم غير مرفق",
+  },
 });
 
 const auth = Object.freeze({
@@ -108,6 +116,14 @@ const rooms = Object.freeze({
     en: "You're already joined",
     ar: "أنت منضم للغرفة بالفعل",
   },
+  notJoined: {
+    en: "You're not a member in this room",
+    ar: "أنت لست عضواً في هذه الغرفة",
+  },
+  invalidMessage: {
+    en: "You can't send an empty message",
+    ar: "لا يمكنك ارسال رسالة فارغة",
+  },
   incorrectCode: {
     en: "Incorrect registeration code",
     ar: "كود التسجيل خاطئ",
@@ -115,6 +131,21 @@ const rooms = Object.freeze({
   alreadyExist: {
     en: "Room name is already exist",
     ar: "اسم الغرفة موجود بالفعل",
+  },
+});
+
+const assignments = Object.freeze({
+  notFound: {
+    en: "Assignment was not found",
+    ar: "التكليف غير موجود",
+  },
+  expired: {
+    en: "Assignment has expired",
+    ar: "مدة تسليم التكليف انتهت",
+  },
+  hasSubmission: {
+    en: "You have already added a submission",
+    ar: "لقد قمت بإضافة تسليم مسبقاً",
   },
 });
 
@@ -128,4 +159,5 @@ module.exports = {
   user,
   codes,
   rooms,
+  assignments,
 };

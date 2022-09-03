@@ -1,5 +1,6 @@
 const { Room } = require("../models/room.model");
 const usersService = require("./users.service");
+const messagesService = require("./messages.service");
 const { ApiError } = require("../middleware/apiError");
 const httpStatus = require("http-status");
 const errors = require("../config/errors");
@@ -8,6 +9,22 @@ const mongoose = require("mongoose");
 module.exports.findRoomById = async (roomId) => {
   try {
     return await Room.findOne({ _id: roomId });
+  } catch (err) {
+    throw err;
+  }
+};
+
+module.exports.findRoomByName = async (name) => {
+  try {
+    return await Room.findOne({ name });
+  } catch (err) {
+    throw err;
+  }
+};
+
+module.exports.searchRooms = async (name) => {
+  try {
+    return await Room.find({ name, status: "public" });
   } catch (err) {
     throw err;
   }
@@ -36,10 +53,25 @@ module.exports.getMappedRooms = async (roomIds = []) => {
         },
       },
       {
+        $lookup: {
+          from: "messages",
+          localField: "pinnedMessages",
+          foreignField: "_id",
+          as: "pinnedMessages",
+        },
+      },
+      {
+        $lookup: {
+          from: "assignments",
+          localField: "assignments",
+          foreignField: "_id",
+          as: "assignments",
+        },
+      },
+      {
         $project: {
           _id: 1,
           name: 1,
-          pinnedMessages: 1,
           messages: 1,
           chatDisabled: 1,
           status: 1,
@@ -54,6 +86,12 @@ module.exports.getMappedRooms = async (roomIds = []) => {
             firstname: 1,
             lastname: 1,
             role: 1,
+          },
+          pinnedMessages: {
+            _id: 1,
+            text: 1,
+            file: 1,
+            date: 1,
           },
         },
       },
@@ -282,7 +320,7 @@ module.exports.addPinnedMessage = async (req) => {
   try {
     const user = req.user;
     const roomId = req.params.id;
-    const { message } = req.body;
+    const { text, file } = req.body;
 
     const room = await this.findRoomById(roomId);
     if (!room) {
@@ -297,9 +335,12 @@ module.exports.addPinnedMessage = async (req) => {
       throw new ApiError(statusCode, message);
     }
 
-    // Check if message id exists...
+    const message = await messagesService.sendMessage({
+      user,
+      body: { text, file, roomId },
+    });
 
-    room.pinnedMessages.push(message);
+    room.pinnedMessages.push(message._id);
     await room.save();
 
     const mappedRoom = await this.getMappedRooms([room._id]);
@@ -312,10 +353,9 @@ module.exports.addPinnedMessage = async (req) => {
 module.exports.joinRoom = async (req) => {
   try {
     const user = req.user;
-    const roomId = req.params.id;
-    const { code } = req.body;
+    const { name, code } = req.body;
 
-    const room = await this.findRoomById(roomId);
+    const room = await this.findRoomByName(name);
     if (!room) {
       const statusCode = httpStatus.NOT_FOUND;
       const message = errors.rooms.notFound;

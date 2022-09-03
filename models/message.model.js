@@ -4,26 +4,24 @@ const messageSchema = new mongoose.Schema(
   {
     from: {
       type: Object,
+      ref: "User",
     },
     to: {
       type: Object,
+      ref: "Room",
     },
     text: {
       type: String,
-      minLength: 1,
       trim: true,
-      required: true,
-      default: null,
+      default: "",
     },
     file: {
-      type: String,
-      minLength: 1,
-      trim: true,
-      required: true,
-      default: null,
-    },
-    time: {
-      type: String,
+      displayName: {
+        type: String,
+      },
+      url: {
+        type: String,
+      },
     },
     date: {
       type: String,

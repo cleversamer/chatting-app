@@ -24,12 +24,15 @@ const errorConverter = (err, req, res, next) => {
         ? httpStatus.BAD_REQUEST
         : httpStatus.INTERNAL_SERVER_ERROR;
 
-    const message = err.message
-      ? { en: err.message, ar: err.message }
-      : {
-          en: httpStatus[statusCode],
-          ar: httpStatus[statusCode],
-        };
+    const message =
+      err.message === "request entity too large"
+        ? errors.system.largeFile
+        : err.message
+        ? { en: err.message, ar: err.message }
+        : {
+            en: httpStatus[statusCode],
+            ar: httpStatus[statusCode],
+          };
 
     err = new ApiError(statusCode, message);
   }

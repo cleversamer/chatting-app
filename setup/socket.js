@@ -4,7 +4,6 @@ const socketIo = require("socket.io");
 module.exports = (server) => {
   const options = {
     cors: {
-      //   origin: host.client.url,
       origin: "*",
       methods: ["GET", "POST"],
     },
