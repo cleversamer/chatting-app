@@ -45,7 +45,7 @@ module.exports.sendMessage = async (req) => {
     }
 
     let fileUrl = "";
-    if (file || file.base46) {
+    if (typeof file === "object" && Object.keys(file).length) {
       const data = file.base64.split(",");
       const extension = data[0].split("/")[1].split(";")[0];
       const content = data[1];

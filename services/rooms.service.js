@@ -320,7 +320,7 @@ module.exports.addPinnedMessage = async (req) => {
   try {
     const user = req.user;
     const roomId = req.params.id;
-    const { text, file } = req.body;
+    const { text, file = {} } = req.body;
 
     const room = await this.findRoomById(roomId);
     if (!room) {
