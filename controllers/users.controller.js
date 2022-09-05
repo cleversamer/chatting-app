@@ -173,3 +173,18 @@ module.exports.handleForgotPassword = async (req, res, next) => {
     next(err);
   }
 };
+
+module.exports.updateProfile = async (req, res, next) => {
+  try {
+    const user = await usersService.updateProfile(req);
+    res.status(httpStatus.CREATED).json(_.pick(user, clientSchema));
+  } catch (err) {
+    if (err.code === errors.codes.duplicateIndexKey) {
+      const statusCode = httpStatus.BAD_REQUEST;
+      const message = errors.auth.emailUsed;
+      err = new ApiError(statusCode, message);
+    }
+
+    next(err);
+  }
+};

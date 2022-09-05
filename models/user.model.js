@@ -4,15 +4,21 @@ const bcrypt = require("bcrypt");
 
 const clientSchema = [
   "_id",
+  "avatarUrl",
   "email",
   "role",
   "firstname",
   "lastname",
+  "nickname",
   "verified",
 ];
 
 const userSchema = new mongoose.Schema(
   {
+    avatarUrl: {
+      type: String,
+      default: "",
+    },
     email: {
       type: String,
       required: true,
@@ -38,6 +44,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       trim: true,
       required: true,
+    },
+    nickname: {
+      type: String,
+      default: "",
     },
     verificationCode: {
       type: Object,

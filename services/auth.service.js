@@ -5,12 +5,34 @@ const httpStatus = require("http-status");
 const errors = require("../config/errors");
 const userService = require("./users.service");
 
-module.exports.createUser = async (email, password, firstname, lastname) => {
+module.exports.createUser = async (
+  email,
+  password,
+  firstname,
+  lastname,
+  nickname = ""
+) => {
   try {
     const salt = await bcrypt.genSalt(10);
     const hashed = await bcrypt.hash(password, salt);
 
-    const user = new User({ email, password: hashed, firstname, lastname });
+    const notValidNickname =
+      nickname &&
+      (typeof nickname !== "string" ||
+        nickname.length < 4 ||
+        nickname.length > 32);
+
+    if (notValidNickname) {
+      throw new ApiError(httpStatus.BAD_REQUEST, errors.auth.invalidNickname);
+    }
+
+    const user = new User({
+      email,
+      password: hashed,
+      firstname,
+      lastname,
+      nickname,
+    });
     await user.save();
     return user;
   } catch (err) {

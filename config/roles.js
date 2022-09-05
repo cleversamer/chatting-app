@@ -16,6 +16,10 @@ let grantsObject = {
     message: allRights,
     assignment: allRights,
     submission: allRights,
+    profile: {
+      "read:own": ["*"],
+      "update:own": ["*"],
+    },
   },
   stdteacher: {
     user: allRights,
@@ -25,6 +29,10 @@ let grantsObject = {
     message: allRights,
     assignment: allRights,
     submission: allRights,
+    profile: {
+      "read:own": ["*"],
+      "update:own": ["*"],
+    },
   },
   student: {
     user: {
@@ -49,6 +57,10 @@ let grantsObject = {
     submission: {
       "create:own": ["*"],
       "read:own": ["*"],
+    },
+    profile: {
+      "read:own": ["*"],
+      "update:own": ["*"],
     },
   },
 };

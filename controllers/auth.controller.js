@@ -7,12 +7,13 @@ const _ = require("lodash");
 
 module.exports.register = async (req, res, next) => {
   try {
-    const { email, password, firstname, lastname } = req.body;
+    const { email, password, firstname, lastname, nickname } = req.body;
     const user = await authService.createUser(
       email,
       password,
       firstname,
-      lastname
+      lastname,
+      nickname
     );
     const token = user.genAuthToken();
 

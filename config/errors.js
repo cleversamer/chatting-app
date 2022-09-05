@@ -66,6 +66,10 @@ const auth = Object.freeze({
     en: "Name should be (1 ~ 64 characters) length",
     ar: "الإسم يجب أن يكون بين 1-64 حرفا",
   },
+  invalidNickname: {
+    en: "Nickname should be (4 ~ 32 characters) length",
+    ar: "إسم الكنية يجب أن يكون بين 4-32 حرفا",
+  },
 });
 
 const user = Object.freeze({

@@ -37,4 +37,10 @@ router.post(
   usersController.resetPassword
 );
 
+router.patch(
+  "/profile",
+  [auth("updateOwn", "profile")],
+  usersController.updateProfile
+);
+
 module.exports = router;
