@@ -1,5 +1,5 @@
 const { Assignment } = require("../models/assignment.model");
-const { roomsService } = require("../services");
+const { roomsService, messagesService } = require("../services");
 const httpStatus = require("http-status");
 const { ApiError } = require("../middleware/apiError");
 const errors = require("../config/errors");
@@ -9,7 +9,7 @@ const crypto = require("crypto");
 module.exports.createAssignment = async (req, res, next) => {
   try {
     const user = req.user;
-    const { roomId, file, date = new Date(), expiresAfterDays } = req.body;
+    const { roomId, file = {}, date = new Date(), expiresAfterDays } = req.body;
 
     const room = await roomsService.findRoomById(roomId);
     if (!room) {
@@ -44,6 +44,10 @@ module.exports.createAssignment = async (req, res, next) => {
       date,
       expiresAt: expiryDate,
     });
+
+    req.body.type = "assignment";
+    req.body.text = "تكليف جديد";
+    await messagesService.sendMessage(req);
 
     const savedAssignment = await assignment.save();
 

@@ -11,7 +11,7 @@ module.exports.findMessageById;
 module.exports.sendMessage = async (req) => {
   try {
     const user = req.user;
-    let { text, date = new Date(), file, roomId } = req.body;
+    let { type, text, date = new Date(), file, roomId } = req.body;
 
     text = text.trim();
 
@@ -46,9 +46,8 @@ module.exports.sendMessage = async (req) => {
 
     let fileUrl = "";
     if (typeof file === "object" && Object.keys(file).length) {
-      const data = file.base64.split(",");
-      const extension = data[0].split("/")[1].split(";")[0];
-      const content = data[1];
+      const content = file.base64.split(",")[1];
+      const extension = file.ext;
       const readFile = Buffer.from(content, "base64");
       const diskName = crypto.randomUUID();
       fs.writeFileSync(`./uploads/${diskName}.${extension}`, readFile, "utf8");
@@ -61,6 +60,7 @@ module.exports.sendMessage = async (req) => {
       date,
       to: roomId,
       from: user._id,
+      type,
     });
 
     return await message.save();

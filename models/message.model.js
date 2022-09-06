@@ -2,6 +2,15 @@ const mongoose = require("mongoose");
 
 const messageSchema = new mongoose.Schema(
   {
+    type: {
+      type: String,
+      enum: ["message", "assignment"],
+      default: "message",
+    },
+    assignmentId: {
+      type: Object,
+      ref: "assignments",
+    },
     from: {
       type: Object,
       ref: "User",
