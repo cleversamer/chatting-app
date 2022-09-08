@@ -43,4 +43,9 @@ router.patch(
   usersController.updateProfile
 );
 
+router
+  .route("/")
+  .get([auth("readAny", "userType")], usersController.getAllUsers)
+  .delete([auth("deleteAny", "userType")], usersController.deleteUser);
+
 module.exports = router;

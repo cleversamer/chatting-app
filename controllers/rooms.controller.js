@@ -3,6 +3,25 @@ const { ApiError } = require("../middleware/apiError");
 const httpStatus = require("http-status");
 const errors = require("../config/errors");
 
+module.exports.getAllRooms = async (req, res, next) => {
+  try {
+    const rooms = await roomsService.getAllRooms();
+    res.status(httpStatus.OK).json(rooms);
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports.deleteRoom = async (req, res, next) => {
+  try {
+    const { roomId } = req.body;
+    const room = await roomsService.deleteRoom(roomId);
+    res.status(httpStatus.OK).json(room);
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports.getAllPublicRooms = async (req, res, next) => {
   try {
     const rooms = await roomsService.getAllPublicRooms();

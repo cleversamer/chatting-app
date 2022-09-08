@@ -188,3 +188,30 @@ module.exports.updateProfile = async (req, res, next) => {
     next(err);
   }
 };
+
+module.exports.getAllUsers = async (req, res, next) => {
+  try {
+    const user = req.user;
+    const users = await usersService.getAllUsers(user);
+    if (!users || !users.length) {
+      const statusCode = httpStatus.NOT_FOUND;
+      const message = errors.user.noUsers;
+      throw new ApiError(statusCode, message);
+    }
+
+    res.status(httpStatus.OK).json(users);
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports.deleteUser = async (req, res, next) => {
+  try {
+    const user = req.user;
+    const { userId } = req.body;
+    const deletedUser = await usersService.deleteUser(user, userId);
+    res.status(httpStatus.OK).json(deletedUser);
+  } catch (err) {
+    next(err);
+  }
+};

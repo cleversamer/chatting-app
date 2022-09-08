@@ -3,11 +3,67 @@ const { User } = require("../models/user.model");
 const emailService = require("./email.service");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { auth: errors } = require("../config/errors");
+const errors = require("../config/errors");
 const { ApiError } = require("../middleware/apiError");
 const httpStatus = require("http-status");
 const fs = require("fs");
 const crypto = require("crypto");
+
+module.exports.getAllUsers = async (user) => {
+  try {
+    return await User.aggregate([
+      {
+        $match: {
+          _id: {
+            $not: {
+              $eq: user._id,
+            },
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          email: 1,
+          firstname: 1,
+          lastname: 1,
+          nickname: 1,
+          role: 1,
+          verified: 1,
+        },
+      },
+    ]);
+  } catch (err) {
+    throw err;
+  }
+};
+
+module.exports.deleteUser = async (user, userId) => {
+  try {
+    if (!mongoose.isValidObjectId(userId)) {
+      const statusCode = httpStatus.BAD_REQUEST;
+      const message = errors.system.invalidMongoId;
+      throw new ApiError(statusCode, message);
+    }
+
+    if (user._id.toString() === userId.toString()) {
+      const statusCode = httpStatus.FORBIDDEN;
+      const message = errors.auth.deleteItself;
+      throw new ApiError(statusCode, message);
+    }
+
+    const deletedUser = await User.findByIdAndDelete(userId);
+    if (!deletedUser) {
+      const statusCode = httpStatus.NOT_FOUND;
+      const message = errors.auth.notFound;
+      throw new ApiError(statusCode, message);
+    }
+
+    return deletedUser;
+  } catch (err) {
+    throw err;
+  }
+};
 
 module.exports.findUserByEmail = async (email) => {
   try {
@@ -128,7 +184,7 @@ const validateEmail = (email, err) => {
       );
 
   if (!valid) {
-    throw new ApiError(httpStatus.BAD_REQUEST, errors[err]);
+    throw new ApiError(httpStatus.BAD_REQUEST, errors.auth[err]);
   }
 
   return valid;
@@ -139,7 +195,7 @@ const validateString = (str, min, max, err) => {
     !str || (typeof str === "string" && str.length >= min && str.length <= max);
 
   if (!valid) {
-    throw new ApiError(httpStatus.BAD_REQUEST, errors[err]);
+    throw new ApiError(httpStatus.BAD_REQUEST, errors.auth[err]);
   }
 
   return valid;

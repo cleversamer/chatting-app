@@ -8,6 +8,18 @@ const allRights = {
 };
 
 let grantsObject = {
+  admin: {
+    user: allRights,
+    userType: allRights,
+    verificationCode: allRights,
+    password: allRights,
+    room: allRights,
+    message: allRights,
+    assignment: allRights,
+    submission: allRights,
+    profile: allRights,
+    roomType: allRights,
+  },
   teacher: {
     user: allRights,
     verificationCode: allRights,

@@ -10,7 +10,10 @@ router
   .post(
     [auth("createOwn", "room"), validator.createRoomValidator],
     roomsController.createRoom
-  );
+  )
+  .delete([auth("deleteAny", "roomType")], roomsController.deleteRoom);
+
+router.get("/all", [auth("readAny", "roomType")], roomsController.getAllRooms);
 
 router.get(
   "/suggested",

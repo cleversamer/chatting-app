@@ -15,9 +15,21 @@ const system = Object.freeze({
     en: "Submission file is not included",
     ar: "ملف التسليم غير مرفق",
   },
+  invalidMongoId: {
+    en: "Invalid document id",
+    ar: "معرّف المستند غير صالح",
+  },
 });
 
 const auth = Object.freeze({
+  notFound: {
+    en: "User not found",
+    ar: "المستخدم غير موجود",
+  },
+  deleteItself: {
+    en: "You can't delete your account",
+    ar: "لا يمكنك حذف حسابك",
+  },
   invalidCode: {
     en: "Invalid verification code",
     ar: "الكود غير صالح",
@@ -73,6 +85,10 @@ const auth = Object.freeze({
 });
 
 const user = Object.freeze({
+  noUsers: {
+    en: "There are no users yet",
+    ar: "لا يوجد هناك مستخدمين بعد",
+  },
   notFound: {
     en: "User was not found",
     ar: "المستخدم غير موجود",

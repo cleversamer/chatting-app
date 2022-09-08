@@ -6,6 +6,59 @@ const httpStatus = require("http-status");
 const errors = require("../config/errors");
 const mongoose = require("mongoose");
 
+module.exports.getAllRooms = async () => {
+  try {
+    const rooms = await Room.aggregate([
+      {
+        $lookup: {
+          from: "users",
+          localField: "author",
+          foreignField: "_id",
+          as: "author",
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          members: { $size: "$members" },
+          status: 1,
+          author: {
+            _id: 1,
+            firstname: 1,
+            lastname: 1,
+          },
+        },
+      },
+    ]);
+
+    if (!rooms || !rooms.length) {
+      const statusCode = httpStatus.NOT_FOUND;
+      const message = errors.rooms.noRooms;
+      throw new ApiError(statusCode, message);
+    }
+
+    return rooms;
+  } catch (err) {
+    throw err;
+  }
+};
+
+module.exports.deleteRoom = async (roomId) => {
+  try {
+    const room = await Room.findByIdAndDelete(roomId);
+    if (!room) {
+      const statusCode = httpStatus.NOT_FOUND;
+      const message = errors.rooms.notFound;
+      throw new ApiError(statusCode, message);
+    }
+
+    return room;
+  } catch (err) {
+    throw err;
+  }
+};
+
 module.exports.findRoomById = async (roomId) => {
   try {
     return await Room.findOne({ _id: roomId });
