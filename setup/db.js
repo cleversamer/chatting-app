@@ -2,7 +2,7 @@ const host = require("../config/host");
 const mongoose = require("mongoose");
 
 module.exports = () => {
-  const mongoURI = process.env["MONGODB_URI"] || host.server.db;
+  const mongoURI = host.server.db;
   mongoose
     .connect(mongoURI)
     .then((value) => {

@@ -14,7 +14,7 @@ module.exports.getRoomMessages = async (req, res, next) => {
   try {
     const roomId = req.params.id;
     const messages = await messagesService.getRoomMessages(roomId);
-    res.status(httpStatus.OK).json(messages);
+    res.status(httpStatus.OK).json({ messages });
   } catch (err) {
     next(err);
   }

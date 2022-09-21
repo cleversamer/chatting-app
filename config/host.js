@@ -4,6 +4,6 @@ module.exports = Object.freeze({
   },
   server: {
     port: 4000,
-    db: "mongodb://localhost:27017/tech-tech",
+    db: "mongodb://127.0.0.1:27017/technology-teacher",
   },
 });

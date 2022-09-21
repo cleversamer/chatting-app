@@ -47,6 +47,7 @@ module.exports.createAssignment = async (req, res, next) => {
 
     req.body.type = "assignment";
     req.body.text = "تكليف جديد";
+    req.body.assignmentId = assignment._id;
     await messagesService.sendMessage(req);
 
     const savedAssignment = await assignment.save();
@@ -192,7 +193,7 @@ module.exports.getAssignmentSubmissions = async (req, res, next) => {
 
     submissions = submissions.map((s) => s.submissions);
 
-    res.status(httpStatus.OK).json(submissions);
+    res.status(httpStatus.OK).json({ submissions });
   } catch (err) {
     next(err);
   }

@@ -11,13 +11,13 @@
 /.firebase
 .firebaserc
 firebase.json
+/functions
 
 # development
 **.log
 
 # misc
 .DS_Store
-.env
 .env.local
 .env.development
 .env.production

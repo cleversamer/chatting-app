@@ -11,7 +11,14 @@ module.exports.findMessageById;
 module.exports.sendMessage = async (req) => {
   try {
     const user = req.user;
-    let { type, text, date = new Date(), file, roomId } = req.body;
+    let {
+      type,
+      text,
+      date = new Date(),
+      file,
+      roomId,
+      assignmentId,
+    } = req.body;
 
     text = text.trim();
 
@@ -61,6 +68,7 @@ module.exports.sendMessage = async (req) => {
       to: roomId,
       from: user._id,
       type,
+      assignmentId,
     });
 
     return await message.save();
@@ -87,6 +95,8 @@ module.exports.getRoomMessages = async (roomId) => {
           from: 1,
           text: 1,
           date: 1,
+          file: 1,
+          assignmentId: 1,
           sender: {
             _id: 1,
             firstname: 1,

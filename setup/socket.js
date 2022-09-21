@@ -1,4 +1,3 @@
-const host = require("../config/host");
 const socketIo = require("socket.io");
 
 module.exports = (server) => {
@@ -12,10 +11,10 @@ module.exports = (server) => {
   const io = socketIo(server, options);
 
   io.on("connection", (socket) => {
-    console.log(socket.id);
+    console.log("connected", socket.id);
 
-    socket.on("custom-event", (message) => {
-      console.log(message);
+    socket.on("send-message", (message) => {
+      socket.broadcast.emit(message);
     });
   });
 };

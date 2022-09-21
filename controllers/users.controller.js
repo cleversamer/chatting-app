@@ -97,13 +97,7 @@ module.exports.resetPassword = async (req, res, next) => {
 module.exports.getUserRooms = async (req, res, next) => {
   try {
     const rooms = await roomsService.getMappedRooms(req.user.rooms);
-    if (!rooms || !rooms.length) {
-      const statusCode = httpStatus.NOT_FOUND;
-      const message = errors.user.hasNoRooms;
-      throw new ApiError(statusCode, message);
-    }
-
-    res.status(httpStatus.OK).json(rooms);
+    res.status(httpStatus.OK).json({ rooms });
   } catch (err) {
     next(err);
   }
@@ -199,7 +193,7 @@ module.exports.getAllUsers = async (req, res, next) => {
       throw new ApiError(statusCode, message);
     }
 
-    res.status(httpStatus.OK).json(users);
+    res.status(httpStatus.OK).json({ users });
   } catch (err) {
     next(err);
   }
