@@ -1,10 +1,10 @@
-const { Room } = require("../models/room.model");
-const usersService = require("./users.service");
-const messagesService = require("./messages.service");
-const { ApiError } = require("../middleware/apiError");
+const { ApiError } = require("../../middleware/apiError");
+const { Room } = require("../../models/room.model");
+const errors = require("../../config/errors");
 const httpStatus = require("http-status");
-const errors = require("../config/errors");
+const messagesService = require("./messages.service");
 const mongoose = require("mongoose");
+const usersService = require("../user/users.service");
 
 module.exports.getAllRooms = async () => {
   try {
@@ -202,71 +202,71 @@ module.exports.getAllPublicRooms = async () => {
   }
 };
 
-module.exports.getSuggestedRooms = async () => {
-  try {
-    return await Room.aggregate([
-      {
-        $match: { status: "public" },
-      },
-      {
-        $project: {
-          _id: 1,
-          name: 1,
-          author: 1,
-          pinnedMessages: 1,
-          messages: 1,
-          members: 1,
-          assignments: 1,
-          chatDisabled: 1,
-          status: 1,
-          length: { $size: "$members" },
-        },
-      },
-      { $sort: { length: -1 } },
-      { $limit: 5 },
-      {
-        $lookup: {
-          from: "users",
-          localField: "members",
-          foreignField: "_id",
-          as: "members",
-        },
-      },
-      {
-        $lookup: {
-          from: "users",
-          localField: "author",
-          foreignField: "_id",
-          as: "author",
-        },
-      },
-      {
-        $project: {
-          _id: 1,
-          name: 1,
-          pinnedMessages: 1,
-          messages: 1,
-          chatDisabled: 1,
-          status: 1,
-          author: {
-            _id: 1,
-            firstname: 1,
-            lastname: 1,
-            role: 1,
-          },
-          members: {
-            _id: 1,
-            firstname: 1,
-            lastname: 1,
-            role: 1,
-          },
-        },
-      },
-    ]);
-  } catch (err) {
-    throw err;
-  }
-};
+// module.exports.getSuggestedRooms = async () => {
+//   try {
+//     return await Room.aggregate([
+//       {
+//         $match: { status: "public" },
+//       },
+//       {
+//         $project: {
+//           _id: 1,
+//           name: 1,
+//           author: 1,
+//           pinnedMessages: 1,
+//           messages: 1,
+//           members: 1,
+//           assignments: 1,
+//           chatDisabled: 1,
+//           status: 1,
+//           length: { $size: "$members" },
+//         },
+//       },
+//       { $sort: { length: -1 } },
+//       { $limit: 5 },
+//       {
+//         $lookup: {
+//           from: "users",
+//           localField: "members",
+//           foreignField: "_id",
+//           as: "members",
+//         },
+//       },
+//       {
+//         $lookup: {
+//           from: "users",
+//           localField: "author",
+//           foreignField: "_id",
+//           as: "author",
+//         },
+//       },
+//       {
+//         $project: {
+//           _id: 1,
+//           name: 1,
+//           pinnedMessages: 1,
+//           messages: 1,
+//           chatDisabled: 1,
+//           status: 1,
+//           author: {
+//             _id: 1,
+//             firstname: 1,
+//             lastname: 1,
+//             role: 1,
+//           },
+//           members: {
+//             _id: 1,
+//             firstname: 1,
+//             lastname: 1,
+//             role: 1,
+//           },
+//         },
+//       },
+//     ]);
+//   } catch (err) {
+//     throw err;
+//   }
+// };
 
 module.exports.createRoom = async (req) => {
   try {
@@ -338,11 +338,8 @@ module.exports.toggleChatDisabled = async (req) => {
   }
 };
 
-module.exports.resetRoom = async (req) => {
+module.exports.resetRoom = async (user, roomId) => {
   try {
-    const user = req.user;
-    const roomId = req.params.id;
-
     const room = await this.findRoomById(roomId);
     if (!room) {
       const statusCode = httpStatus.NOT_FOUND;
@@ -388,7 +385,7 @@ module.exports.addPinnedMessage = async (req) => {
       throw new ApiError(statusCode, message);
     }
 
-    const message = await messagesService.sendMessage({
+    const message = await messagesService.createMessage({
       user,
       body: { text, file, roomId },
     });

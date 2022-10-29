@@ -1,20 +1,23 @@
-const { authService, emailService, usersService } = require("../services");
-const httpStatus = require("http-status");
-const { ApiError } = require("../middleware/apiError");
-const { clientSchema } = require("../models/user.model");
-const errors = require("../config/errors");
 const _ = require("lodash");
+const { ApiError } = require("../../middleware/apiError");
+const { authService, emailService } = require("../../services");
+const { clientSchema } = require("../../models/user.model");
+const errors = require("../../config/errors");
+const httpStatus = require("http-status");
 
 module.exports.register = async (req, res, next) => {
   try {
-    const { email, password, firstname, lastname, nickname } = req.body;
+    const { email, password, firstname, lastname, nickname, role } = req.body;
+
     const user = await authService.createUser(
       email,
       password,
       firstname,
       lastname,
-      nickname
+      nickname,
+      role
     );
+
     const token = user.genAuthToken();
 
     await emailService.registerEmail(email, user);

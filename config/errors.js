@@ -82,6 +82,10 @@ const auth = Object.freeze({
     en: "Nickname should be (4 ~ 32 characters) length",
     ar: "إسم الكنية يجب أن يكون بين 4-32 حرفا",
   },
+  invalidRole: {
+    en: "Role should be either student or teacher",
+    ar: "نوع المستخدم يجب أن يكون طالب أو معلّم",
+  },
 });
 
 const user = Object.freeze({
@@ -170,6 +174,10 @@ const assignments = Object.freeze({
   hasSubmission: {
     en: "You have already added a submission",
     ar: "لقد قمت بإضافة تسليم مسبقاً",
+  },
+  noFile: {
+    en: "You have to add a file",
+    ar: "يجب عليك إضافة ملف",
   },
 });
 

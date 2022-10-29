@@ -1,13 +1,13 @@
-const mongoose = require("mongoose");
-const { User } = require("../models/user.model");
-const emailService = require("./email.service");
+const { ApiError } = require("../../middleware/apiError");
+const { User } = require("../../models/user.model");
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const errors = require("../config/errors");
-const { ApiError } = require("../middleware/apiError");
-const httpStatus = require("http-status");
-const fs = require("fs");
 const crypto = require("crypto");
+const emailService = require("../user/email.service");
+const errors = require("../../config/errors");
+const fs = require("fs");
+const httpStatus = require("http-status");
+const jwt = require("jsonwebtoken");
+const mongoose = require("mongoose");
 
 module.exports.getAllUsers = async (user) => {
   try {

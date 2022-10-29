@@ -1,27 +1,24 @@
-const { Message } = require("../models/message.model");
-const roomsService = require("./rooms.service");
-const errors = require("../config/errors");
-const { ApiError } = require("../middleware/apiError");
+const { ApiError } = require("../../middleware/apiError");
+const { Message } = require("../../models/message.model");
+const { clientSchema: userSchema } = require("../../models/user.model");
+const localStorage = require("../storage/localStorage.service");
+const errors = require("../../config/errors");
 const httpStatus = require("http-status");
-const fs = require("fs");
-const crypto = require("crypto");
+const roomsService = require("./rooms.service");
+const _ = require("lodash");
 
 module.exports.findMessageById;
 
-module.exports.sendMessage = async (req) => {
+module.exports.createMessage = async (
+  user,
+  type,
+  text,
+  roomId,
+  assignmentId,
+  file
+) => {
   try {
-    const user = req.user;
-    let {
-      type,
-      text,
-      date = new Date(),
-      file,
-      roomId,
-      assignmentId,
-    } = req.body;
-
-    text = text.trim();
-
+    // Check if room exists
     const room = await roomsService.findRoomById(roomId);
     if (!room) {
       const statusCode = httpStatus.BAD_REQUEST;
@@ -29,6 +26,7 @@ module.exports.sendMessage = async (req) => {
       throw new ApiError(statusCode, message);
     }
 
+    // Check if the user is a member in the room
     const notRoomMember =
       !room.members.includes(user._id.toString()) &&
       room.author.toString() !== user._id.toString();
@@ -38,40 +36,47 @@ module.exports.sendMessage = async (req) => {
       throw new ApiError(statusCode, message);
     }
 
+    // Check if the chat is disabled
     if (room.chatDisabled && user._id.toString() !== room.author.toString()) {
       const statusCode = httpStatus.BAD_REQUEST;
       const message = errors.rooms.chatDisabled;
       throw new ApiError(statusCode, message);
     }
 
-    const emptyMessage = !file.base46 && !text;
+    // Check if the message does not contain text or file data
+    const emptyMessage = !file && !text;
     if (emptyMessage) {
       const statusCode = httpStatus.BAD_REQUEST;
       const message = errors.rooms.invalidMessage;
       throw new ApiError(statusCode, message);
     }
 
-    let fileUrl = "";
-    if (typeof file === "object" && Object.keys(file).length) {
-      const content = file.base64.split(",")[1];
-      const extension = file.ext;
-      const readFile = Buffer.from(content, "base64");
-      const diskName = crypto.randomUUID();
-      fs.writeFileSync(`./uploads/${diskName}.${extension}`, readFile, "utf8");
-      fileUrl = `/${diskName}.${extension}`;
-    }
+    // Store file in case it exists and message type is not text
+    const mssgFile =
+      type && type !== "text" && file ? await localStorage.storeFile(file) : {};
 
+    // Create the message
     const message = new Message({
       text,
-      file: { displayName: file?.name, url: fileUrl },
-      date,
-      to: roomId,
-      from: user._id,
+      file: {
+        displayName: mssgFile.originalName,
+        url: mssgFile.path,
+      },
+      receiver: roomId,
+      sender: user._id,
       type,
       assignmentId,
     });
 
-    return await message.save();
+    const savedMssg = await message.save();
+
+    savedMssg.sender = _.pick(user, userSchema);
+    savedMssg.receiver = {
+      _id: room._id,
+      name: room.name,
+    };
+
+    return savedMssg;
   } catch (err) {
     throw err;
   }
@@ -80,7 +85,7 @@ module.exports.sendMessage = async (req) => {
 module.exports.getRoomMessages = async (roomId) => {
   try {
     return await Message.aggregate([
-      { $match: { to: roomId } },
+      { $match: { receiver: roomId } },
       {
         $lookup: {
           from: "users",
@@ -106,5 +111,7 @@ module.exports.getRoomMessages = async (roomId) => {
         },
       },
     ]);
-  } catch (err) {}
+  } catch (err) {
+    throw err;
+  }
 };

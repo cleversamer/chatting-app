@@ -1,8 +1,8 @@
 const { Router } = require("express");
 const router = Router();
-const { roomsController } = require("../controllers");
-const validator = require("../middleware/validation/room");
-const auth = require("../middleware/auth");
+const { roomsController } = require("../../controllers");
+const validator = require("../../middleware/validation/room");
+const auth = require("../../middleware/auth");
 
 router
   .route("/")
@@ -15,11 +15,11 @@ router
 
 router.get("/all", [auth("readAny", "roomType")], roomsController.getAllRooms);
 
-router.get(
-  "/suggested",
-  [auth("readAny", "room")],
-  roomsController.getSuggestedRooms
-);
+// router.get(
+//   "/suggested",
+//   [auth("readAny", "room")],
+//   roomsController.getSuggestedRooms
+// );
 
 router.post(
   "/:id/add-pinned-message",

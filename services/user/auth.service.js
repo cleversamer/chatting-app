@@ -1,8 +1,8 @@
-const { User } = require("../models/user.model");
+const { ApiError } = require("../../middleware/apiError");
+const { User } = require("../../models/user.model");
 const bcrypt = require("bcrypt");
-const { ApiError } = require("../middleware/apiError");
+const errors = require("../../config/errors");
 const httpStatus = require("http-status");
-const errors = require("../config/errors");
 const userService = require("./users.service");
 
 module.exports.createUser = async (
@@ -10,7 +10,8 @@ module.exports.createUser = async (
   password,
   firstname,
   lastname,
-  nickname = ""
+  nickname = "",
+  role
 ) => {
   try {
     const salt = await bcrypt.genSalt(10);
@@ -32,6 +33,7 @@ module.exports.createUser = async (
       firstname,
       lastname,
       nickname,
+      role,
     });
     await user.save();
     return user;

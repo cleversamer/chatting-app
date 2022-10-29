@@ -1,5 +1,6 @@
-module.exports.authController = require("./auth.controller");
-module.exports.usersController = require("./users.controller");
-module.exports.roomsController = require("./rooms.controller");
-module.exports.messagesController = require("./messages.controller");
-module.exports.assignmentsController = require("./assignments.controller");
+module.exports.assignmentsController = require("./room/assignments.controller");
+module.exports.messagesController = require("./room/messages.controller");
+module.exports.roomsController = require("./room/rooms.controller");
+
+module.exports.authController = require("./user/auth.controller");
+module.exports.usersController = require("./user/users.controller");

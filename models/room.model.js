@@ -27,9 +27,9 @@ const roomSchema = new mongoose.Schema(
     code: {
       type: String,
     },
-    assignments: {
-      type: Array,
-    },
+    // assignments: {
+    //   type: Array,
+    // },
     pinnedMessages: {
       type: Array,
     },

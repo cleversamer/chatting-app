@@ -1,23 +1,24 @@
 const mongoose = require("mongoose");
 
+const MESSAGE_TYPES = ["text", "audio", "image"];
+
 const messageSchema = new mongoose.Schema(
   {
     type: {
       type: String,
-      enum: ["message", "assignment"],
-      default: "message",
+      enum: MESSAGE_TYPES,
+      default: "text",
+      required: true,
     },
-    assignmentId: {
-      type: Object,
-      ref: "assignments",
-    },
-    from: {
+    sender: {
       type: Object,
       ref: "User",
+      required: true,
     },
-    to: {
+    receiver: {
       type: Object,
       ref: "Room",
+      required: true,
     },
     text: {
       type: String,
@@ -34,6 +35,8 @@ const messageSchema = new mongoose.Schema(
     },
     date: {
       type: String,
+      required: true,
+      default: new Date(),
     },
   },
   { minimize: false }
@@ -41,4 +44,7 @@ const messageSchema = new mongoose.Schema(
 
 const Message = mongoose.model("Message", messageSchema);
 
-module.exports = { Message };
+module.exports = {
+  Message,
+  MESSAGE_TYPES,
+};

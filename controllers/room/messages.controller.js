@@ -1,9 +1,21 @@
-const { messagesService } = require("../services");
+const { messagesService } = require("../../services");
 const httpStatus = require("http-status");
 
-module.exports.sendMessage = async (req, res, next) => {
+module.exports.createMessage = async (req, res, next) => {
   try {
-    const message = await messagesService.sendMessage(req);
+    const user = req.user;
+    let { type, text, roomId, assignmentId } = req.body;
+    const file = req?.files?.file;
+
+    const message = await messagesService.createMessage(
+      user,
+      type,
+      text,
+      roomId,
+      assignmentId,
+      file
+    );
+
     res.status(httpStatus.OK).json(message);
   } catch (err) {
     next(err);

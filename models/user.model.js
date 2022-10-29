@@ -13,6 +13,8 @@ const clientSchema = [
   "verified",
 ];
 
+const SUPPORTED_ROLES = ["student", "teacher", "admin"];
+
 const userSchema = new mongoose.Schema(
   {
     avatarUrl: {
@@ -32,7 +34,7 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ["student", "teacher", "stdteacher"],
+      enum: SUPPORTED_ROLES,
       default: "student",
     },
     firstname: {
@@ -114,4 +116,5 @@ const User = mongoose.model("User", userSchema);
 module.exports = {
   User,
   clientSchema,
+  SUPPORTED_ROLES,
 };

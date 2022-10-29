@@ -1,11 +1,11 @@
-const httpStatus = require("http-status");
-const { clientSchema } = require("../models/user.model");
-const { emailService, usersService, roomsService } = require("../services");
-const { ApiError } = require("../middleware/apiError");
-const errors = require("../config/errors");
-const success = require("../config/success");
 const _ = require("lodash");
+const { ApiError } = require("../../middleware/apiError");
+const { clientSchema } = require("../../models/user.model");
+const { emailService, usersService, roomsService } = require("../../services");
 const bcrypt = require("bcrypt");
+const errors = require("../../config/errors");
+const httpStatus = require("http-status");
+const success = require("../../config/success");
 
 module.exports.isAuth = async (req, res, next) => {
   try {

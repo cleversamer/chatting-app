@@ -1,6 +1,7 @@
 const { check, validationResult } = require("express-validator");
 const httpStatus = require("http-status");
 const { ApiError } = require("../apiError");
+const { SUPPORTED_ROLES } = require("../../models/user.model");
 const { auth: errors } = require("../../config/errors");
 
 const handler = (req, res, next) => {
@@ -38,6 +39,10 @@ const registerValidator = [
     .trim()
     .isLength({ min: 1, max: 64 })
     .withMessage(errors.invalidName),
+
+  check("role")
+    .isIn(SUPPORTED_ROLES.filter((role) => role.toLowerCase() !== "admin"))
+    .withMessage(errors.invalidRole),
 
   handler,
 ];

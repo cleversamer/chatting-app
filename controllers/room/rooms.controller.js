@@ -1,7 +1,7 @@
-const { roomsService } = require("../services");
-const { ApiError } = require("../middleware/apiError");
+const { ApiError } = require("../../middleware/apiError");
+const { roomsService } = require("../../services");
+const errors = require("../../config/errors");
 const httpStatus = require("http-status");
-const errors = require("../config/errors");
 
 module.exports.getAllRooms = async (req, res, next) => {
   try {
@@ -25,6 +25,7 @@ module.exports.deleteRoom = async (req, res, next) => {
 module.exports.getAllPublicRooms = async (req, res, next) => {
   try {
     const rooms = await roomsService.getAllPublicRooms();
+
     if (!rooms || !rooms.length) {
       const statusCode = httpStatus.NOT_FOUND;
       const message = errors.rooms.noRooms;
@@ -39,27 +40,31 @@ module.exports.getAllPublicRooms = async (req, res, next) => {
 
 module.exports.resetRoom = async (req, res, next) => {
   try {
-    const data = await roomsService.resetRoom(req);
+    const user = req.user;
+    const roomId = req.params.id;
+
+    const data = await roomsService.resetRoom(user, roomId);
+
     res.status(httpStatus.CREATED).json(data);
   } catch (err) {
     next(err);
   }
 };
 
-module.exports.getSuggestedRooms = async (req, res, next) => {
-  try {
-    const rooms = await roomsService.getSuggestedRooms();
-    if (!rooms || !rooms.length) {
-      const statusCode = httpStatus.NOT_FOUND;
-      const message = errors.rooms.noRooms;
-      throw new ApiError(statusCode, message);
-    }
+// module.exports.getSuggestedRooms = async (req, res, next) => {
+//   try {
+//     const rooms = await roomsService.getSuggestedRooms();
+//     if (!rooms || !rooms.length) {
+//       const statusCode = httpStatus.NOT_FOUND;
+//       const message = errors.rooms.noRooms;
+//       throw new ApiError(statusCode, message);
+//     }
 
-    res.status(httpStatus.OK).json({ rooms });
-  } catch (err) {
-    next(err);
-  }
-};
+//     res.status(httpStatus.OK).json({ rooms });
+//   } catch (err) {
+//     next(err);
+//   }
+// };
 
 module.exports.createRoom = async (req, res, next) => {
   try {
@@ -107,6 +112,7 @@ module.exports.searchRooms = async (req, res, next) => {
   try {
     const { name } = req.query;
     const rooms = await roomsService.searchRooms(name);
+
     if (!rooms || !rooms.length) {
       const statusCode = httpStatus.NOT_FOUND;
       const message = errors.rooms.noRooms;

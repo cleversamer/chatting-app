@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const router = Router();
-const { assignmentsController } = require("../controllers");
-const auth = require("../middleware/auth");
+const { assignmentsController } = require("../../controllers");
+const auth = require("../../middleware/auth");
 
 router.post(
   "/",
@@ -9,10 +9,16 @@ router.post(
   assignmentsController.createAssignment
 );
 
+router.patch(
+  "/addSubmissionTime",
+  [auth("createOwn", "assignment")],
+  assignmentsController.addSubmissionTime
+);
+
 router.post(
   "/submit",
   [auth("createOwn", "submission")],
-  assignmentsController.addSubmission
+  assignmentsController.createSubmission
 );
 
 router.get(

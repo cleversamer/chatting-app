@@ -1,8 +1,8 @@
 const { Router } = require("express");
 const router = Router();
-const { usersController } = require("../controllers");
-const auth = require("../middleware/auth");
-const validator = require("../middleware/validation/auth");
+const { usersController } = require("../../controllers");
+const auth = require("../../middleware/auth");
+const validator = require("../../middleware/validation/auth");
 
 router.get("/isauth", [auth("readOwn", "user")], usersController.isAuth);
 

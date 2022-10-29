@@ -1,10 +1,10 @@
 const { Router } = require("express");
 const router = Router();
-const authRoute = require("./auth.route");
-const usersRoute = require("./users.route");
-const roomsRoute = require("./rooms.route");
-const messagesRoute = require("./messages.route");
-const assignmentsRoute = require("./assignment.route");
+const authRoute = require("./user/auth.route");
+const usersRoute = require("./user/users.route");
+const roomsRoute = require("./room/rooms.route");
+const messagesRoute = require("./room/messages.route");
+const assignmentsRoute = require("./room/assignment.route");
 
 const routes = [
   {
