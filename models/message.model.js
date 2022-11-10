@@ -2,6 +2,16 @@ const mongoose = require("mongoose");
 
 const MESSAGE_TYPES = ["text", "audio", "image"];
 
+const CLIENT_SCHEMA = [
+  "_id",
+  "type",
+  "sender",
+  "receiver",
+  "text",
+  "file",
+  "date",
+];
+
 const messageSchema = new mongoose.Schema(
   {
     type: {
@@ -47,4 +57,5 @@ const Message = mongoose.model("Message", messageSchema);
 module.exports = {
   Message,
   MESSAGE_TYPES,
+  CLIENT_SCHEMA,
 };

@@ -22,15 +22,21 @@ router.get("/all", [auth("readAny", "roomType")], roomsController.getAllRooms);
 // );
 
 router.post(
-  "/:id/add-pinned-message",
+  "/add-pinned-message",
   [auth("updateOwn", "room")],
   roomsController.addPinnedMessage
 );
 
 router.patch(
-  "/:id/toggle-chat-disable",
+  "/block-users",
   [auth("updateOwn", "room")],
-  roomsController.toggleChatDisabled
+  roomsController.blockUsersFromChatting
+);
+
+router.patch(
+  "/unblock-users",
+  [auth("updateOwn", "room")],
+  roomsController.unblockUsersFromChatting
 );
 
 router.put(

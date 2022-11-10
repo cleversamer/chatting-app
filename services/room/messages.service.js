@@ -1,5 +1,5 @@
 const { ApiError } = require("../../middleware/apiError");
-const { Message } = require("../../models/message.model");
+const { Message, MESSAGE_TYPES } = require("../../models/message.model");
 const { clientSchema: userSchema } = require("../../models/user.model");
 const localStorage = require("../storage/localStorage.service");
 const errors = require("../../config/errors");
@@ -7,17 +7,14 @@ const httpStatus = require("http-status");
 const roomsService = require("./rooms.service");
 const _ = require("lodash");
 
-module.exports.findMessageById;
-
-module.exports.createMessage = async (
-  user,
-  type,
-  text,
-  roomId,
-  assignmentId,
-  file
-) => {
+module.exports.createMessage = async (user, type, text, roomId, file) => {
   try {
+    if (!MESSAGE_TYPES.includes(type)) {
+      const statusCode = httpStatus.BAD_REQUEST;
+      const message = errors.message.invalidType;
+      throw new ApiError(statusCode, message);
+    }
+
     // Check if room exists
     const room = await roomsService.findRoomById(roomId);
     if (!room) {
@@ -36,10 +33,10 @@ module.exports.createMessage = async (
       throw new ApiError(statusCode, message);
     }
 
-    // Check if the chat is disabled
-    if (room.chatDisabled && user._id.toString() !== room.author.toString()) {
+    // Check if the user is blocked from sending messages
+    if (room.blockList.includes(user._id.toString())) {
       const statusCode = httpStatus.BAD_REQUEST;
-      const message = errors.rooms.chatDisabled;
+      const message = errors.rooms.chatBlocked;
       throw new ApiError(statusCode, message);
     }
 
@@ -48,6 +45,13 @@ module.exports.createMessage = async (
     if (emptyMessage) {
       const statusCode = httpStatus.BAD_REQUEST;
       const message = errors.rooms.invalidMessage;
+      throw new ApiError(statusCode, message);
+    }
+
+    // Check if there's file in case of the message is not a text message
+    if (type !== "text" && !file) {
+      const statusCode = httpStatus.BAD_REQUEST;
+      const message = errors.message.noFile;
       throw new ApiError(statusCode, message);
     }
 
@@ -65,7 +69,6 @@ module.exports.createMessage = async (
       receiver: roomId,
       sender: user._id,
       type,
-      assignmentId,
     });
 
     const savedMssg = await message.save();
@@ -89,7 +92,7 @@ module.exports.getRoomMessages = async (roomId) => {
       {
         $lookup: {
           from: "users",
-          localField: "from",
+          localField: "sender",
           foreignField: "_id",
           as: "sender",
         },
@@ -97,16 +100,20 @@ module.exports.getRoomMessages = async (roomId) => {
       {
         $project: {
           _id: 1,
-          from: 1,
+          type: 1,
           text: 1,
-          date: 1,
           file: 1,
-          assignmentId: 1,
+          date: 1,
+          receiver: 1,
           sender: {
             _id: 1,
+            avatarUrl: 1,
+            email: 1,
+            role: 1,
             firstname: 1,
             lastname: 1,
-            role: 1,
+            nickname: 1,
+            verified: 1,
           },
         },
       },

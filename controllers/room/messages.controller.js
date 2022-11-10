@@ -1,10 +1,12 @@
+const { CLIENT_SCHEMA } = require("../../models/message.model");
 const { messagesService } = require("../../services");
 const httpStatus = require("http-status");
+const _ = require("lodash");
 
 module.exports.createMessage = async (req, res, next) => {
   try {
     const user = req.user;
-    let { type, text, roomId, assignmentId } = req.body;
+    let { type, text, roomId } = req.body;
     const file = req?.files?.file;
 
     const message = await messagesService.createMessage(
@@ -12,11 +14,10 @@ module.exports.createMessage = async (req, res, next) => {
       type,
       text,
       roomId,
-      assignmentId,
       file
     );
 
-    res.status(httpStatus.OK).json(message);
+    res.status(httpStatus.OK).json(_.pick(message, CLIENT_SCHEMA));
   } catch (err) {
     next(err);
   }

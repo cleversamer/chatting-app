@@ -1,5 +1,6 @@
 const { ApiError } = require("../../middleware/apiError");
 const { Room } = require("../../models/room.model");
+const { MESSAGE_TYPES } = require("../../models/message.model");
 const errors = require("../../config/errors");
 const httpStatus = require("http-status");
 const messagesService = require("./messages.service");
@@ -61,7 +62,8 @@ module.exports.deleteRoom = async (roomId) => {
 
 module.exports.findRoomById = async (roomId) => {
   try {
-    return await Room.findOne({ _id: roomId });
+    roomId = new mongoose.Types.ObjectId(roomId);
+    return await Room.findById(roomId);
   } catch (err) {
     throw err;
   }
@@ -310,11 +312,12 @@ module.exports.createRoom = async (req) => {
   }
 };
 
-module.exports.toggleChatDisabled = async (req) => {
+module.exports.blockUsersFromChatting = async (req) => {
   try {
     const user = req.user;
-    const roomId = req.params.id;
+    const { roomId, userIds } = req.body;
 
+    // Check if room exists
     const room = await this.findRoomById(roomId);
     if (!room) {
       const statusCode = httpStatus.NOT_FOUND;
@@ -322,13 +325,48 @@ module.exports.toggleChatDisabled = async (req) => {
       throw new ApiError(statusCode, message);
     }
 
+    // Check if the user is room's author
     if (room.author.toString() !== user._id.toString()) {
       const statusCode = httpStatus.UNAUTHORIZED;
       const message = errors.rooms.unauthorized;
       throw new ApiError(statusCode, message);
     }
 
-    room.chatDisabled = !room.chatDisabled;
+    // Add users to blockList
+    userIds.forEach((userId) => room.blockList.push(userId));
+    await room.save();
+
+    const mappedRoom = await this.getMappedRooms([room._id]);
+    return mappedRoom[0];
+  } catch (err) {
+    throw err;
+  }
+};
+
+module.exports.unblockUsersFromChatting = async (req) => {
+  try {
+    const user = req.user;
+    const { roomId, userIds } = req.body;
+
+    // Check if room exists
+    const room = await this.findRoomById(roomId);
+    if (!room) {
+      const statusCode = httpStatus.NOT_FOUND;
+      const message = errors.rooms.notFound;
+      throw new ApiError(statusCode, message);
+    }
+
+    // Check if the user is room's author
+    if (room.author.toString() !== user._id.toString()) {
+      const statusCode = httpStatus.UNAUTHORIZED;
+      const message = errors.rooms.unauthorized;
+      throw new ApiError(statusCode, message);
+    }
+
+    // Remove users from blockList
+    room.blockList = room.blockList.filter(
+      (userId) => !userIds.includes(userId)
+    );
     await room.save();
 
     const mappedRoom = await this.getMappedRooms([room._id]);
@@ -369,9 +407,21 @@ module.exports.resetRoom = async (user, roomId) => {
 module.exports.addPinnedMessage = async (req) => {
   try {
     const user = req.user;
-    const roomId = req.params.id;
-    const { text, file = {} } = req.body;
+    const { type, roomId, text, file = {} } = req.body;
 
+    if (!MESSAGE_TYPES.includes(type)) {
+      const statusCode = httpStatus.BAD_REQUEST;
+      const message = errors.message.invalidType;
+      throw new ApiError(statusCode, message);
+    }
+
+    if (!MESSAGE_TYPES.includes(type)) {
+      const statusCode = httpStatus.BAD_REQUEST;
+      const message = errors.message.invalidType;
+      throw new ApiError(statusCode, message);
+    }
+
+    // Check if room exists
     const room = await this.findRoomById(roomId);
     if (!room) {
       const statusCode = httpStatus.NOT_FOUND;
@@ -384,16 +434,19 @@ module.exports.addPinnedMessage = async (req) => {
       const message = errors.rooms.unauthorized;
       throw new ApiError(statusCode, message);
     }
-
-    const message = await messagesService.createMessage({
+    const message = await messagesService.createMessage(
       user,
-      body: { text, file, roomId },
-    });
+      type,
+      text,
+      roomId,
+      file
+    );
 
     room.pinnedMessages.push(message._id);
     await room.save();
 
     const mappedRoom = await this.getMappedRooms([room._id]);
+
     return mappedRoom[0];
   } catch (err) {
     throw err;

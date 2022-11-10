@@ -156,9 +156,20 @@ const rooms = Object.freeze({
     en: "Room name is already exist",
     ar: "اسم الغرفة موجود بالفعل",
   },
-  chatDisabled: {
-    en: "Chatting is disabled by admin",
-    ar: "تم إيقاء الرسائل من طرف الآدمن",
+  chatBlocked: {
+    en: "The admin has blocked you from sending messages",
+    ar: "الآدمن قام بمنعك من إرسال الرسائل",
+  },
+});
+
+const message = Object.freeze({
+  invalidType: {
+    en: "Invalid message type",
+    ar: "نوع الرسالة غير مدعوم",
+  },
+  noFile: {
+    en: "Please add a file",
+    ar: "يرجى اضافة ملف",
   },
 });
 
@@ -192,4 +203,5 @@ module.exports = {
   codes,
   rooms,
   assignments,
+  message,
 };

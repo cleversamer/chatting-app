@@ -81,9 +81,18 @@ module.exports.createRoom = async (req, res, next) => {
   }
 };
 
-module.exports.toggleChatDisabled = async (req, res, next) => {
+module.exports.blockUsersFromChatting = async (req, res, next) => {
   try {
-    const room = await roomsService.toggleChatDisabled(req);
+    const room = await roomsService.blockUsersFromChatting(req);
+    res.status(httpStatus.CREATED).json(room);
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports.unblockUsersFromChatting = async (req, res, next) => {
+  try {
+    const room = await roomsService.unblockUsersFromChatting(req);
     res.status(httpStatus.CREATED).json(room);
   } catch (err) {
     next(err);

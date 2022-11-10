@@ -1,13 +1,12 @@
 const { ApiError } = require("../../middleware/apiError");
 const { User } = require("../../models/user.model");
 const bcrypt = require("bcrypt");
-const crypto = require("crypto");
 const emailService = require("../user/email.service");
 const errors = require("../../config/errors");
-const fs = require("fs");
 const httpStatus = require("http-status");
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
+const localStorage = require("../../services/storage/localStorage.service");
 
 module.exports.getAllUsers = async (user) => {
   try {
@@ -106,11 +105,11 @@ module.exports.unjoinUsersFromRoom = async (userIds, roomId) => {
 module.exports.updateProfile = async (req) => {
   try {
     let user = req.user;
-    const { avatarAsBase64, firstname, lastname, email, password, nickname } =
-      req.body;
+    const { firstname, lastname, email, password, nickname } = req.body;
+    const avatar = req?.files?.avatar;
 
     if (
-      !avatarAsBase64 &&
+      !avatar &&
       !firstname &&
       !lastname &&
       !email &&
@@ -126,14 +125,9 @@ module.exports.updateProfile = async (req) => {
     validateString(password, 8, 32, "invalidPassword");
     validateString(nickname, 4, 32, "invalidNickname");
 
-    if (avatarAsBase64) {
-      const data = avatarAsBase64.split(",");
-      const extension = data[0].split("/")[1].split(";")[0];
-      const content = data[1];
-      const readFile = Buffer.from(content, "base64");
-      const diskName = crypto.randomUUID();
-      fs.writeFileSync(`./uploads/${diskName}.${extension}`, readFile, "utf8");
-      user.avatarUrl = `/${diskName}.${extension}`;
+    if (avatar) {
+      const _file = await localStorage.storeFile(avatar);
+      user.avatarUrl = _file.path;
     }
 
     if (firstname && user.firstname !== firstname) {

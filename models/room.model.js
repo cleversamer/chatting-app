@@ -6,9 +6,7 @@ const clientSchema = [
   "author",
   "pinnedMessages",
   "members",
-  "chatDisabled",
   "status",
-  "assignments",
 ];
 
 const roomSchema = new mongoose.Schema(
@@ -26,20 +24,19 @@ const roomSchema = new mongoose.Schema(
     },
     code: {
       type: String,
+      trim: true,
     },
-    // assignments: {
-    //   type: Array,
-    // },
     pinnedMessages: {
       type: Array,
+      default: [],
     },
     members: {
       type: Array,
+      default: [],
     },
-    chatDisabled: {
-      type: Boolean,
-      required: true,
-      default: false,
+    blockList: {
+      type: Array,
+      default: [],
     },
     status: {
       type: String,
