@@ -160,6 +160,7 @@ module.exports.getAllPublicRooms = async () => {
   try {
     return await Room.aggregate([
       { $match: { status: "public" } },
+      { $limit: 10 },
       {
         $lookup: {
           from: "users",

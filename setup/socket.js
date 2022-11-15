@@ -11,8 +11,6 @@ module.exports = (server) => {
   const io = socketIo(server, options);
 
   io.on("connection", (socket) => {
-    console.log("Connected", socket.id);
-
     socket.on("setup", (user) => {
       socket.join(user._id);
       socket.emit("connected");
