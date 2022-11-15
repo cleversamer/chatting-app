@@ -10,6 +10,7 @@ const clientSchema = [
   "firstname",
   "lastname",
   "nickname",
+  "rooms",
   "verified",
 ];
 
