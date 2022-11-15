@@ -66,20 +66,15 @@ module.exports.createMessage = async (user, type, text, roomId, file) => {
         displayName: mssgFile.originalName,
         url: mssgFile.path,
       },
-      receiver: roomId,
-      sender: user._id,
+      receiver: {
+        _id: room._id,
+        name: room.name,
+      },
+      sender: _.pick(user, userSchema),
       type,
     });
 
-    const savedMssg = await message.save();
-
-    savedMssg.sender = _.pick(user, userSchema);
-    savedMssg.receiver = {
-      _id: room._id,
-      name: room.name,
-    };
-
-    return savedMssg;
+    return await message.save();
   } catch (err) {
     throw err;
   }
