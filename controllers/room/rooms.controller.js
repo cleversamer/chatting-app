@@ -24,7 +24,8 @@ module.exports.deleteRoom = async (req, res, next) => {
 
 module.exports.getAllPublicRooms = async (req, res, next) => {
   try {
-    const rooms = await roomsService.getAllPublicRooms();
+    const { skip } = req.qury;
+    const rooms = await roomsService.getAllPublicRooms(skip);
 
     if (!rooms || !rooms.length) {
       const statusCode = httpStatus.NOT_FOUND;

@@ -156,11 +156,15 @@ module.exports.getMappedRooms = async (roomIds = []) => {
   }
 };
 
-module.exports.getAllPublicRooms = async () => {
+module.exports.getAllPublicRooms = async (skip) => {
   try {
+    if (typeof skip !== "number") {
+      skip = 0;
+    }
+
     return await Room.aggregate([
       { $match: { status: "public" } },
-      { $limit: 10 },
+      { $limit: 10, $skip: skip },
       {
         $lookup: {
           from: "users",
