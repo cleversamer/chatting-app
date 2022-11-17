@@ -24,7 +24,7 @@ module.exports.deleteRoom = async (req, res, next) => {
 
 module.exports.getAllPublicRooms = async (req, res, next) => {
   try {
-    const { skip } = req.qury;
+    const { skip } = req.query;
     const rooms = await roomsService.getAllPublicRooms(skip);
 
     if (!rooms || !rooms.length) {
