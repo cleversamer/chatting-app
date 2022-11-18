@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const { ApiError } = require("../../middleware/apiError");
 const { Message, MESSAGE_TYPES } = require("../../models/message.model");
 const { clientSchema: userSchema } = require("../../models/user.model");
@@ -80,7 +81,7 @@ module.exports.createMessage = async (user, type, text, roomId, file) => {
 module.exports.getRoomMessages = async (roomId) => {
   try {
     return await Message.aggregate([
-      { $match: { receiver: roomId } },
+      { $match: { receiver: mongoose.Types.ObjectId(roomId) } },
       {
         $lookup: {
           from: "users",
