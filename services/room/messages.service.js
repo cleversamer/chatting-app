@@ -66,10 +66,7 @@ module.exports.createMessage = async (user, type, text, roomId, file) => {
         displayName: mssgFile.originalName,
         url: mssgFile.path,
       },
-      receiver: {
-        _id: room._id,
-        name: room.name,
-      },
+      receiver: room._id,
       sender: _.pick(user, userSchema),
       type,
     });
