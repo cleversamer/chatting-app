@@ -27,11 +27,11 @@ module.exports.getAllPublicRooms = async (req, res, next) => {
     const { skip } = req.query;
     const rooms = await roomsService.getAllPublicRooms(skip);
 
-    if (!rooms || !rooms.length) {
-      const statusCode = httpStatus.NOT_FOUND;
-      const message = errors.rooms.noRooms;
-      throw new ApiError(statusCode, message);
-    }
+    // if (!rooms || !rooms.length) {
+    //   const statusCode = httpStatus.NOT_FOUND;
+    //   const message = errors.rooms.noRooms;
+    //   throw new ApiError(statusCode, message);
+    // }
 
     res.status(httpStatus.OK).json({ rooms });
   } catch (err) {
