@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const MESSAGE_TYPES = ["text", "audio", "image"];
+const MESSAGE_TYPES = ["text", "audio", "file"];
 
 const CLIENT_SCHEMA = [
   "_id",
