@@ -24,7 +24,7 @@ module.exports = (server) => {
     });
 
     socket.on("new message", (roomId, message) => {
-      io.to(roomId).emit("message received", message);
+      socket.broadcast.to(roomId).emit("message received", message);
     });
 
     socket.on("leave room", (roomId) => {
