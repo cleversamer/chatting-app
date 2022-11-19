@@ -16,15 +16,15 @@ module.exports = (server) => {
     });
 
     socket.on("typing", (roomId, user) => {
-      socket.to(roomId).emit("typing", user);
+      io.to(roomId).emit("typing", user);
     });
 
     socket.on("stop typing", (roomId, user) => {
-      socket.to(roomId).emit("stop typing", user);
+      io.to(roomId).emit("stop typing", user);
     });
 
     socket.on("new message", (roomId, message) => {
-      socket.to(roomId).emit("message received", message);
+      io.to(roomId).emit("message received", message);
     });
 
     socket.on("leave room", (roomId) => {
