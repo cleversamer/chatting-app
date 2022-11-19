@@ -8,7 +8,7 @@ const httpStatus = require("http-status");
 const roomsService = require("./rooms.service");
 const _ = require("lodash");
 
-module.exports.createMessage = async (user, type, text, roomId, file) => {
+module.exports.createMessage = async (user, type, text, roomId, file, date) => {
   try {
     if (!MESSAGE_TYPES.includes(type)) {
       const statusCode = httpStatus.BAD_REQUEST;
@@ -68,8 +68,9 @@ module.exports.createMessage = async (user, type, text, roomId, file) => {
         url: mssgFile.path,
       },
       receiver: room._id,
-      sender: _.pick(user, userSchema),
+      sender: user._id,
       type,
+      date,
     });
 
     return await message.save();
