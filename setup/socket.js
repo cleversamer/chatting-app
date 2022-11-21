@@ -12,23 +12,22 @@ module.exports = (server) => {
 
   io.on("connection", (socket) => {
     socket.on("join room", (roomId) => {
+      const lastJoinedRooms = Array.from(socket.rooms).slice(1);
+      lastJoinedRooms.forEach((roomId) => socket.leave(roomId));
+
       socket.join(roomId);
     });
 
     socket.on("typing", (roomId, user) => {
-      io.to(roomId).emit("typing", user);
+      socket.broadcast.to(roomId).emit("typing", user);
     });
 
     socket.on("stop typing", (roomId, user) => {
-      io.to(roomId).emit("stop typing", user);
+      socket.broadcast.to(roomId).emit("stop typing", user);
     });
 
     socket.on("new message", (roomId, message) => {
       socket.broadcast.to(roomId).emit("message received", message);
-    });
-
-    socket.on("leave room", (roomId) => {
-      socket.leave(roomId);
     });
   });
 };
