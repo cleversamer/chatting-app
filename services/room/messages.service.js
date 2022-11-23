@@ -1,14 +1,22 @@
 const mongoose = require("mongoose");
 const { ApiError } = require("../../middleware/apiError");
 const { Message, MESSAGE_TYPES } = require("../../models/message.model");
-const { clientSchema: userSchema } = require("../../models/user.model");
 const localStorage = require("../storage/localStorage.service");
 const errors = require("../../config/errors");
 const httpStatus = require("http-status");
 const roomsService = require("./rooms.service");
-const _ = require("lodash");
 
-module.exports.createMessage = async (user, type, text, roomId, file, date) => {
+module.exports.createMessage = async (
+  user,
+  type,
+  text,
+  roomId,
+  file,
+  date,
+  isReply,
+  repliedMessageId,
+  isPinned
+) => {
   try {
     if (!MESSAGE_TYPES.includes(type)) {
       const statusCode = httpStatus.BAD_REQUEST;
@@ -57,8 +65,9 @@ module.exports.createMessage = async (user, type, text, roomId, file, date) => {
     }
 
     // Store file in case it exists and message type is not text
-    const mssgFile =
-      type && type !== "text" && file ? await localStorage.storeFile(file) : {};
+    const fileTypes = ["audio", "file", "image", "video"];
+    const isFile = type && fileTypes.includes(type) && file;
+    const mssgFile = isFile ? await localStorage.storeFile(file) : {};
 
     // Create the message
     const message = new Message({
@@ -71,7 +80,12 @@ module.exports.createMessage = async (user, type, text, roomId, file, date) => {
       sender: user._id,
       type,
       date,
+      isReply: isReply && !isPinned,
+      isPinned,
     });
+
+    message.repliedMessage =
+      isReply && !isPinned ? mongoose.Types.ObjectId(repliedMessageId) : "";
 
     return await message.save();
   } catch (err) {

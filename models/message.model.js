@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const MESSAGE_TYPES = ["text", "audio", "file"];
+const MESSAGE_TYPES = ["text", "audio", "file", "image", "video"];
 
 const CLIENT_SCHEMA = [
   "_id",
@@ -19,6 +19,18 @@ const messageSchema = new mongoose.Schema(
       enum: MESSAGE_TYPES,
       default: "text",
       required: true,
+    },
+    repliedMessage: {
+      type: Object,
+      ref: "Message",
+    },
+    isReply: {
+      type: Boolean,
+      default: false,
+    },
+    isPinned: {
+      type: Boolean,
+      default: false,
     },
     sender: {
       type: Object,

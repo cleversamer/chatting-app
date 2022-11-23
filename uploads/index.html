@@ -32,19 +32,16 @@
       const socket = io("http://localhost:4000/");
       const roomId = "room#1";
 
-      socket.emit("join room", roomId);
-      socket.emit("join room", roomId + "1");
-      socket.emit("join room", roomId + "2");
-      socket.emit("join room", roomId + "3");
-      socket.emit("join room", roomId + "4");
-
       socket.on("message received", (message) => {
         displayMessage(message.text);
       });
 
       document.querySelector("#form").addEventListener("submit", (event) => {
         event.preventDefault();
+
         const text = getMessage();
+        if (!text) return;
+
         displayMessage(text);
         socket.emit("new message", roomId, { text });
       });

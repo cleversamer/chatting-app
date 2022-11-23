@@ -6,7 +6,8 @@ const _ = require("lodash");
 module.exports.createMessage = async (req, res, next) => {
   try {
     const user = req.user;
-    let { type, text, roomId, date } = req.body;
+    let { type, text, roomId, date, isPinned, isReply, repliedMessageId } =
+      req.body;
     const file = req?.files?.file;
 
     const message = await messagesService.createMessage(
@@ -15,7 +16,10 @@ module.exports.createMessage = async (req, res, next) => {
       text,
       roomId,
       file,
-      date
+      date,
+      isReply,
+      repliedMessageId,
+      isPinned
     );
 
     res.status(httpStatus.OK).json(_.pick(message, CLIENT_SCHEMA));
