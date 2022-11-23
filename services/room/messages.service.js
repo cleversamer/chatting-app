@@ -14,7 +14,7 @@ module.exports.createMessage = async (
   file,
   date,
   isReply,
-  repliedMessageId,
+  repliedMessage,
   isPinned
 ) => {
   try {
@@ -84,8 +84,7 @@ module.exports.createMessage = async (
       isPinned,
     });
 
-    message.repliedMessage =
-      isReply && !isPinned ? mongoose.Types.ObjectId(repliedMessageId) : "";
+    message.repliedMessage = isReply && !isPinned ? repliedMessage : null;
 
     return await message.save();
   } catch (err) {
@@ -109,6 +108,9 @@ module.exports.getRoomMessages = async (roomId) => {
         $project: {
           _id: 1,
           type: 1,
+          repliedMessage: 1,
+          isReply: 1,
+          isPinned: 1,
           text: 1,
           file: 1,
           date: 1,
@@ -116,12 +118,9 @@ module.exports.getRoomMessages = async (roomId) => {
           sender: {
             _id: 1,
             avatarUrl: 1,
-            email: 1,
-            role: 1,
             firstname: 1,
             lastname: 1,
             nickname: 1,
-            verified: 1,
           },
         },
       },

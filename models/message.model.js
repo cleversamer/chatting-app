@@ -5,6 +5,9 @@ const MESSAGE_TYPES = ["text", "audio", "file", "image", "video"];
 const CLIENT_SCHEMA = [
   "_id",
   "type",
+  "repliedMessage",
+  "isReply",
+  "isPinned",
   "sender",
   "receiver",
   "text",
@@ -22,7 +25,6 @@ const messageSchema = new mongoose.Schema(
     },
     repliedMessage: {
       type: Object,
-      ref: "Message",
     },
     isReply: {
       type: Boolean,

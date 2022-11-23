@@ -411,7 +411,8 @@ module.exports.resetRoom = async (user, roomId) => {
 module.exports.addPinnedMessage = async (req) => {
   try {
     const user = req.user;
-    const { type, roomId, text, file = {} } = req.body;
+    const { type, roomId, text, date } = req.body;
+    const file = req?.files?.file;
 
     if (!MESSAGE_TYPES.includes(type)) {
       const statusCode = httpStatus.BAD_REQUEST;
@@ -438,12 +439,17 @@ module.exports.addPinnedMessage = async (req) => {
       const message = errors.rooms.unauthorized;
       throw new ApiError(statusCode, message);
     }
+
     const message = await messagesService.createMessage(
       user,
       type,
       text,
       roomId,
-      file
+      file,
+      date,
+      false,
+      null,
+      true
     );
 
     room.pinnedMessages.push(message._id);
