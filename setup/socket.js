@@ -29,5 +29,9 @@ module.exports = (server) => {
     socket.on("new message", (roomId, message) => {
       socket.broadcast.to(roomId).emit("message received", message);
     });
+
+    socket.on("delete message", (roomId, messageId) => {
+      socket.broadcast.to(roomId).emit("message deleted", messageId);
+    });
   });
 };

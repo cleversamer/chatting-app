@@ -163,6 +163,10 @@ const rooms = Object.freeze({
 });
 
 const message = Object.freeze({
+  invalidId: {
+    en: "Invalid message id",
+    ar: "معرّف الرسالة غير صالح",
+  },
   invalidType: {
     en: "Invalid message type",
     ar: "نوع الرسالة غير مدعوم",
@@ -170,6 +174,14 @@ const message = Object.freeze({
   noFile: {
     en: "Please add a file",
     ar: "يرجى اضافة ملف",
+  },
+  notFound: {
+    en: "Message was not found",
+    ar: "الرسالة غير موجودة",
+  },
+  notAuthor: {
+    en: "You're not message's owner",
+    ar: "أنت لست صاحب الرسالة",
   },
 });
 

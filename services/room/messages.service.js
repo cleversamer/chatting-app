@@ -129,3 +129,33 @@ module.exports.getRoomMessages = async (roomId) => {
     throw err;
   }
 };
+
+module.exports.deleteMessage = async (user, messageId) => {
+  try {
+    messageId = mongoose.Types.ObjectId(messageId);
+
+    if (!mongoose.isValidObjectId(messageId)) {
+      const statusCode = httpStatus.BAD_REQUEST;
+      const message = errors.message.invalidId;
+      throw new ApiError(statusCode, message);
+    }
+
+    const message = await Message.findById(messageId);
+    if (!message) {
+      const statusCode = httpStatus.NOT_FOUND;
+      const message = errors.message.notFound;
+      throw new ApiError(statusCode, message);
+    }
+
+    const isMssgAuthor = message.sender.toString() === user._id.toString();
+    if (!isMssgAuthor) {
+      const statusCode = httpStatus.FORBIDDEN;
+      const message = errors.message.notAuthor;
+      throw new ApiError(statusCode, message);
+    }
+
+    return await Message.findByIdAndDelete(messageId);
+  } catch (err) {
+    throw err;
+  }
+};

@@ -33,19 +33,6 @@ let grantsObject = {
       "update:own": ["*"],
     },
   },
-  stdteacher: {
-    user: allRights,
-    verificationCode: allRights,
-    password: allRights,
-    room: allRights,
-    message: allRights,
-    assignment: allRights,
-    submission: allRights,
-    profile: {
-      "read:own": ["*"],
-      "update:own": ["*"],
-    },
-  },
   student: {
     user: {
       "read:own": ["*"],
@@ -62,6 +49,8 @@ let grantsObject = {
     },
     message: {
       "create:own": ["*"],
+      "update:own": ["*"],
+      "delete:own": ["*"],
     },
     assignment: {
       "read:any": ["*"],

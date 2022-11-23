@@ -36,3 +36,16 @@ module.exports.getRoomMessages = async (req, res, next) => {
     next(err);
   }
 };
+
+module.exports.deleteMessage = async (req, res, next) => {
+  try {
+    const user = req.user;
+    const { messageId } = req.body;
+
+    const message = await messagesService.deleteMessage(user, messageId);
+
+    res.status(httpStatus.OK).json(message);
+  } catch (err) {
+    next(err);
+  }
+};

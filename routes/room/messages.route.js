@@ -11,4 +11,10 @@ router.post(
 
 router.get("/room/:id", messagesController.getRoomMessages);
 
+router.delete(
+  "/delete",
+  [auth("deleteOwn", "message")],
+  messagesController.deleteMessage
+);
+
 module.exports = router;
