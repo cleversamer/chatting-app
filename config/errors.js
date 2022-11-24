@@ -116,6 +116,10 @@ const rooms = Object.freeze({
     en: "There are no rooms out there",
     ar: "لا يوجد غرف مسجلة",
   },
+  noRoomsMatch: {
+    en: "No rooms match",
+    ar: "لا يوجد غرف لنتيجة بحثك",
+  },
   unauthorized: {
     en: "You don't have admin rights",
     ar: "ليس لديك صلاحيات الآدمن",

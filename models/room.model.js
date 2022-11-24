@@ -48,6 +48,8 @@ const roomSchema = new mongoose.Schema(
   { minimize: false }
 );
 
+roomSchema.index({ name: "text" });
+
 const Room = mongoose.model("Room", roomSchema);
 
 module.exports = { Room, clientSchema };

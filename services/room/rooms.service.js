@@ -79,7 +79,14 @@ module.exports.findRoomByName = async (name) => {
 
 module.exports.searchRooms = async (name) => {
   try {
-    return await Room.find({ name, status: "public" });
+    // return await Room.find({ name, status: "public" });
+
+    return await Room.find(
+      { $text: { $search: name } },
+      { score: { $meta: "textScore" } }
+    )
+      .sort({ score: { $meta: "textScore" } })
+      .limit(10);
   } catch (err) {
     throw err;
   }

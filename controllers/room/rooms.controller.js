@@ -1,7 +1,9 @@
+const { clientSchema } = require("../../models/room.model");
 const { ApiError } = require("../../middleware/apiError");
 const { roomsService } = require("../../services");
 const errors = require("../../config/errors");
 const httpStatus = require("http-status");
+const _ = require("lodash");
 
 module.exports.getAllRooms = async (req, res, next) => {
   try {
@@ -125,11 +127,15 @@ module.exports.searchRooms = async (req, res, next) => {
 
     if (!rooms || !rooms.length) {
       const statusCode = httpStatus.NOT_FOUND;
-      const message = errors.rooms.noRooms;
+      const message = errors.rooms.noRoomsMatch;
       throw new ApiError(statusCode, message);
     }
 
-    res.status(httpStatus.OK).json({ rooms });
+    const response = {
+      rooms: rooms.map((room) => _.pick(room, clientSchema)),
+    };
+
+    res.status(httpStatus.OK).json(response);
   } catch (err) {
     next(err);
   }
