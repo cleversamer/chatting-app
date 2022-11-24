@@ -140,3 +140,16 @@ module.exports.searchRooms = async (req, res, next) => {
     next(err);
   }
 };
+
+module.exports.deleteMembers = async (req, res, next) => {
+  try {
+    const user = req.user;
+    const { roomId, members } = req.body;
+
+    const room = await roomsService.deleteMembers(user, roomId, members);
+
+    res.status(httpStatus.OK).json(room);
+  } catch (err) {
+    next(err);
+  }
+};

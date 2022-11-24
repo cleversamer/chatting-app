@@ -501,7 +501,9 @@ module.exports.joinRoom = async (req) => {
       throw new ApiError(statusCode, message);
     }
 
-    if (user.rooms.includes(room._id)) {
+    const isAlreadyJoined =
+      user.rooms.includes(room._id) && room.members.includes(user._id);
+    if (isAlreadyJoined) {
       const statusCode = httpStatus.BAD_REQUEST;
       const message = errors.rooms.alreadyJoined;
       throw new ApiError(statusCode, message);
@@ -516,6 +518,31 @@ module.exports.joinRoom = async (req) => {
 
     const mappedRoom = await this.getMappedRooms([room._id]);
     return mappedRoom[0];
+  } catch (err) {
+    throw err;
+  }
+};
+
+module.exports.deleteMembers = async (user, roomId, members) => {
+  try {
+    const room = await Room.findById(roomId);
+    if (!room) {
+      const statusCode = httpStatus.NOT_FOUND;
+      const message = errors.rooms.notFound;
+      throw new ApiError(statusCode, message);
+    }
+
+    if (room.author.toString() !== user._id.toString()) {
+      const statusCode = httpStatus.FORBIDDEN;
+      const message = errors.rooms.unauthorized;
+      throw new ApiError(statusCode, message);
+    }
+
+    room.members = room.members.filter(
+      (roomId) => !members.includes(roomId.toString())
+    );
+
+    return await room.save();
   } catch (err) {
     throw err;
   }

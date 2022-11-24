@@ -49,4 +49,10 @@ router.get("/join", [auth("updateOwn", "room")], roomsController.joinRoom);
 
 router.get("/search", [auth("readAny", "room")], roomsController.searchRooms);
 
+router.delete(
+  "/delete-members",
+  auth("updateOwn", "room"),
+  roomsController.deleteMembers
+);
+
 module.exports = router;
