@@ -178,6 +178,14 @@ module.exports.getAllPublicRooms = async (skip) => {
         },
       },
       {
+        $lookup: {
+          from: "users",
+          localField: "author",
+          foreignField: "_id",
+          as: "author",
+        },
+      },
+      {
         $project: {
           _id: 1,
           name: 1,
@@ -185,7 +193,12 @@ module.exports.getAllPublicRooms = async (skip) => {
           messages: 1,
           chatDisabled: 1,
           status: 1,
-          author: 1,
+          author: {
+            _id: 1,
+            firstname: 1,
+            lastname: 1,
+            role: 1,
+          },
           members: {
             _id: 1,
             firstname: 1,
