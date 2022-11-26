@@ -83,7 +83,7 @@ module.exports.searchRooms = async (name) => {
   try {
     return await Room.aggregate([
       { $match: { $text: { $search: name }, status: "public" } },
-      { $sort: { score: 1 } },
+      { $sort: { score: { $meta: "textScore" } } },
       { $limit: 10 },
       {
         $lookup: {
