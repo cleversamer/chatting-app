@@ -8,7 +8,7 @@ const { limitHandler } = require("../middleware/apiError");
 module.exports = (app) => {
   app.use(
     upload({
-      limits: { fileSize: 5 * 1024 * 1024 },
+      limits: { fileSize: 10 * 1024 * 1024 },
       abortOnLimit: true,
       limitHandler,
     })
