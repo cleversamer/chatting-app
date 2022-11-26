@@ -1,5 +1,6 @@
 const { ApiError } = require("../../middleware/apiError");
 const { Room } = require("../../models/room.model");
+const { User } = require("../../models/user.model");
 const { MESSAGE_TYPES } = require("../../models/message.model");
 const errors = require("../../config/errors");
 const httpStatus = require("http-status");
@@ -79,12 +80,41 @@ module.exports.findRoomByName = async (name) => {
 
 module.exports.searchRooms = async (name) => {
   try {
-    return await Room.find(
-      { $text: { $search: name } },
-      { score: { $meta: "textScore" } }
-    )
-      .sort({ score: { $meta: "textScore" } })
-      .limit(10);
+    return await Room.aggregate([
+      { $match: { $text: { $search: name }, status: "public" } },
+      { $sort: { score: 1 } },
+      { $limit: 10 },
+      {
+        $lookup: {
+          from: "users",
+          localField: "author",
+          foreignField: "_id",
+          as: "author",
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          pinnedMessages: 1,
+          messages: 1,
+          chatDisabled: 1,
+          status: 1,
+          author: {
+            _id: 1,
+            firstname: 1,
+            lastname: 1,
+            role: 1,
+          },
+          members: {
+            _id: 1,
+            firstname: 1,
+            lastname: 1,
+            role: 1,
+          },
+        },
+      },
+    ]);
   } catch (err) {
     throw err;
   }
@@ -540,6 +570,11 @@ module.exports.deleteMembers = async (user, roomId, members) => {
 
     room.members = room.members.filter(
       (roomId) => !members.includes(roomId.toString())
+    );
+
+    await User.updateMany(
+      { _id: { $in: members } },
+      { $pull: { rooms: mongoose.Types.ObjectId(roomId) } }
     );
 
     return await room.save();

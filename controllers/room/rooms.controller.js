@@ -131,11 +131,7 @@ module.exports.searchRooms = async (req, res, next) => {
       throw new ApiError(statusCode, message);
     }
 
-    const response = {
-      rooms: rooms.map((room) => _.pick(room, clientSchema)),
-    };
-
-    res.status(httpStatus.OK).json(response);
+    res.status(httpStatus.OK).json({ rooms });
   } catch (err) {
     next(err);
   }
