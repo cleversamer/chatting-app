@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const clientSchema = [
   "_id",
   "name",
+  "showName",
   "author",
   "pinnedMessages",
   "members",
@@ -16,6 +17,10 @@ const roomSchema = new mongoose.Schema(
       required: true,
       unique: true,
       trim: true,
+    },
+    showName: {
+      type: Boolean,
+      default: true,
     },
     author: {
       type: Object,

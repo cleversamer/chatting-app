@@ -149,3 +149,16 @@ module.exports.deleteMembers = async (req, res, next) => {
     next(err);
   }
 };
+
+module.exports.toggleShowName = async (req, res, next) => {
+  try {
+    const user = req.user;
+    const { roomId } = req.body;
+
+    const room = await roomsService.toggleShowName(user, roomId);
+
+    res.status(httpStatus.OK).json(room);
+  } catch (err) {
+    next(err);
+  }
+};

@@ -23,6 +23,7 @@ module.exports.getAllRooms = async () => {
         $project: {
           _id: 1,
           name: 1,
+          showName: 1,
           members: { $size: "$members" },
           status: 1,
           author: {
@@ -96,6 +97,7 @@ module.exports.searchRooms = async (name) => {
         $project: {
           _id: 1,
           name: 1,
+          showName: 1,
           pinnedMessages: 1,
           messages: 1,
           chatDisabled: 1,
@@ -162,6 +164,7 @@ module.exports.getMappedRooms = async (roomIds = []) => {
         $project: {
           _id: 1,
           name: 1,
+          showName: 1,
           messages: 1,
           chatDisabled: 1,
           status: 1,
@@ -219,6 +222,7 @@ module.exports.getAllPublicRooms = async (skip) => {
         $project: {
           _id: 1,
           name: 1,
+          showName: 1,
           pinnedMessages: 1,
           messages: 1,
           chatDisabled: 1,
@@ -576,6 +580,29 @@ module.exports.deleteMembers = async (user, roomId, members) => {
       { _id: { $in: members } },
       { $pull: { rooms: mongoose.Types.ObjectId(roomId) } }
     );
+
+    return await room.save();
+  } catch (err) {
+    throw err;
+  }
+};
+
+module.exports.toggleShowName = async (user, roomId) => {
+  try {
+    const room = await Room.findById(roomId);
+    if (!room) {
+      const statusCode = httpStatus.NOT_FOUND;
+      const message = errors.rooms.notFound;
+      throw new ApiError(statusCode, message);
+    }
+
+    if (room.author.toString() !== user._id.toString()) {
+      const statusCode = httpStatus.FORBIDDEN;
+      const message = errors.rooms.unauthorized;
+      throw new ApiError(statusCode, message);
+    }
+
+    room.showName = !room.showName;
 
     return await room.save();
   } catch (err) {

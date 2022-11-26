@@ -55,4 +55,10 @@ router.delete(
   roomsController.deleteMembers
 );
 
+router.patch(
+  "/toggle-show-name",
+  auth("updateOwn", "room"),
+  roomsController.toggleShowName
+);
+
 module.exports = router;
