@@ -9,7 +9,7 @@ module.exports = (app) => {
   app.use(express.urlencoded({ extended: true }));
   app.use(express.static("uploads"));
   app.use(cors({ origin: true }));
-  app.use(upload());
+  app.use(upload({ limits: { fileSize: 10 * 1024 * 1024 } }));
   app.use(xss());
   app.use(mongoSanitize());
 };
