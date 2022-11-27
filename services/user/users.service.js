@@ -8,7 +8,7 @@ const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
 const localStorage = require("../../services/storage/localStorage.service");
 
-module.exports.getAllUsers = async (user) => {
+module.exports.getAllUsers = async (user, role) => {
   try {
     return await User.aggregate([
       {
@@ -18,6 +18,7 @@ module.exports.getAllUsers = async (user) => {
               $eq: user._id,
             },
           },
+          role,
         },
       },
       {

@@ -7,7 +7,9 @@ const clientSchema = [
   "author",
   "pinnedMessages",
   "members",
+  "chatDisabled",
   "status",
+  "blockList",
 ];
 
 const roomSchema = new mongoose.Schema(
@@ -38,6 +40,10 @@ const roomSchema = new mongoose.Schema(
     members: {
       type: Array,
       default: [],
+    },
+    chatDisabled: {
+      type: Boolean,
+      default: false,
     },
     blockList: {
       type: Array,

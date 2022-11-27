@@ -101,6 +101,7 @@ module.exports.searchRooms = async (name) => {
           pinnedMessages: 1,
           messages: 1,
           chatDisabled: 1,
+          blockList: 1,
           status: 1,
           author: {
             _id: 1,
@@ -226,6 +227,7 @@ module.exports.getAllPublicRooms = async (skip) => {
           pinnedMessages: 1,
           messages: 1,
           chatDisabled: 1,
+          blockList: 1,
           status: 1,
           author: {
             _id: 1,
@@ -603,6 +605,29 @@ module.exports.toggleShowName = async (user, roomId) => {
     }
 
     room.showName = !room.showName;
+
+    return await room.save();
+  } catch (err) {
+    throw err;
+  }
+};
+
+module.exports.toggleChatDisabled = async (roomId, user) => {
+  try {
+    const room = await Room.findById(roomId);
+    if (!room) {
+      const statusCode = httpStatus.NOT_FOUND;
+      const message = errors.rooms.notFound;
+      throw new ApiError(statusCode, message);
+    }
+
+    if (room.author.toString() !== user._id.toString()) {
+      const statusCode = httpStatus.FORBIDDEN;
+      const message = errors.rooms.unauthorized;
+      throw new ApiError(statusCode, message);
+    }
+
+    room.chatDisabled = !room.chatDisabled;
 
     return await room.save();
   } catch (err) {

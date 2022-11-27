@@ -186,7 +186,12 @@ module.exports.updateProfile = async (req, res, next) => {
 module.exports.getAllUsers = async (req, res, next) => {
   try {
     const user = req.user;
-    const users = await usersService.getAllUsers(user);
+    let { role } = req.query;
+    if (!["student", "teacher"].includes(role)) {
+      role = "student";
+    }
+
+    const users = await usersService.getAllUsers(user, role);
     if (!users || !users.length) {
       const statusCode = httpStatus.NOT_FOUND;
       const message = errors.user.noUsers;

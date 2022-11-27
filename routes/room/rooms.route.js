@@ -61,4 +61,10 @@ router.patch(
   roomsController.toggleShowName
 );
 
+router.patch(
+  "/toggle-chat-disabled",
+  auth("updateOwn", "room"),
+  roomsController.toggleChatDisabled
+);
+
 module.exports = router;

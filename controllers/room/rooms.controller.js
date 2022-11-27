@@ -162,3 +162,16 @@ module.exports.toggleShowName = async (req, res, next) => {
     next(err);
   }
 };
+
+module.exports.toggleChatDisabled = async (req, res, next) => {
+  try {
+    const user = req.user;
+    const { roomId } = req.body;
+
+    const room = await roomsService.toggleChatDisabled(roomId, user);
+
+    res.status(httpStatus.OK).json(room);
+  } catch (err) {
+    next(err);
+  }
+};
