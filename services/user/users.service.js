@@ -195,3 +195,17 @@ const validateString = (str, min, max, err) => {
 
   return valid;
 };
+
+module.exports.sendNotification = async (user, userIds) => {
+  try {
+    // Find users and map them to an array of device tokens.
+    let users = await User.find({ _id: { $in: userIds } });
+    users = users.map((user) => user.deviceToken);
+
+    // TODO: send notification to specified tokens...
+
+    return true;
+  } catch (err) {
+    throw err;
+  }
+};

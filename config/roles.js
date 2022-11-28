@@ -19,6 +19,7 @@ let grantsObject = {
     submission: allRights,
     profile: allRights,
     roomType: allRights,
+    notification: allRights,
   },
   teacher: {
     user: allRights,
@@ -32,6 +33,7 @@ let grantsObject = {
       "read:own": ["*"],
       "update:own": ["*"],
     },
+    notification: allRights,
   },
   student: {
     user: {
@@ -63,6 +65,7 @@ let grantsObject = {
       "read:own": ["*"],
       "update:own": ["*"],
     },
+    notification: {},
   },
 };
 

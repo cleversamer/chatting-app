@@ -48,4 +48,10 @@ router
   .get([auth("readAny", "userType")], usersController.getAllUsers)
   .delete([auth("deleteAny", "userType")], usersController.deleteUser);
 
+router.post(
+  "/send-notification",
+  auth("createAny", "notification"),
+  usersController.sendNotification
+);
+
 module.exports = router;

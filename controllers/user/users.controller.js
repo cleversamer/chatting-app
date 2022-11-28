@@ -214,3 +214,16 @@ module.exports.deleteUser = async (req, res, next) => {
     next(err);
   }
 };
+
+module.exports.sendNotification = async (req, res, next) => {
+  try {
+    const user = req.user;
+    const { userIds } = req.body;
+
+    await usersService.sendNotification(user, userIds);
+
+    res.status(httpStatus.OK).json();
+  } catch (err) {
+    next(err);
+  }
+};

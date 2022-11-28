@@ -62,6 +62,10 @@ const userSchema = new mongoose.Schema(
     rooms: {
       type: Array,
     },
+    deviceToken: {
+      type: String,
+      required: true,
+    },
     resetPasswordCode: {
       code: {
         type: String,

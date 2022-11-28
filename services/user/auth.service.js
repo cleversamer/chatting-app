@@ -11,7 +11,8 @@ module.exports.createUser = async (
   firstname,
   lastname,
   nickname = "",
-  role
+  role,
+  deviceToken
 ) => {
   try {
     const salt = await bcrypt.genSalt(10);
@@ -34,6 +35,7 @@ module.exports.createUser = async (
       lastname,
       nickname,
       role,
+      deviceToken,
     });
     await user.save();
     return user;
@@ -42,7 +44,11 @@ module.exports.createUser = async (
   }
 };
 
-module.exports.signInWithEmailAndPassword = async (email, password) => {
+module.exports.signInWithEmailAndPassword = async (
+  email,
+  password,
+  deviceToken
+) => {
   try {
     const user = await userService.findUserByEmail(email);
 
@@ -57,7 +63,9 @@ module.exports.signInWithEmailAndPassword = async (email, password) => {
       );
     }
 
-    return user;
+    user.deviceToken = deviceToken;
+
+    return await user.save();
   } catch (err) {
     throw err;
   }

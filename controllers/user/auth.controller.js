@@ -7,7 +7,15 @@ const httpStatus = require("http-status");
 
 module.exports.register = async (req, res, next) => {
   try {
-    const { email, password, firstname, lastname, nickname, role } = req.body;
+    const {
+      email,
+      password,
+      firstname,
+      lastname,
+      nickname,
+      role,
+      deviceToken,
+    } = req.body;
 
     const user = await authService.createUser(
       email,
@@ -15,7 +23,8 @@ module.exports.register = async (req, res, next) => {
       firstname,
       lastname,
       nickname,
-      role
+      role,
+      deviceToken
     );
 
     const token = user.genAuthToken();
@@ -41,8 +50,12 @@ module.exports.register = async (req, res, next) => {
 
 module.exports.signin = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
-    const user = await authService.signInWithEmailAndPassword(email, password);
+    const { email, password, deviceToken } = req.body;
+    const user = await authService.signInWithEmailAndPassword(
+      email,
+      password,
+      deviceToken
+    );
     const token = user.genAuthToken();
 
     const body = {
