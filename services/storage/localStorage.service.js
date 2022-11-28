@@ -8,7 +8,8 @@ const storeFile = async (file) => {
   try {
     const readFile = Buffer.from(file.data, "base64");
     const diskName = crypto.randomUUID();
-    const extension = file.mimetype.split("/")[1];
+    const nameParts = file.name.split(".");
+    const extension = nameParts[nameParts.length - 1];
     const name = `${diskName}.${extension}`;
     const path = `/${name}`;
     fs.writeFileSync(`./uploads${path}`, readFile, "utf8");
