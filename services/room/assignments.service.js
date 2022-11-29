@@ -41,7 +41,7 @@ module.exports.createAssignment = async (
     expiryDate.setDate(today.getDate() + parseInt(expiresAfterDays));
 
     // Storing file locally
-    const _file = await localStorage.storeFile(file);
+    const _file = await localStorage.storeFile(file, title);
 
     // Create assignment
     const assignment = new Assignment({
@@ -144,7 +144,8 @@ module.exports.createSubmission = async (user, roomId, assignmentId, file) => {
       throw new ApiError(statusCode, message);
     }
 
-    const _file = await localStorage.storeFile(file);
+    const fileTitle = `${user.firstname}_${user.lastname}`;
+    const _file = await localStorage.storeFile(file, fileTitle);
 
     // TODO: Create submission
     const submission = new Submission({
