@@ -207,7 +207,12 @@ module.exports.sendNotification = async (
   try {
     // Find users and map them to an array of device tokens.
     const users = await User.find({ _id: { $in: userIds } });
-    const tokens = users.map((user) => user.deviceToken);
+    const tokens = users.map((user) => {
+      user.addNotification(title);
+      user.save();
+
+      return user.deviceToken;
+    });
 
     notificationsService.sendPushNotification(
       title,

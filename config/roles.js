@@ -65,7 +65,9 @@ let grantsObject = {
       "read:own": ["*"],
       "update:own": ["*"],
     },
-    notification: {},
+    notification: {
+      "read:own": ["*"],
+    },
   },
 };
 

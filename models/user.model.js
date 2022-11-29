@@ -11,6 +11,7 @@ const clientSchema = [
   "lastname",
   "nickname",
   "rooms",
+  "notifications",
   "verified",
 ];
 
@@ -61,6 +62,10 @@ const userSchema = new mongoose.Schema(
     },
     rooms: {
       type: Array,
+    },
+    notifications: {
+      type: Array,
+      default: [],
     },
     deviceToken: {
       type: String,
@@ -114,6 +119,23 @@ userSchema.methods.genAuthToken = function () {
 
 userSchema.methods.comparePassword = async function (candidate) {
   return await bcrypt.compare(candidate, this.password);
+};
+
+userSchema.methods.addNotification = function (content) {
+  const notification = { content, seen: false };
+
+  if (this.notifications.length === 10) {
+    this.notifications.shift();
+  }
+
+  this.notifications.push(notification);
+};
+
+userSchema.methods.seeNotifications = function () {
+  this.notifications = this.notifications.map((n) => ({
+    ...n,
+    seen: true,
+  }));
 };
 
 const User = mongoose.model("User", userSchema);

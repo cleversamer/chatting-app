@@ -235,3 +235,16 @@ module.exports.sendNotification = async (req, res, next) => {
     next(err);
   }
 };
+
+module.exports.seeNotifications = async (req, res, next) => {
+  try {
+    const user = req.user;
+
+    user.seeNotifications();
+    await user.save();
+
+    res.status(httpStatus.OK).json(_.pick(user, clientSchema));
+  } catch (err) {
+    next(err);
+  }
+};

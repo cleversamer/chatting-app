@@ -54,4 +54,10 @@ router.post(
   usersController.sendNotification
 );
 
+router.get(
+  "/see-notifications",
+  auth("readOwn", "notification"),
+  usersController.seeNotifications
+);
+
 module.exports = router;
