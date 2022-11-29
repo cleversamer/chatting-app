@@ -19,6 +19,10 @@ const system = Object.freeze({
     en: "Invalid document id",
     ar: "معرّف المستند غير صالح",
   },
+  notification: {
+    en: "Error sending notification",
+    ar: "حصل خطأ عند إرسال الإشعار",
+  },
 });
 
 const auth = Object.freeze({

@@ -2,6 +2,7 @@ const { ApiError } = require("../../middleware/apiError");
 const { User } = require("../../models/user.model");
 const bcrypt = require("bcrypt");
 const emailService = require("../user/email.service");
+const notificationsService = require("../user/notifications.service");
 const errors = require("../../config/errors");
 const httpStatus = require("http-status");
 const jwt = require("jsonwebtoken");
@@ -196,13 +197,25 @@ const validateString = (str, min, max, err) => {
   return valid;
 };
 
-module.exports.sendNotification = async (user, userIds) => {
+module.exports.sendNotification = async (
+  userIds,
+  title,
+  body,
+  data,
+  callback
+) => {
   try {
     // Find users and map them to an array of device tokens.
-    let users = await User.find({ _id: { $in: userIds } });
-    users = users.map((user) => user.deviceToken);
+    const users = await User.find({ _id: { $in: userIds } });
+    const tokens = users.map((user) => user.deviceToken);
 
-    // TODO: send notification to specified tokens...
+    notificationsService.sendPushNotification(
+      title,
+      body,
+      data,
+      tokens,
+      callback
+    );
 
     return true;
   } catch (err) {

@@ -217,12 +217,20 @@ module.exports.deleteUser = async (req, res, next) => {
 
 module.exports.sendNotification = async (req, res, next) => {
   try {
-    const user = req.user;
-    const { userIds } = req.body;
+    const { userIds = [], title = "", body = "", data = {} } = req.body;
 
-    await usersService.sendNotification(user, userIds);
+    const callback = (err, response) => {
+      if (err) {
+        const statusCode = httpStatus.INTERNAL_SERVER_ERROR;
+        const message = errors.system.notification;
+        const err = new ApiError(statusCode, message);
+        return next(err);
+      }
 
-    res.status(httpStatus.OK).json();
+      res.status(httpStatus.OK).json(success.auth.notificationSent);
+    };
+
+    await usersService.sendNotification(userIds, title, body, data, callback);
   } catch (err) {
     next(err);
   }
