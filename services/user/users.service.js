@@ -125,7 +125,9 @@ module.exports.updateProfile = async (req) => {
     validateString(lastname, 1, 64, "invalidName");
     validateEmail(email, "invalidEmail");
     validateString(password, 8, 32, "invalidPassword");
-    validateString(nickname, 4, 32, "invalidNickname");
+    if (nickname) {
+      validateString(nickname, 4, 32, "invalidNickname");
+    }
 
     if (avatar) {
       const _file = await localStorage.storeFile(avatar);
@@ -140,9 +142,7 @@ module.exports.updateProfile = async (req) => {
       user.lastname = lastname;
     }
 
-    if (nickname && user.nickname !== nickname) {
-      user.nickname = nickname;
-    }
+    user.nickname = nickname;
 
     if (password) {
       const passwordMatch = await user.comparePassword(password);
