@@ -37,7 +37,7 @@ module.exports.createAssignment = async (
 
     // Calculate expiry date
     const currentTimeAsMs = Date.now();
-    const adjustedTimeAsMs = currentTimeAsMs + milliseconds;
+    const adjustedTimeAsMs = currentTimeAsMs + parseInt(milliseconds);
     const expiryDate = new Date(adjustedTimeAsMs);
 
     // Storing file locally
