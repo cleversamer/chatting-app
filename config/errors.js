@@ -23,6 +23,10 @@ const system = Object.freeze({
     en: "Error sending notification",
     ar: "حصل خطأ عند إرسال الإشعار",
   },
+  fileUploadError: {
+    en: "Error uploading file",
+    ar: "حصل خطأ عند رفع الملف",
+  },
 });
 
 const auth = Object.freeze({

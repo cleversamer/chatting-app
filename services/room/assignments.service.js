@@ -10,7 +10,7 @@ module.exports.createAssignment = async (
   user,
   title,
   roomId,
-  milliseconds,
+  minutes,
   file
 ) => {
   try {
@@ -37,7 +37,7 @@ module.exports.createAssignment = async (
 
     // Calculate expiry date
     const currentTimeAsMs = Date.now();
-    const adjustedTimeAsMs = currentTimeAsMs + parseInt(milliseconds);
+    const adjustedTimeAsMs = currentTimeAsMs + parseInt(minutes * 60000);
     const expiryDate = new Date(adjustedTimeAsMs);
 
     // Storing file locally
@@ -56,6 +56,7 @@ module.exports.createAssignment = async (
 
     return await assignment.save();
   } catch (err) {
+    console.log(err);
     throw err;
   }
 };

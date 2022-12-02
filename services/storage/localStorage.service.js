@@ -9,7 +9,7 @@ const storeFile = async (file, title = "") => {
     const readFile = Buffer.from(file.data, "base64");
 
     const diskName = title
-      ? `${title}_${getCurrentDate()}`
+      ? filterName(`${title}_${getCurrentDate()}`)
       : crypto.randomUUID();
 
     const nameParts = file.name.split(".");
@@ -27,6 +27,10 @@ const storeFile = async (file, title = "") => {
   }
 };
 
+const filterName = (name = "") => {
+  return name.split(" ").join("_");
+};
+
 const getCurrentDate = () => {
   let strDate = new Date().toLocaleString();
   strDate = strDate.split(", ");
@@ -34,7 +38,10 @@ const getCurrentDate = () => {
   let part2 = strDate[1].split(" ");
   let part21 = part2[0].split(":").slice(0, 2).join(":");
   let part22 = part2[1];
-  return `${part1}_${part21}_${part22}`;
+
+  let date = `${part1}_${part21}_${part22}`;
+  date = date.split("/").join("-");
+  return date;
 };
 
 const deleteFile = async (file) => {

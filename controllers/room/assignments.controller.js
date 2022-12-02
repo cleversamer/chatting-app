@@ -4,14 +4,14 @@ const httpStatus = require("http-status");
 module.exports.createAssignment = async (req, res, next) => {
   try {
     const user = req.user;
-    const { title, roomId, milliseconds } = req.body;
+    const { title, roomId, minutes } = req.body;
     const file = req?.files?.file;
 
     const assignment = await assignemntsService.createAssignment(
       user,
       title,
       roomId,
-      milliseconds,
+      minutes,
       file
     );
 
