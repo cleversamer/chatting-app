@@ -21,6 +21,18 @@ module.exports.createAssignment = async (req, res, next) => {
   }
 };
 
+module.exports.getRoomAssignments = async (req, res, next) => {
+  try {
+    const { roomId } = req.params;
+
+    const assignments = await assignemntsService.getRoomAssignments(roomId);
+
+    res.status(httpStatus.OK).json({ assignments });
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports.addSubmissionTime = async (req, res, next) => {
   try {
     const user = req.user;

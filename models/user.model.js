@@ -125,10 +125,10 @@ userSchema.methods.addNotification = function (content) {
   const notification = { content, seen: false };
 
   if (this.notifications.length === 10) {
-    this.notifications.shift();
+    this.notifications.pop();
   }
 
-  this.notifications.push(notification);
+  this.notifications.unshift(notification);
 };
 
 userSchema.methods.seeNotifications = function () {

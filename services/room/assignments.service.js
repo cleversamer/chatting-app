@@ -56,7 +56,14 @@ module.exports.createAssignment = async (
 
     return await assignment.save();
   } catch (err) {
-    console.log(err);
+    throw err;
+  }
+};
+
+module.exports.getRoomAssignments = async (roomId) => {
+  try {
+    return await Assignment.find({ room: roomId });
+  } catch (err) {
     throw err;
   }
 };

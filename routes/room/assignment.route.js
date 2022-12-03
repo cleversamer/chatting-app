@@ -9,6 +9,12 @@ router.post(
   assignmentsController.createAssignment
 );
 
+router.get(
+  "/:roomId",
+  auth("readOwn", "assignment"),
+  assignmentsController.getRoomAssignments
+);
+
 router.patch(
   "/addSubmissionTime",
   [auth("createOwn", "assignment")],
