@@ -5,6 +5,7 @@ const localStorage = require("../storage/localStorage.service");
 const errors = require("../../config/errors");
 const httpStatus = require("http-status");
 const roomsService = require("../room/rooms.service");
+const mongoose = require("mongoose");
 
 module.exports.createAssignment = async (
   user,
@@ -59,6 +60,7 @@ module.exports.createAssignment = async (
     return {
       ...assignment._doc,
       remainingTime: assignment.getRemainingTime(),
+      room: [room],
     };
   } catch (err) {
     throw err;
@@ -67,10 +69,22 @@ module.exports.createAssignment = async (
 
 module.exports.getRoomAssignments = async (roomId) => {
   try {
-    let assignments = await Assignment.find({ room: roomId });
+    // Check if room exists
+    const room = await roomsService.findRoomById(roomId);
+    if (!room) {
+      const statusCode = httpStatus.NOT_FOUND;
+      const message = errors.rooms.notFound;
+      throw new ApiError(statusCode, message);
+    }
+
+    let assignments = await Assignment.find({
+      room: mongoose.Types.ObjectId(roomId),
+    });
+
     assignments = assignments.map((item) => ({
       ...item._doc,
       remainingTime: item.getRemainingTime(),
+      room: [room],
     }));
 
     return assignments;
@@ -118,7 +132,13 @@ module.exports.addSubmissionTime = async (
 
     assignment.expiresAt = newExpiryDate;
 
-    return await assignment.save();
+    await assignment.save();
+
+    return {
+      ...assignment._doc,
+      remainingTime: assignment.getRemainingTime(),
+      room: [room],
+    };
   } catch (err) {
     throw err;
   }

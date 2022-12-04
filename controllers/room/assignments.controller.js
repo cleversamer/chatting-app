@@ -45,12 +45,7 @@ module.exports.addSubmissionTime = async (req, res, next) => {
       hours
     );
 
-    const body = {
-      ...assignment._doc,
-      remainingTime: assignment.getRemainingTime(),
-    };
-
-    res.status(httpStatus.CREATED).json(body);
+    res.status(httpStatus.CREATED).json(assignment);
   } catch (err) {
     next(err);
   }

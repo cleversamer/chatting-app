@@ -1,6 +1,7 @@
 const { ApiError } = require("../../middleware/apiError");
 const { roomsService } = require("../../services");
 const scheduleService = require("../../services/system/schedule.service");
+const notificationsService = require("../../services/user/notifications.service");
 const errors = require("../../config/errors");
 const httpStatus = require("http-status");
 const _ = require("lodash");
@@ -87,11 +88,27 @@ module.exports.createRoom = async (req, res, next) => {
     const room = await roomsService.createRoom(req);
 
     // Shceduling an event to run after 6 months
-    const runDate = new Date();
-    runDate.setMinutes(runDate.getMinutes() + 1);
-    scheduleService.scheduleEvent(runDate, async () => {
+    const runDate1 = new Date();
+    runDate1.setMinutes(runDate1.getMinutes() + 1);
+    scheduleService.scheduleEvent(runDate1, async () => {
       try {
         await roomsService.resetRoom("admin", room._id);
+      } catch (err) {
+        // TODO: store the error in db
+      }
+    });
+
+    // Shceduling an event to run after 6 months
+    const runDate2 = new Date();
+    runDate2.setSeconds(runDate2.getSeconds() + 30);
+    scheduleService.scheduleEvent(runDate2, async () => {
+      try {
+        notificationsService.sendPushNotification(
+          "غرفة test-1",
+          "سيتم اعادة تعيين الغرفة خلال 24 ساعة",
+          {},
+          "cFdOP1dASfuUqFcCOkPCW0:APA91bE39yCjkac3cRH82iiDqeyB4QxxNPWL4x48trM41HXlLlAN28RlqBWbgPl-cOz_WJ1E6zFuBJ-yKLFIvVvhfj6Qrd1o5GEHo3_BkYkYRsYtVVHUxWIIMOWiv2sfHfkx4HDBjgjd"
+        );
       } catch (err) {
         // TODO: store the error in db
       }
