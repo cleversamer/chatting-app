@@ -10,6 +10,10 @@ const assignmentSchema = new mongoose.Schema({
     ref: "Room",
     required: true,
   },
+  submissions: {
+    type: Number,
+    default: 0,
+  },
   file: {
     displayName: {
       type: String,

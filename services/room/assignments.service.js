@@ -176,7 +176,12 @@ module.exports.createSubmission = async (user, roomId, assignmentId, file) => {
       },
     });
 
-    return await submission.save();
+    await submission.save();
+
+    assignment.submissions = assignment.submissions + 1;
+    await assignment.save();
+
+    return submission;
   } catch (err) {
     throw err;
   }
