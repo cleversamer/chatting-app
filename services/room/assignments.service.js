@@ -46,7 +46,7 @@ module.exports.createAssignment = async (
     // Create assignment
     const assignment = new Assignment({
       title,
-      room: roomId,
+      room: room._id,
       file: {
         displayName: _file.name,
         url: _file.path,
@@ -54,7 +54,12 @@ module.exports.createAssignment = async (
       expiresAt: expiryDate,
     });
 
-    return await assignment.save();
+    await assignment.save();
+
+    return {
+      ...assignment._doc,
+      remainingTime: assignment.getRemainingTime(),
+    };
   } catch (err) {
     throw err;
   }

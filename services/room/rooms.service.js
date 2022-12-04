@@ -347,7 +347,7 @@ module.exports.createRoom = async (req) => {
 
     const newRoom = await room.save();
 
-    user.rooms.push(room._id);
+    user.createdRooms.push(room._id);
     await user.save();
 
     const mappedRoom = await this.getMappedRooms([newRoom._id]);
@@ -538,7 +538,7 @@ module.exports.joinRoom = async (req) => {
     }
 
     const isAlreadyJoined =
-      user.rooms.includes(room._id) && room.members.includes(user._id);
+      user.joinedRooms.includes(room._id) && room.members.includes(user._id);
     if (isAlreadyJoined) {
       const statusCode = httpStatus.BAD_REQUEST;
       const message = errors.rooms.alreadyJoined;
@@ -547,7 +547,7 @@ module.exports.joinRoom = async (req) => {
 
     room.members.push(user._id);
 
-    user.rooms.push(room._id);
+    user.joinedRooms.push(room._id);
     await user.save();
 
     await room.save();

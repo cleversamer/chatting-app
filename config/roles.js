@@ -16,6 +16,7 @@ let grantsObject = {
     room: allRights,
     message: allRights,
     assignment: allRights,
+    createdAssignments: allRights,
     submission: allRights,
     profile: allRights,
     roomType: allRights,
@@ -28,6 +29,7 @@ let grantsObject = {
     room: allRights,
     message: allRights,
     assignment: allRights,
+    createdAssignments: allRights,
     submission: allRights,
     profile: {
       "read:own": ["*"],

@@ -248,3 +248,15 @@ module.exports.seeNotifications = async (req, res, next) => {
     next(err);
   }
 };
+
+module.exports.getMyAssignments = async (req, res, next) => {
+  try {
+    const user = req.user;
+
+    const assignments = await usersService.getMyAssignments(user);
+
+    res.status(httpStatus.OK).json(assignments);
+  } catch (err) {
+    next(err);
+  }
+};

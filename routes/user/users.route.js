@@ -60,4 +60,10 @@ router.get(
   usersController.seeNotifications
 );
 
+router.get(
+  "/my-assignments",
+  auth("readOwn", "createdAssignments"),
+  usersController.getMyAssignments
+);
+
 module.exports = router;

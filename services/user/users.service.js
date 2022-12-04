@@ -1,5 +1,6 @@
 const { ApiError } = require("../../middleware/apiError");
 const { User } = require("../../models/user.model");
+const { Assignment } = require("../../models/assignment.model");
 const bcrypt = require("bcrypt");
 const emailService = require("../user/email.service");
 const notificationsService = require("../user/notifications.service");
@@ -223,6 +224,42 @@ module.exports.sendNotification = async (
     );
 
     return true;
+  } catch (err) {
+    throw err;
+  }
+};
+
+module.exports.getMyAssignments = async (user) => {
+  try {
+    let assignments = await Assignment.aggregate([
+      { $match: { room: { $in: user.createdRooms } } },
+      {
+        $lookup: {
+          from: "rooms",
+          localField: "room",
+          foreignField: "_id",
+          as: "room",
+        },
+      },
+      {
+        $project: {
+          title: 1,
+          file: 1,
+          date: 1,
+          expiresAt: 1,
+          room: {
+            _id: 1,
+            name: 1,
+            status: 1,
+          },
+        },
+      },
+    ]);
+
+    return assignments.map((item) => ({
+      ...item,
+      remainingTime: Assignment.getRemainingTime(item.expiresAt),
+    }));
   } catch (err) {
     throw err;
   }
