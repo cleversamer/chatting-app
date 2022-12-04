@@ -33,5 +33,13 @@ module.exports = (server) => {
     socket.on("delete message", (roomId, messageId) => {
       socket.broadcast.to(roomId).emit("message deleted", messageId);
     });
+
+    socket.on("block members", (roomId, userIds) => {
+      socket.broadcast.to(roomId).emit("memebrs blocked", userIds);
+    });
+
+    socket.on("unblock members", (roomId, userIds) => {
+      socket.broadcast.to(roomId).emit("memebrs unblocked", userIds);
+    });
   });
 };
