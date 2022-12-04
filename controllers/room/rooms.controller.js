@@ -1,6 +1,6 @@
-const { clientSchema } = require("../../models/room.model");
 const { ApiError } = require("../../middleware/apiError");
 const { roomsService } = require("../../services");
+const scheduleService = require("../../services/system/schedule.service");
 const errors = require("../../config/errors");
 const httpStatus = require("http-status");
 const _ = require("lodash");
@@ -85,6 +85,18 @@ module.exports.deleteRoomMessages = async (req, res, next) => {
 module.exports.createRoom = async (req, res, next) => {
   try {
     const room = await roomsService.createRoom(req);
+
+    // Shceduling an event to run after 6 months
+    const runDate = new Date();
+    runDate.setMinutes(runDate.getMinutes() + 1);
+    scheduleService.scheduleEvent(runDate, async () => {
+      try {
+        await roomsService.resetRoom("admin", room._id);
+      } catch (err) {
+        // TODO: store the error in db
+      }
+    });
+
     res.status(httpStatus.CREATED).json(room);
   } catch (err) {
     if (err.code === errors.codes.duplicateIndexKey) {

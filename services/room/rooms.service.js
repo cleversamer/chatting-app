@@ -478,13 +478,15 @@ module.exports.resetRoom = async (user, roomId) => {
       throw new ApiError(statusCode, message);
     }
 
-    if (room.author.toString() !== user._id.toString()) {
+    if (user !== "admin" && room.author.toString() !== user._id.toString()) {
       const statusCode = httpStatus.UNAUTHORIZED;
       const message = errors.rooms.unauthorized;
       throw new ApiError(statusCode, message);
     }
 
     await usersService.unjoinUsersFromRoom(room.members, roomId);
+
+    await Message.deleteMany({ receiver: room._id });
 
     room.pinnedMessages = [];
     room.members = [];
