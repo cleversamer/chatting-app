@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const { ApiError } = require("../../middleware/apiError");
 const { Message, MESSAGE_TYPES } = require("../../models/message.model");
+const { Room } = require("../../models/room.model");
 const localStorage = require("../storage/localStorage.service");
 const errors = require("../../config/errors");
 const httpStatus = require("http-status");
@@ -147,8 +148,13 @@ module.exports.deleteMessage = async (user, messageId) => {
       throw new ApiError(statusCode, message);
     }
 
+    const room = await Room.findById(message.receiver);
+
     const isMssgAuthor = message.sender.toString() === user._id.toString();
-    if (!isMssgAuthor) {
+    const isRoomAdmin = room.author.toString() === user._id.toString();
+    const isAuthorized = isMssgAuthor || isRoomAdmin;
+
+    if (!isAuthorized) {
       const statusCode = httpStatus.FORBIDDEN;
       const message = errors.message.notAuthor;
       throw new ApiError(statusCode, message);

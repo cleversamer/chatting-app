@@ -1,5 +1,6 @@
 const { ApiError } = require("../../middleware/apiError");
 const { Room } = require("../../models/room.model");
+const { Message } = require("../../models/message.model");
 const { User } = require("../../models/user.model");
 const { MESSAGE_TYPES } = require("../../models/message.model");
 const errors = require("../../config/errors");
@@ -488,6 +489,30 @@ module.exports.resetRoom = async (user, roomId) => {
     room.pinnedMessages = [];
     room.members = [];
     await room.save();
+
+    const mappedRoom = await this.getMappedRooms([room._id]);
+    return mappedRoom[0];
+  } catch (err) {
+    throw err;
+  }
+};
+
+module.exports.deleteRoomMessages = async (user, roomId) => {
+  try {
+    const room = await this.findRoomById(roomId);
+    if (!room) {
+      const statusCode = httpStatus.NOT_FOUND;
+      const message = errors.rooms.notFound;
+      throw new ApiError(statusCode, message);
+    }
+
+    if (room.author.toString() !== user._id.toString()) {
+      const statusCode = httpStatus.UNAUTHORIZED;
+      const message = errors.rooms.unauthorized;
+      throw new ApiError(statusCode, message);
+    }
+
+    await Message.deleteMany({ receiver: room._id });
 
     const mappedRoom = await this.getMappedRooms([room._id]);
     return mappedRoom[0];

@@ -45,6 +45,12 @@ router.put(
   roomsController.resetRoom
 );
 
+router.delete(
+  "/delete-messages",
+  [auth("updateOwn", "room")],
+  roomsController.deleteRoomMessages
+);
+
 router.get("/join", [auth("updateOwn", "room")], roomsController.joinRoom);
 
 router.get("/search", [auth("readAny", "room")], roomsController.searchRooms);

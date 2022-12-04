@@ -54,6 +54,19 @@ module.exports.resetRoom = async (req, res, next) => {
   }
 };
 
+module.exports.deleteRoomMessages = async (req, res, next) => {
+  try {
+    const user = req.user;
+    const { roomId } = req.body;
+
+    const data = await roomsService.deleteRoomMessages(user, roomId);
+
+    res.status(httpStatus.CREATED).json(data);
+  } catch (err) {
+    next(err);
+  }
+};
+
 // module.exports.getSuggestedRooms = async (req, res, next) => {
 //   try {
 //     const rooms = await roomsService.getSuggestedRooms();

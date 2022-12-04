@@ -1,0 +1,1328 @@
+{
+	"info": {
+		"_postman_id": "3f9031d6-b571-49a7-89ff-5e5d6f5de8c0",
+		"name": "Technology Teacher",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21859355"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"thedev.samer@gmail.com\",\r\n    \"password\": \"12345678\",\r\n    \"deviceToken\": \"cFdOP1dASfuUqFcCOkPCW0:APA91bE39yCjkac3cRH82iiDqeyB4QxxNPWL4x48trM41HXlLlAN28RlqBWbgPl-cOz_WJ1E6zFuBJ-yKLFIvVvhfj6Qrd1o5GEHo3_BkYkYRsYtVVHUxWIIMOWiv2sfHfkx4HDBjgjd\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"crusheryclub@gmail.com\",\r\n    \"password\": \"12345678\",\r\n    \"firstname\": \"Samer\",\r\n    \"lastname\": \"Alsaadawi\",\r\n    \"nickname\": \"\",\r\n    \"role\": \"student\",\r\n    \"deviceToken\": \"token-123\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "common",
+					"item": [
+						{
+							"name": "Is Auth",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MzVkMDZkYzU2NTBhOGY2YTA2MzRmY2YiLCJlbWFpbCI6InRoZWRldi5zYW1lckBnbWFpbC5jb20iLCJpYXQiOjE2NjcwNjU0NzUsImV4cCI6MTY2NzE1MTg3NX0.t7RLa_V1gJX0Vegy3uSoLNZVONkB_MUQL1QvnnneHVI",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4000/api/users/isauth",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"api",
+										"users",
+										"isauth"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Verify Account",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MzdmN2QzY2JlN2NhMWEzOGNiMGNhYTYiLCJlbWFpbCI6Imx1aXNtZXRpbjU2QGdtYWlsLmNvbSIsImlhdCI6MTY2OTI5OTUxNiwiZXhwIjoxNjY5Mzg1OTE2fQ.5pjec8YtxH4jet6P17VTUs3ArURRZpbPPKcvEC7qlvE",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"code\": \"7595\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4000/api/users/verify",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"api",
+										"users",
+										"verify"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "New Verification Code",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MzY2ODQ5N2YzMDVmYjgyMTZlODhkY2EiLCJlbWFpbCI6InRoZWRldi5zYW1lckBnbWFpbC5jb20iLCJpYXQiOjE2Njc2NjI5OTksImV4cCI6MTY2Nzc0OTM5OX0.rGrKiUneTusNTK0lGE3WGmM0V7ozRjfEZjh1r-ne3_4",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:4000/api/users/verify",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"api",
+										"users",
+										"verify"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Change Password",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MzY2ODQ5N2YzMDVmYjgyMTZlODhkY2EiLCJlbWFpbCI6InRoZWRldi5zYW1lckBnbWFpbC5jb20iLCJpYXQiOjE2Njc2NjI5OTksImV4cCI6MTY2Nzc0OTM5OX0.rGrKiUneTusNTK0lGE3WGmM0V7ozRjfEZjh1r-ne3_4",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"newPassword\": \"123456789\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4000/api/users/reset-password",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"api",
+										"users",
+										"reset-password"
+									],
+									"query": [
+										{
+											"key": "",
+											"value": null,
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Forgot Password Code",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://192.168.1.235:4000/api/users/forgot-password?email=thedev.samer@gmail.com",
+									"protocol": "http",
+									"host": [
+										"192",
+										"168",
+										"1",
+										"235"
+									],
+									"port": "4000",
+									"path": [
+										"api",
+										"users",
+										"forgot-password"
+									],
+									"query": [
+										{
+											"key": "email",
+											"value": "thedev.samer@gmail.com"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Forgot Password",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"thedev.samer@gmail.com\",\r\n    \"code\": \"3797\",\r\n    \"newPassword\": \"12345678\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://192.168.1.235:4000/api/users/forgot-password",
+									"protocol": "http",
+									"host": [
+										"192",
+										"168",
+										"1",
+										"235"
+									],
+									"port": "4000",
+									"path": [
+										"api",
+										"users",
+										"forgot-password"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Profile",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MzY2ODQ5N2YzMDVmYjgyMTZlODhkY2EiLCJlbWFpbCI6InRoZWRldi5zYW1lckBnbWFpbC5jb20iLCJpYXQiOjE2NjgwNjY1MjEsImV4cCI6MTY2ODE1MjkyMX0.TzjeBLycB5gGj0WOwBwT5ruuUXrSe06sipE412hxYVM",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "avatar",
+											"type": "file",
+											"src": "/D:/media/Avatar.jpg"
+										},
+										{
+											"key": "firstname",
+											"value": "mohannad",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:4000/api/users/profile",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"api",
+										"users",
+										"profile"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "See Notifications",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MzdmMTM5MTA2MDJkODM0NTM2OGMyY2EiLCJlbWFpbCI6InRoZWRldi5zYW1lckBnbWFpbC5jb20iLCJpYXQiOjE2Njk3Mzc5NDUsImV4cCI6MTY2OTgyNDM0NX0.9UFII4zD4d4_YLNWBVP3vUieZlXEBd6bcm4-5kYyvHw",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4000/api/users/see-notifications",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"api",
+										"users",
+										"see-notifications"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "teacher",
+					"item": [
+						{
+							"name": "Send Notification",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MzdmMTM5MTA2MDJkODM0NTM2OGMyY2EiLCJlbWFpbCI6InRoZWRldi5zYW1lckBnbWFpbC5jb20iLCJpYXQiOjE2Njk3MjU4MjEsImV4cCI6MTY2OTgxMjIyMX0.voDFGNFciUmDMMjSY1tZyxTl-NhXsG6gFc7KzcPdJLY",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"userIds\": [\r\n        \"637f13910602d8345368c2ca\"\r\n    ],\r\n    \"title\": \"إشعار تجريبي\",\r\n    \"body\": \"إشعار تجريبي\",\r\n    \"data\": {\r\n        \"name\": \"Samer\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4000/api/users/send-notification",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"api",
+										"users",
+										"send-notification"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "admin",
+					"item": [
+						{
+							"name": "All Users",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MzdmMTM5MTA2MDJkODM0NTM2OGMyY2EiLCJlbWFpbCI6InRoZWRldi5zYW1lckBnbWFpbC5jb20iLCJpYXQiOjE2Njk1MjU5ODQsImV4cCI6MTY2OTYxMjM4NH0.n36GdFo_igMHiEv-u9Rs36_MV6g-MJbk3rCmo5Z-uJA",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:4000/api/users?role=student",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"api",
+										"users"
+									],
+									"query": [
+										{
+											"key": "role",
+											"value": "student"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete User",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MzE3MzE0NDViZjUwYTFmMTUwYTc4N2MiLCJlbWFpbCI6InRoZWRldi5zYW1lckBnbWFpbC5jb20iLCJpYXQiOjE2NjI2MTAyNTQsImV4cCI6MTY2MjY5NjY1NH0.jGJXBHCasGWrSFuMNb8b309Q1TnavSGkDyy4-372kM4",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"userId\": \"631731c45bf50a1f150a7886\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4000/api/users",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"api",
+										"users"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "room",
+			"item": [
+				{
+					"name": "common",
+					"item": [
+						{
+							"name": "Public Rooms",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MzY2ODQ5N2YzMDVmYjgyMTZlODhkY2EiLCJlbWFpbCI6InRoZWRldi5zYW1lckBnbWFpbC5jb20iLCJpYXQiOjE2Njg3NjQ2MTcsImV4cCI6MTY2ODg1MTAxN30.MumbjUqEdLeXiDTZpWXelt015B9Ce74VtLnnHUbgORs",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://localhost:4000/api/rooms?skip=0",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"api",
+										"rooms"
+									],
+									"query": [
+										{
+											"key": "skip",
+											"value": "0"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Join Room",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MzdmN2QzY2JlN2NhMWEzOGNiMGNhYTYiLCJlbWFpbCI6Imx1aXNtZXRpbjU2QGdtYWlsLmNvbSIsImlhdCI6MTY2OTQ0Njg3NywiZXhwIjoxNjY5NTMzMjc3fQ.4dKPTz9yI0uBoH2RyTc_4k4BdlVIT_wJFZfGkJBisko",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": []
+								},
+								"url": {
+									"raw": "http://localhost:4000/api/rooms/join?name=غرفة سامر",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"api",
+										"rooms",
+										"join"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "غرفة سامر"
+										},
+										{
+											"key": "code",
+											"value": "123",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Search rooms",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MzdmMTM5MTA2MDJkODM0NTM2OGMyY2EiLCJlbWFpbCI6InRoZWRldi5zYW1lckBnbWFpbC5jb20iLCJpYXQiOjE2Njk2MjM0MDYsImV4cCI6MTY2OTcwOTgwNn0.ceEpHA-F8ruSKN-pzn-8KktsIa06x8UVk4JVwVfRVW0",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4000/api/rooms/search?name=test",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"api",
+										"rooms",
+										"search"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "test"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "My Rooms",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MzVkMDljMzU2NTBhOGY2YTA2MzRmZWIiLCJlbWFpbCI6Imx1aXNtZXRpbjU2QGdtYWlsLmNvbSIsImlhdCI6MTY2NzA0MTc4NiwiZXhwIjoxNjY3MTI4MTg2fQ.U6REdMQ1Ma3-wbaZ1G2MqSfkfDTqsB_LOiL2THkX11A",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:4000/api/users/my-rooms",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"api",
+										"users",
+										"my-rooms"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "teacher",
+					"item": [
+						{
+							"name": "Room",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MzdiYjY1MGRiNDMzYWM3MTNlNjU0OTkiLCJlbWFpbCI6InRoZWRldi5zYW1lckBnbWFpbC5jb20iLCJpYXQiOjE2Njk0NzM1NzgsImV4cCI6MTY2OTU1OTk3OH0.zeDZEMso--Ko1MeS696Hvm5g2pg1QzTx1O1wv_s0pmA",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"video-upload\",\r\n    \"status\": \"public\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://153.92.4.242/api/rooms",
+									"protocol": "http",
+									"host": [
+										"153",
+										"92",
+										"4",
+										"242"
+									],
+									"path": [
+										"api",
+										"rooms"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Reset Room",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MzdmMTM5MTA2MDJkODM0NTM2OGMyY2EiLCJlbWFpbCI6InRoZWRldi5zYW1lckBnbWFpbC5jb20iLCJpYXQiOjE2Njk0NDY1MDMsImV4cCI6MTY2OTUzMjkwM30.vqCIwGDYE2Um1pwUcObYMqhQoBT9Uk-PYOxiuUeuZuY",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:4000/api/rooms/637f14160602d8345368c2d7/reset-room",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"api",
+										"rooms",
+										"637f14160602d8345368c2d7",
+										"reset-room"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Block Users From Chatting",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MzY2ODQ5N2YzMDVmYjgyMTZlODhkY2EiLCJlbWFpbCI6InRoZWRldi5zYW1lckBnbWFpbC5jb20iLCJpYXQiOjE2NjgwMDc2MjMsImV4cCI6MTY2ODA5NDAyM30.GlL7uhCLCeefGcNp_XpjYkeg2OOumPrvffNhvR1mVLA",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"roomId\": \"636bc578ba1a6339473e0952\",\r\n    \"userIds\": [\r\n        \"636bc4e8ba1a6339473e0948\"\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4000/api/rooms/block-users",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"api",
+										"rooms",
+										"block-users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Unblock Users From Chatting",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MzY2ODQ5N2YzMDVmYjgyMTZlODhkY2EiLCJlbWFpbCI6InRoZWRldi5zYW1lckBnbWFpbC5jb20iLCJpYXQiOjE2NjgwMDc2MjMsImV4cCI6MTY2ODA5NDAyM30.GlL7uhCLCeefGcNp_XpjYkeg2OOumPrvffNhvR1mVLA",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"roomId\": \"636bc578ba1a6339473e0952\",\r\n    \"userIds\": [\r\n        \"636bc4e8ba1a6339473e0948\"\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4000/api/rooms/unblock-users",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"api",
+										"rooms",
+										"unblock-users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Toggle Show Author Name",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MzdmMTM5MTA2MDJkODM0NTM2OGMyY2EiLCJlbWFpbCI6InRoZWRldi5zYW1lckBnbWFpbC5jb20iLCJpYXQiOjE2Njk0NTA0NDYsImV4cCI6MTY2OTUzNjg0Nn0.nU60plj9dSqNt7SngiX7WfnC8_J897rUzj_BmaV9Sao",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"roomId\": \"637f14160602d8345368c2d7\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4000/api/rooms/toggle-show-name",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"api",
+										"rooms",
+										"toggle-show-name"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Toggle Chat Disabled",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MzdmMTM5MTA2MDJkODM0NTM2OGMyY2EiLCJlbWFpbCI6InRoZWRldi5zYW1lckBnbWFpbC5jb20iLCJpYXQiOjE2Njk0NTA0NDYsImV4cCI6MTY2OTUzNjg0Nn0.nU60plj9dSqNt7SngiX7WfnC8_J897rUzj_BmaV9Sao",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"roomId\": \"637f14160602d8345368c2d7\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4000/api/rooms/toggle-chat-disabled",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"api",
+										"rooms",
+										"toggle-chat-disabled"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Pinned Message",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MzdmMTM5MTA2MDJkODM0NTM2OGMyY2EiLCJlbWFpbCI6InRoZWRldi5zYW1lckBnbWFpbC5jb20iLCJpYXQiOjE2Njk0NDY1MDMsImV4cCI6MTY2OTUzMjkwM30.vqCIwGDYE2Um1pwUcObYMqhQoBT9Uk-PYOxiuUeuZuY",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"roomId\": \"637f14160602d8345368c2d7\",\r\n    \"text\": \"a pinned message\",\r\n    \"type\": \"text\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4000/api/rooms/add-pinned-message",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"api",
+										"rooms",
+										"add-pinned-message"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Room Members",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MzdmMTM5MTA2MDJkODM0NTM2OGMyY2EiLCJlbWFpbCI6InRoZWRldi5zYW1lckBnbWFpbC5jb20iLCJpYXQiOjE2Njk0NDY1MDMsImV4cCI6MTY2OTUzMjkwM30.vqCIwGDYE2Um1pwUcObYMqhQoBT9Uk-PYOxiuUeuZuY",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"roomId\": \"637f14160602d8345368c2d7\",\r\n    \"members\": [\r\n        \"637f7d3cbe7ca1a38cb0caa6\"\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4000/api/rooms/delete-members",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"api",
+										"rooms",
+										"delete-members"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "admin",
+					"item": [
+						{
+							"name": "All Rooms",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MzY2ODQ5N2YzMDVmYjgyMTZlODhkY2EiLCJlbWFpbCI6InRoZWRldi5zYW1lckBnbWFpbC5jb20iLCJpYXQiOjE2NjgwMDQ2MTcsImV4cCI6MTY2ODA5MTAxN30.OuGl8iufTAsnalpa_hRYCTWcMs0gkjyiuEXKFb8U0fQ",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:4000/api/rooms/all",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"api",
+										"rooms",
+										"all"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Room",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MzE3MzE0NDViZjUwYTFmMTUwYTc4N2MiLCJlbWFpbCI6InRoZWRldi5zYW1lckBnbWFpbC5jb20iLCJpYXQiOjE2NjI2MDk2MjUsImV4cCI6MTY2MjY5NjAyNX0.I5jClv5RMI69Wxxys9SO9H7LhxO9f1beeHvUOyZsv-w",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"roomId\": \"6317321d5bf50a1f150a7893\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4000/api/rooms/",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"api",
+										"rooms",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "message",
+			"item": [
+				{
+					"name": "Message",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MzdmMTM5MTA2MDJkODM0NTM2OGMyY2EiLCJlbWFpbCI6InRoZWRldi5zYW1lckBnbWFpbC5jb20iLCJpYXQiOjE2Njk2MjM0MDYsImV4cCI6MTY2OTcwOTgwNn0.ceEpHA-F8ruSKN-pzn-8KktsIa06x8UVk4JVwVfRVW0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "roomId",
+									"value": "6382013fc16a02ed585f53b8",
+									"type": "text"
+								},
+								{
+									"key": "text",
+									"value": "Hello",
+									"type": "text"
+								},
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/lab/Downloads/Documents/APIs for crosspay.docx"
+								},
+								{
+									"key": "type",
+									"value": "file",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/messages/send",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"messages",
+								"send"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Room Messages",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:4000/api/messages/room/6377549abcf75c0b7fe7f268",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"messages",
+								"room",
+								"6377549abcf75c0b7fe7f268"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Message",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"messageId\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/messages/delete",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"messages",
+								"delete"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "assignment",
+			"item": [
+				{
+					"name": "Assignment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MzVkMDZkYzU2NTBhOGY2YTA2MzRmY2YiLCJlbWFpbCI6InRoZWRldi5zYW1lckBnbWFpbC5jb20iLCJpYXQiOjE2NjcwNDYzNzQsImV4cCI6MTY2NzEzMjc3NH0.iS4IObNHutJ-h1cIsDdI2e7U--BQ0CRAqG4dFj5OckY",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "roomId",
+									"value": "635d08b75650a8f6a0634fdc",
+									"type": "text"
+								},
+								{
+									"key": "milliseconds",
+									"value": "100000000",
+									"type": "text"
+								},
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/D:/Resume.pdf"
+								},
+								{
+									"key": "title",
+									"value": "التكليف الأول",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/assignments",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"assignments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Assignment Submission",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MzVkMDljMzU2NTBhOGY2YTA2MzRmZWIiLCJlbWFpbCI6Imx1aXNtZXRpbjU2QGdtYWlsLmNvbSIsImlhdCI6MTY2NzA0Njc5OCwiZXhwIjoxNjY3MTMzMTk4fQ.ew7Ej2ZctT_UFFn_8r5MslDqLXK198iGuWTZc9GzDHY",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "roomId",
+									"value": "635d08b75650a8f6a0634fdc",
+									"type": "text"
+								},
+								{
+									"key": "assignmentId",
+									"value": "635d1c9f4de5cf6729783c7e",
+									"type": "text"
+								},
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/D:/Resume.pdf"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/assignments/submit",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"assignments",
+								"submit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Assignment Submissions",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MzVkMDZkYzU2NTBhOGY2YTA2MzRmY2YiLCJlbWFpbCI6InRoZWRldi5zYW1lckBnbWFpbC5jb20iLCJpYXQiOjE2NjcwNDcxODUsImV4cCI6MTY2NzEzMzU4NX0.isxAwdntsRbmYpB7QVvhYOUJStjVk9t-8uCGx--r_Kc",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/assignments/635d1c9f4de5cf6729783c7e/submissions?roomId=635d08b75650a8f6a0634fdc",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"assignments",
+								"635d1c9f4de5cf6729783c7e",
+								"submissions"
+							],
+							"query": [
+								{
+									"key": "roomId",
+									"value": "635d08b75650a8f6a0634fdc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Submission Time",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MzVkMDZkYzU2NTBhOGY2YTA2MzRmY2YiLCJlbWFpbCI6InRoZWRldi5zYW1lckBnbWFpbC5jb20iLCJpYXQiOjE2NjcwNDYzNzQsImV4cCI6MTY2NzEzMjc3NH0.iS4IObNHutJ-h1cIsDdI2e7U--BQ0CRAqG4dFj5OckY",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"roomId\": \"635d08b75650a8f6a0634fdc\",\r\n    \"assignmentId\": \"635d1c9f4de5cf6729783c7e\",\r\n    \"hours\": \"24\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/assignments/addSubmissionTime",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"assignments",
+								"addSubmissionTime"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "herokuToken",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MzJjM2Q0NDFlYWZhZGVlZjg3NmM5YWQiLCJlbWFpbCI6InRoZWRldi5zYW1lckBnbWFpbC5jb20iLCJpYXQiOjE2NjU4MzIwODB9.ACTCEStiQUoK8fDw_BkyaO7DUm9XMd15f2Wgl5L6GzE",
+			"type": "string"
+		}
+	]
+}
