@@ -347,7 +347,7 @@ module.exports.createRoom = async (req) => {
 
     const newRoom = await room.save();
 
-    user.createdRooms.push(room._id);
+    user.createdRooms.unshift(room._id);
     await user.save();
 
     const mappedRoom = await this.getMappedRooms([newRoom._id]);
@@ -378,7 +378,7 @@ module.exports.blockUsersFromChatting = async (req) => {
     }
 
     // Add users to blockList
-    userIds.forEach((userId) => room.blockList.push(userId));
+    userIds.forEach((userId) => room.blockList.unshift(userId));
     await room.save();
 
     const mappedRoom = await this.getMappedRooms([room._id]);
@@ -493,7 +493,7 @@ module.exports.addPinnedMessage = async (req) => {
       true
     );
 
-    room.pinnedMessages.push(message._id);
+    room.pinnedMessages.unshift(message._id);
     await room.save();
 
     const mappedRoom = await this.getMappedRooms([room._id]);
@@ -545,9 +545,8 @@ module.exports.joinRoom = async (req) => {
       throw new ApiError(statusCode, message);
     }
 
-    room.members.push(user._id);
-
-    user.joinedRooms.push(room._id);
+    room.members.unshift(user._id);
+    user.joinedRooms.unshift(room._id);
     await user.save();
 
     await room.save();
