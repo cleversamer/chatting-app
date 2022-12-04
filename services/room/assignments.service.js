@@ -62,7 +62,13 @@ module.exports.createAssignment = async (
 
 module.exports.getRoomAssignments = async (roomId) => {
   try {
-    return await Assignment.find({ room: roomId });
+    let assignments = await Assignment.find({ room: roomId });
+    assignments = assignments.map((item) => ({
+      ...item._doc,
+      remainingTime: item.getRemainingTime(),
+    }));
+
+    return assignments;
   } catch (err) {
     throw err;
   }
