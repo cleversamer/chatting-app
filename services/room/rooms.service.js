@@ -79,9 +79,47 @@ module.exports.findRoomByName = async (name) => {
   }
 };
 
-module.exports.searchRooms = async (name) => {
+module.exports.searchRooms = async (user, name) => {
   try {
-    return await Room.aggregate([
+    const myRooms = await Room.aggregate([
+      { $match: { $text: { $search: name }, _id: { $in: user.createdRooms } } },
+      { $sort: { score: { $meta: "textScore" } } },
+      { $limit: 10 },
+      {
+        $lookup: {
+          from: "users",
+          localField: "author",
+          foreignField: "_id",
+          as: "author",
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          showName: 1,
+          pinnedMessages: 1,
+          messages: 1,
+          chatDisabled: 1,
+          blockList: 1,
+          status: 1,
+          author: {
+            _id: 1,
+            firstname: 1,
+            lastname: 1,
+            role: 1,
+          },
+          members: {
+            _id: 1,
+            firstname: 1,
+            lastname: 1,
+            role: 1,
+          },
+        },
+      },
+    ]);
+
+    let resultRooms = await Room.aggregate([
       { $match: { $text: { $search: name }, status: "public" } },
       { $sort: { score: { $meta: "textScore" } } },
       { $limit: 10 },
@@ -118,6 +156,15 @@ module.exports.searchRooms = async (name) => {
         },
       },
     ]);
+
+    resultRooms = resultRooms.filter(
+      (room) => !user.createdRooms.includes(room._id)
+    );
+
+    return {
+      myRooms,
+      resultRooms,
+    };
   } catch (err) {
     throw err;
   }

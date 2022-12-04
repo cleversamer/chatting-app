@@ -122,16 +122,17 @@ module.exports.joinRoom = async (req, res, next) => {
 
 module.exports.searchRooms = async (req, res, next) => {
   try {
+    const user = req.user;
     const { name } = req.query;
-    const rooms = await roomsService.searchRooms(name);
+    const result = await roomsService.searchRooms(user, name);
 
-    if (!rooms || !rooms.length) {
+    if (!result.myRooms.length && !result.resultRooms.length) {
       const statusCode = httpStatus.NOT_FOUND;
       const message = errors.rooms.noRoomsMatch;
       throw new ApiError(statusCode, message);
     }
 
-    res.status(httpStatus.OK).json({ rooms });
+    res.status(httpStatus.OK).json(result);
   } catch (err) {
     next(err);
   }
