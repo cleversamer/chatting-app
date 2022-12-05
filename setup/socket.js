@@ -39,13 +39,7 @@ module.exports = (server) => {
     });
 
     socket.on("block member", (userId, roomId) => {
-      try {
-        console.log("userId:", userId, ":", typeof userId);
-        console.log("roomId:", roomId, ":", typeof roomId);
-        socket.broadcast.to(userId).emit("iam blocked", roomId);
-      } catch (err) {
-        console.log(err);
-      }
+      socket.broadcast.to(userId).emit("iam blocked", roomId);
     });
 
     socket.on("block members", (roomId, userIds) => {
@@ -56,9 +50,9 @@ module.exports = (server) => {
       socket.broadcast.to(roomId).emit("memebrs unblocked", userIds);
     });
 
-    socket.on("disconnect", (socket) => {
-      const joinedRooms = Array.from(socket.rooms).slice(1);
-      joinedRooms.forEach((roomId) => socket.leave(roomId));
-    });
+    // socket.on("disconnect", (socket) => {
+    //   const joinedRooms = Array.from(socket.rooms).slice(1);
+    //   joinedRooms.forEach((roomId) => socket.leave(roomId));
+    // });
   });
 };
