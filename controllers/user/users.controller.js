@@ -96,7 +96,9 @@ module.exports.resetPassword = async (req, res, next) => {
 
 module.exports.getUserRooms = async (req, res, next) => {
   try {
-    const rooms = await roomsService.getMappedRooms(req.user.rooms);
+    const user = req.user;
+    const roomIds = [...user.createdRooms, ...user.joinedRooms];
+    const rooms = await roomsService.getMappedRooms(roomIds);
     res.status(httpStatus.OK).json({ rooms });
   } catch (err) {
     next(err);
