@@ -5,7 +5,13 @@ const certPath = admin.credential.cert(serviceAccount);
 
 const fcm = new FCM(certPath);
 
-module.exports.sendPushNotification = (title, body, data, tokens, callback) => {
+module.exports.sendPushNotification = (
+  title,
+  body,
+  data,
+  tokens,
+  callback = () => {}
+) => {
   try {
     let payload = {
       data,
@@ -17,6 +23,6 @@ module.exports.sendPushNotification = (title, body, data, tokens, callback) => {
 
     fcm.sendToMultipleToken(payload, tokens, callback);
   } catch (err) {
-    throw err;
+    //
   }
 };
