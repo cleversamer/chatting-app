@@ -43,7 +43,7 @@ module.exports = (server) => {
     });
 
     socket.on("unblock member", (userId, roomId) => {
-      socket.broadcast.to(userId).emit("iam unblocked", roomId);
+      socket.broadcast.to(userId).emit("iam unblocked", roomId, userId);
     });
 
     socket.on("block members", (roomId, userIds) => {
