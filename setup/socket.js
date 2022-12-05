@@ -39,7 +39,13 @@ module.exports = (server) => {
     });
 
     socket.on("block member", (userId, roomId) => {
-      socket.broadcast.to(userId).emit("iam blocked", roomId);
+      try {
+        console.log("userId:", userId, ":", typeof userId);
+        console.log("roomId:", roomId, ":", typeof roomId);
+        socket.broadcast.to(userId).emit("iam blocked", roomId);
+      } catch (err) {
+        console.log(err);
+      }
     });
 
     socket.on("block members", (roomId, userIds) => {
