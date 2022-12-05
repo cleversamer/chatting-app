@@ -67,19 +67,31 @@ assignmentSchema.statics.getRemainingTime = function (endDate) {
     const diffInDays = Math.floor(diffInMs / dayInMs);
     diffInMs = diffInMs - diffInDays * dayInMs;
 
+    if (diffInDays > 0) {
+      return `${diffInDays} days`;
+    }
+
     // Calc hours difference
     const diffInHours = Math.floor(diffInMs / hourInMs);
     diffInMs = diffInMs - diffInHours * hourInMs;
+
+    if (diffInHours > 0) {
+      return `${diffInHours} hours`;
+    }
 
     // Calc minutes difference
     const diffInMins = Math.floor(diffInMs / minInMs);
     diffInMs = diffInMs - diffInMins * minInMs;
 
-    // Calc seconds difference
+    if (diffInMins > 0) {
+      return `${diffInMins} minutes`;
+    }
+
+    // Calc minutes difference
     const diffInSecs = Math.floor(diffInMs / secInMs);
     diffInMs = diffInMs - diffInSecs * secInMs;
 
-    return `${diffInDays} days, ${diffInHours} hours, ${diffInMins} minutes, ${diffInSecs} seconds`;
+    return `${diffInSecs} seconds`;
   } catch (err) {
     return "time ended";
   }
@@ -103,19 +115,31 @@ assignmentSchema.methods.getRemainingTime = function () {
     const diffInDays = Math.floor(diffInMs / dayInMs);
     diffInMs = diffInMs - diffInDays * dayInMs;
 
+    if (diffInDays > 0) {
+      return `${diffInDays} days`;
+    }
+
     // Calc hours difference
     const diffInHours = Math.floor(diffInMs / hourInMs);
     diffInMs = diffInMs - diffInHours * hourInMs;
+
+    if (diffInHours > 0) {
+      return `${diffInHours} hours`;
+    }
 
     // Calc minutes difference
     const diffInMins = Math.floor(diffInMs / minInMs);
     diffInMs = diffInMs - diffInMins * minInMs;
 
-    // Calc seconds difference
+    if (diffInMins > 0) {
+      return `${diffInMins} minutes`;
+    }
+
+    // Calc minutes difference
     const diffInSecs = Math.floor(diffInMs / secInMs);
     diffInMs = diffInMs - diffInSecs * secInMs;
 
-    return `${diffInDays} days, ${diffInHours} hours, ${diffInMins} minutes, ${diffInSecs} seconds`;
+    return `${diffInSecs} seconds`;
   } catch (err) {
     return "time ended";
   }
