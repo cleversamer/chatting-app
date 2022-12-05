@@ -12,6 +12,7 @@ const usersService = require("../user/users.service");
 module.exports.getAllRooms = async () => {
   try {
     const rooms = await Room.aggregate([
+      { $sort: { _id: -1 } },
       {
         $lookup: {
           from: "users",
@@ -250,6 +251,7 @@ module.exports.getAllPublicRooms = async (skip) => {
     return await Room.aggregate([
       { $match: { status: "public" } },
       { $skip: skip },
+      { $sort: { _id: -1 } },
       { $limit: 10 },
       {
         $lookup: {
