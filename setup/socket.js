@@ -39,7 +39,7 @@ module.exports = (server) => {
     });
 
     socket.on("block member", (userId, roomId) => {
-      socket.broadcast.to(userId).emit("iam blocked", roomId);
+      socket.broadcast.to(userId).emit("iam blocked", roomId, userId);
     });
 
     socket.on("unblock member", (userId, roomId) => {
