@@ -78,7 +78,7 @@ module.exports.getRoomAssignments = async (roomId) => {
 
     let assignments = await Assignment.find({
       room: mongoose.Types.ObjectId(roomId),
-    });
+    }).sort({ _id: -1 });
 
     assignments = assignments.map((item) => ({
       ...item._doc,
