@@ -60,7 +60,6 @@ module.exports.createAssignment = async (
     return {
       ...assignment._doc,
       remainingTime: assignment.getRemainingTime(),
-      room: [room],
     };
   } catch (err) {
     throw err;
