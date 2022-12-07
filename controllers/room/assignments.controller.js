@@ -55,19 +55,17 @@ module.exports.createSubmission = async (req, res, next) => {
   try {
     const user = req.user;
     const { roomId, assignmentId } = req.body;
-    const file = req?.files?.file;
-    // const file1 = req?.files?.file1;
-    // const file2 = req?.files?.file2;
-    // const file3 = req?.files?.file3;
+    const file1 = req?.files?.file1;
+    const file2 = req?.files?.file2;
+    const file3 = req?.files?.file3;
 
     const submission = await assignemntsService.createSubmission(
       user,
       roomId,
       assignmentId,
-      file
-      // file1,
-      // file2,
-      // file3
+      file1,
+      file2,
+      file3
     );
 
     res.status(httpStatus.CREATED).json(submission);

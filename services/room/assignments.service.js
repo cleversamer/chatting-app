@@ -142,7 +142,14 @@ module.exports.addSubmissionTime = async (
   }
 };
 
-module.exports.createSubmission = async (user, roomId, assignmentId, file) => {
+module.exports.createSubmission = async (
+  user,
+  roomId,
+  assignmentId,
+  file1,
+  file2,
+  file3
+) => {
   try {
     // Check if room exists
     const room = await roomsService.findRoomById(roomId);
@@ -175,14 +182,11 @@ module.exports.createSubmission = async (user, roomId, assignmentId, file) => {
       throw new ApiError(statusCode, message);
     }
 
-    if (!file) {
+    if (!file1 && !file2 && !file3) {
       const statusCode = httpStatus.BAD_REQUEST;
-      const message = errors.assignments.noFile;
+      const message = errors.assignments.noSubmissionFiles;
       throw new ApiError(statusCode, message);
     }
-
-    const fileTitle = `${user.firstname}_${user.lastname}`;
-    const _file = await localStorage.storeFile(file, fileTitle);
 
     // TODO: Create submission
     const submission = new Submission({
@@ -193,6 +197,33 @@ module.exports.createSubmission = async (user, roomId, assignmentId, file) => {
         url: _file.path,
       },
     });
+
+    if (file1) {
+      const fileTitle = `1_${user.firstname}_${user.lastname}`;
+      const file = await localStorage.storeFile(file1, fileTitle);
+      submission.files.push({
+        displayName: file.originalName,
+        url: file.path,
+      });
+    }
+
+    if (file2) {
+      const fileTitle = `2_${user.firstname}_${user.lastname}`;
+      const file = await localStorage.storeFile(file2, fileTitle);
+      submission.files.push({
+        displayName: file.originalName,
+        url: file.path,
+      });
+    }
+
+    if (file3) {
+      const fileTitle = `3_${user.firstname}_${user.lastname}`;
+      const file = await localStorage.storeFile(file3, fileTitle);
+      submission.files.push({
+        displayName: file.originalName,
+        url: file.path,
+      });
+    }
 
     await submission.save();
 

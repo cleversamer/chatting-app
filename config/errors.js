@@ -214,6 +214,10 @@ const assignments = Object.freeze({
     en: "You have to add a file",
     ar: "يجب عليك إضافة ملف",
   },
+  noSubmissionFiles: {
+    en: "Submission files should be 1 to 3 files maximum",
+    ar: "ملفات التسليم يجب أن تكون من 1 إلى 3 ملفات كحد أقصى",
+  },
 });
 
 const codes = Object.freeze({

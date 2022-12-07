@@ -11,13 +11,8 @@ const submissionSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
-  file: {
-    displayName: {
-      type: String,
-    },
-    url: {
-      type: String,
-    },
+  files: {
+    type: Array,
   },
   date: {
     type: String,
