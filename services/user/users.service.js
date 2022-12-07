@@ -251,6 +251,7 @@ module.exports.getMyAssignments = async (user) => {
             _id: 1,
             name: 1,
             status: 1,
+            members: 1,
           },
         },
       },
