@@ -245,7 +245,11 @@ module.exports.seeNotifications = async (req, res, next) => {
     user.seeNotifications();
     await user.save();
 
-    res.status(httpStatus.OK).json(_.pick(user, clientSchema));
+    const response = {
+      notifications: user.notifications,
+    };
+
+    res.status(httpStatus.OK).json(response);
   } catch (err) {
     next(err);
   }
