@@ -192,10 +192,6 @@ module.exports.createSubmission = async (
     const submission = new Submission({
       authorId: user._id,
       assignmentId: assignment._id,
-      file: {
-        displayName: _file.originalName,
-        url: _file.path,
-      },
     });
 
     if (file1) {
