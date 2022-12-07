@@ -180,6 +180,19 @@ module.exports.searchRooms = async (req, res, next) => {
   }
 };
 
+module.exports.getRoomMembers = async (req, res, next) => {
+  try {
+    const user = req.user;
+    const { roomId } = req.params;
+
+    const members = await roomsService.getRoomMembers(user, roomId);
+
+    res.status(httpStatus.OK).json({ members });
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports.deleteMembers = async (req, res, next) => {
   try {
     const user = req.user;

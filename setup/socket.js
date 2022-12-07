@@ -34,8 +34,16 @@ module.exports = (server) => {
       socket.broadcast.to(roomId).emit("message received", message);
     });
 
+    socket.on("new pinned message", (roomId, message) => {
+      socket.broadcast.to(roomId).emit("pinned message received", message);
+    });
+
     socket.on("delete message", (roomId, messageId) => {
       socket.broadcast.to(roomId).emit("message deleted", messageId);
+    });
+
+    socket.on("delete pinned message", (roomId, messageId) => {
+      socket.broadcast.to(roomId).emit("pinned message deleted", messageId);
     });
 
     socket.on("block member", (userId, roomId) => {

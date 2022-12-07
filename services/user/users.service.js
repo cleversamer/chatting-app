@@ -209,7 +209,7 @@ module.exports.sendNotification = async (
     // Find users and map them to an array of device tokens.
     const users = await User.find({ _id: { $in: userIds } });
     const tokens = users.map((user) => {
-      user.addNotification(title);
+      user.addNotification(title, body, data);
       user.save();
 
       return user.deviceToken;

@@ -172,6 +172,33 @@ module.exports.searchRooms = async (user, name) => {
   }
 };
 
+module.exports.getRoomMembers = async (user, roomId) => {
+  try {
+    const rooms = await this.getMappedRooms([roomId]);
+    const room = rooms[0];
+    if (!room) {
+      const statusCode = httpStatus.NOT_FOUND;
+      const message = errors.rooms.notFound;
+      throw new ApiError(statusCode, message);
+    }
+
+    const isRoomMember = room.members
+      .map((i) => i._id.toString())
+      .includes(roomId);
+    const isRoomAuthor = room.author[0]._id.toString() === user._id.toString();
+    const isAuthorized = isRoomMember || isRoomAuthor;
+    if (!isAuthorized) {
+      const statusCode = httpStatus.FORBIDDEN;
+      const message = errors.rooms.notJoined;
+      throw new ApiError(statusCode, message);
+    }
+
+    return room.members;
+  } catch (err) {
+    throw err;
+  }
+};
+
 module.exports.getMappedRooms = async (roomIds = []) => {
   roomIds = roomIds.map((i) => mongoose.Types.ObjectId(i));
 
@@ -222,12 +249,14 @@ module.exports.getMappedRooms = async (roomIds = []) => {
             _id: 1,
             firstname: 1,
             lastname: 1,
+            nickname: 1,
             role: 1,
           },
           members: {
             _id: 1,
             firstname: 1,
             lastname: 1,
+            nickname: 1,
             role: 1,
           },
           pinnedMessages: {
