@@ -39,6 +39,7 @@ module.exports = (server) => {
     });
 
     socket.on("new pinned message", (roomId, message) => {
+      console.log(`Pinned message sent to ${roomId}, data = ${message}`);
       socket.to(roomId).emit("pinned message received", message);
     });
 
