@@ -280,7 +280,7 @@ module.exports.getAssignmentSubmissions = async (
         $project: {
           _id: 1,
           date: 1,
-          file: 1,
+          files: 1,
           author: {
             _id: 1,
             firstname: 1,
