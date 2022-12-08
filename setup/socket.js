@@ -39,7 +39,7 @@ module.exports = (server) => {
     });
 
     socket.on("new pinned message", (roomId, message) => {
-      socket.broadcast.to(roomId).emit("pinned message received", message);
+      socket.to(roomId).emit("pinned message received", message);
     });
 
     socket.on("delete message", (roomId, messageId) => {
@@ -47,7 +47,7 @@ module.exports = (server) => {
     });
 
     socket.on("delete pinned message", (roomId, messageId) => {
-      socket.broadcast.to(roomId).emit("pinned message deleted", messageId);
+      socket.to(roomId).emit("pinned message deleted", messageId);
     });
 
     socket.on("block member", (userId, roomId) => {
