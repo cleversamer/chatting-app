@@ -16,10 +16,14 @@ module.exports = (server) => {
     });
 
     socket.on("join room", (roomId) => {
-      const lastJoinedRooms = Array.from(socket.rooms).slice(1);
-      lastJoinedRooms.forEach((roomId) => socket.leave(roomId));
+      // const lastJoinedRooms = Array.from(socket.rooms).slice(1);
+      // lastJoinedRooms.forEach((roomId) => socket.leave(roomId));
 
       socket.join(roomId);
+    });
+
+    socket.on("leave room", (roomId) => {
+      socket.leave(roomId);
     });
 
     socket.on("typing", (roomId, user) => {
