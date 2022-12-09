@@ -125,8 +125,8 @@ userSchema.methods.comparePassword = async function (candidate) {
   return await bcrypt.compare(candidate, this.password);
 };
 
-userSchema.methods.addNotification = function (title, body, data) {
-  const notification = { title, body, data, seen: false };
+userSchema.methods.addNotification = function (title, body, data, date) {
+  const notification = { title, body, date, seen: false, data };
 
   if (this.notifications.length === 10) {
     this.notifications.pop();

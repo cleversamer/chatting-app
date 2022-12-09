@@ -219,7 +219,13 @@ module.exports.deleteUser = async (req, res, next) => {
 
 module.exports.sendNotification = async (req, res, next) => {
   try {
-    const { userIds = [], title = "", body = "", data = {} } = req.body;
+    const {
+      userIds = [],
+      title = "",
+      body = "",
+      data = {},
+      date = null,
+    } = req.body;
 
     const callback = (err, response) => {
       if (err) {
@@ -232,7 +238,14 @@ module.exports.sendNotification = async (req, res, next) => {
       res.status(httpStatus.OK).json(success.auth.notificationSent);
     };
 
-    await usersService.sendNotification(userIds, title, body, data, callback);
+    await usersService.sendNotification(
+      userIds,
+      title,
+      body,
+      data,
+      date,
+      callback
+    );
   } catch (err) {
     next(err);
   }

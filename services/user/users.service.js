@@ -2,13 +2,13 @@ const { ApiError } = require("../../middleware/apiError");
 const { User } = require("../../models/user.model");
 const { Assignment } = require("../../models/assignment.model");
 const bcrypt = require("bcrypt");
-const emailService = require("../user/email.service");
-const notificationsService = require("../user/notifications.service");
+const emailService = require("./email.service");
+const notificationsService = require("./notifications.service");
 const errors = require("../../config/errors");
 const httpStatus = require("http-status");
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
-const localStorage = require("../../services/storage/localStorage.service");
+const localStorage = require("../storage/localStorage.service");
 
 module.exports.getAllUsers = async (user, role) => {
   try {
@@ -203,13 +203,14 @@ module.exports.sendNotification = async (
   title,
   body,
   data,
+  date,
   callback
 ) => {
   try {
     // Find users and map them to an array of device tokens.
     const users = await User.find({ _id: { $in: userIds } });
     const tokens = users.map((user) => {
-      user.addNotification(title, body, data);
+      user.addNotification(title, body, data, date);
       user.save();
 
       return user.deviceToken;
