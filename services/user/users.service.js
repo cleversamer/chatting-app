@@ -247,6 +247,7 @@ module.exports.getMyAssignments = async (user) => {
           title: 1,
           file: 1,
           date: 1,
+          submissions: 1,
           expiresAt: 1,
           room: {
             _id: 1,
