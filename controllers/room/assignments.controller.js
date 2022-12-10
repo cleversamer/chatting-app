@@ -91,3 +91,19 @@ module.exports.getAssignmentSubmissions = async (req, res, next) => {
     next(err);
   }
 };
+
+module.exports.getMySubmissionStatus = async (req, res, next) => {
+  try {
+    const user = req.user;
+    const { assignmentId } = req.params;
+
+    const isSubmitted = await assignemntsService.getMySubmissionStatus(
+      user,
+      assignmentId
+    );
+
+    res.status(httpStatus.OK).json({ submitted: isSubmitted });
+  } catch (err) {
+    next(err);
+  }
+};

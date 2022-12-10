@@ -295,3 +295,18 @@ module.exports.getAssignmentSubmissions = async (
     throw err;
   }
 };
+
+module.exports.getMySubmissionStatus = async (user, assignmentId) => {
+  try {
+    const criteria = {
+      authorId: user._id,
+      assignmentId: mongoose.Types.ObjectId(assignmentId),
+    };
+
+    const userSubmission = await Submission.findOne(criteria);
+
+    return !!userSubmission;
+  } catch (err) {
+    throw err;
+  }
+};

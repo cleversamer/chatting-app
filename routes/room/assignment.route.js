@@ -33,4 +33,10 @@ router.get(
   assignmentsController.getAssignmentSubmissions
 );
 
+router.get(
+  "/:assignmentId/submission-status",
+  auth("readOwn", "submission"),
+  assignmentsController.getMySubmissionStatus
+);
+
 module.exports = router;

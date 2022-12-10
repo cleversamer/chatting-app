@@ -42,6 +42,10 @@ module.exports = (server) => {
       io.to(roomId).emit("pinned message received", message);
     });
 
+    socket.on("new replied message", (roomId, message) => {
+      socket.broadcast.to(roomId).emit("replied message received", message);
+    });
+
     socket.on("delete message", (roomId, messageId) => {
       socket.broadcast.to(roomId).emit("message deleted", messageId);
     });
