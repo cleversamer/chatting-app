@@ -1,15 +1,10 @@
 const fs = require("fs");
-const archiver = require("archiver");
 const httpStatus = require("http-status");
 const errors = require("../../config/errors");
 const { ApiError } = require("../../middleware/apiError");
 
-const JSZip = require("jszip");
-
 module.exports.compressFiles = async (title, files = []) => {
   try {
-    const zip = new JSZip();
-
     const fileName = filterName(`${title}_${getCurrentDate()}`);
   } catch (err) {
     const statusCode = httpStatus.BAD_REQUEST;
