@@ -24,7 +24,7 @@ const assignmentSchema = new mongoose.Schema({
   },
   clientDate: {
     type: String,
-    required: true,
+    default: ""
   },
   date: {
     type: String,
