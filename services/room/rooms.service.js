@@ -83,8 +83,9 @@ module.exports.findRoomByName = async (name) => {
 
 module.exports.searchRooms = async (user, name) => {
   try {
+    const myRoomsIds = [...user.createdRooms, ...user.joinedRooms];
     const myRooms = await Room.aggregate([
-      { $match: { $text: { $search: name }, _id: { $in: user.createdRooms } } },
+      { $match: { $text: { $search: name }, _id: { $in: myRoomsIds } } },
       { $sort: { score: { $meta: "textScore" } } },
       { $limit: 10 },
       {
