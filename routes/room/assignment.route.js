@@ -34,6 +34,12 @@ router.get(
 );
 
 router.get(
+  "/download/:roomId/:assignmentId",
+  [auth("readAny", "submission")],
+  assignmentsController.downloadAssignmentSubmissions
+);
+
+router.get(
   "/:assignmentId/submission-status",
   auth("readOwn", "submission"),
   assignmentsController.getMySubmissionStatus

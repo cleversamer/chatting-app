@@ -93,6 +93,23 @@ module.exports.getAssignmentSubmissions = async (req, res, next) => {
   }
 };
 
+module.exports.downloadAssignmentSubmissions = async (req, res, next) => {
+  try {
+    const user = req.user;
+    const { roomId, assignmentId } = req.params;
+
+    const zipFile = await assignemntsService.downloadAssignmentSubmissions(
+      user,
+      assignmentId,
+      roomId
+    );
+
+    res.send(zipFile);
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports.getMySubmissionStatus = async (req, res, next) => {
   try {
     const user = req.user;

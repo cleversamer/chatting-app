@@ -2,6 +2,7 @@ const { ApiError } = require("../../middleware/apiError");
 const { Assignment } = require("../../models/assignment.model");
 const { Submission } = require("../../models/submission.model");
 const localStorage = require("../storage/localStorage.service");
+const compressService = require("../storage/compress.service");
 const errors = require("../../config/errors");
 const httpStatus = require("http-status");
 const roomsService = require("../room/rooms.service");
@@ -293,6 +294,39 @@ module.exports.getAssignmentSubmissions = async (
     ]);
 
     return submissions;
+  } catch (err) {
+    throw err;
+  }
+};
+
+module.exports.downloadAssignmentSubmissions = async (
+  user,
+  assignmentId,
+  roomId
+) => {
+  try {
+    const submissions = await this.getAssignmentSubmissions(
+      user,
+      assignmentId,
+      roomId
+    );
+
+    const files = [];
+    submissions.forEach((item) => {
+      // TODO: compress files in a ZIP file
+      const submissionFiles = item.files.map((file) => ({
+        name: file.displayName,
+        path: file.url,
+      }));
+
+      files.push(...submissionFiles);
+    });
+
+    // TODO: compress ZIP files into one ZIP file
+    const compressedFile = await compressService.compressFiles("123", files);
+    console.log("compressedFile", compressedFile);
+
+    // TODO: return one ZIP file
   } catch (err) {
     throw err;
   }

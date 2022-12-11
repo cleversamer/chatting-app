@@ -63,7 +63,12 @@ module.exports = (server) => {
     });
 
     socket.on("block members", (roomId, userIds) => {
-      socket.broadcast.to(roomId).emit("members blocked", userIds);
+      console.log("roomId", roomId);
+      console.log("userIds", userIds);
+      const succeeded = socket.broadcast
+        .to(roomId)
+        .emit("members blocked", userIds);
+      console.log("succeeded", succeeded);
     });
 
     socket.on("unblock members", (roomId, userIds) => {
