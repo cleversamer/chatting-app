@@ -63,11 +63,11 @@ module.exports = (server) => {
     });
 
     socket.on("block members", (roomId, userIds) => {
-      socket.broadcast.to(roomId).emit("memebrs blocked", userIds);
+      socket.broadcast.to(roomId).emit("members blocked", userIds);
     });
 
     socket.on("unblock members", (roomId, userIds) => {
-      socket.broadcast.to(roomId).emit("memebrs unblocked", userIds);
+      socket.broadcast.to(roomId).emit("members unblocked", userIds);
     });
 
     // socket.on("disconnect", (socket) => {
