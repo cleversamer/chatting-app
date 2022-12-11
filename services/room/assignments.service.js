@@ -12,7 +12,8 @@ module.exports.createAssignment = async (
   title,
   roomId,
   minutes,
-  file
+  file,
+  clientDate
 ) => {
   try {
     // Check if room exists
@@ -53,6 +54,7 @@ module.exports.createAssignment = async (
         url: _file.path,
       },
       expiresAt: expiryDate,
+      clientDate,
     });
 
     await assignment.save();

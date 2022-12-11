@@ -246,6 +246,7 @@ module.exports.getMyAssignments = async (user) => {
         $project: {
           title: 1,
           file: 1,
+          clientDate: 1,
           date: 1,
           submissions: 1,
           expiresAt: 1,

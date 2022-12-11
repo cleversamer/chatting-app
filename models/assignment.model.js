@@ -22,6 +22,10 @@ const assignmentSchema = new mongoose.Schema({
       type: String,
     },
   },
+  clientDate: {
+    type: String,
+    required: true,
+  },
   date: {
     type: String,
     required: true,
