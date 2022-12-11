@@ -128,7 +128,7 @@ userSchema.methods.comparePassword = async function (candidate) {
 userSchema.methods.addNotification = function (title, body, data, date) {
   const notification = { title, body, date, seen: false, data };
 
-  if (this.notifications.length === 10) {
+  if (this.notifications.length === 30) {
     this.notifications.pop();
   }
 
