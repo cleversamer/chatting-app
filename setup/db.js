@@ -3,6 +3,9 @@ const mongoose = require("mongoose");
 
 module.exports = () => {
   const mongoURI = host.server.db;
+
+  mongoose.set("strictQuery", false);
+
   mongoose
     .connect(mongoURI)
     .then((value) => {
