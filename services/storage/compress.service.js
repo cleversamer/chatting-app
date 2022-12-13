@@ -1,4 +1,5 @@
 const fs = require("fs");
+const AdmZip = require("adm-zip");
 const httpStatus = require("http-status");
 const errors = require("../../config/errors");
 const { ApiError } = require("../../middleware/apiError");
@@ -6,7 +7,22 @@ const { ApiError } = require("../../middleware/apiError");
 module.exports.compressFiles = async (title, files = []) => {
   try {
     const fileName = filterName(`${title}_${getCurrentDate()}`);
+
+    const zip = new AdmZip();
+
+    const outputFile = `${fileName}.zip`;
+
+    files.forEach((file, index) => {
+      console.log(`File ${index + 1}:`, file);
+      const path = `${file.path}`;
+      zip.addLocalFolder(path);
+    });
+
+    zip.writeZip(outputFile);
+
+    console.log(`Created ${outputFile} successfully`);
   } catch (err) {
+    console.log(err.message);
     const statusCode = httpStatus.BAD_REQUEST;
     const message = errors.system.fileUploadError;
     throw new ApiError(statusCode, message);
@@ -14,7 +30,7 @@ module.exports.compressFiles = async (title, files = []) => {
 };
 
 const filterName = (name = "") => {
-  return name.split(" ").join("_");
+  return name.split(" ").join("_").split(":").join("_");
 };
 
 const getCurrentDate = () => {

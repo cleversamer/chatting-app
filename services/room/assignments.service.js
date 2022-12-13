@@ -323,8 +323,8 @@ module.exports.downloadAssignmentSubmissions = async (
     });
 
     // TODO: compress ZIP files into one ZIP file
-    const compressedFile = await compressService.compressFiles("123", files);
-    console.log("compressedFile", compressedFile);
+    const fileName = Math.floor(Math.random() * 10 + 10).toString();
+    const compressedFile = await compressService.compressFiles(fileName, files);
 
     // TODO: return one ZIP file
   } catch (err) {

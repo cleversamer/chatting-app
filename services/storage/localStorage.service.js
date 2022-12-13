@@ -28,7 +28,7 @@ const storeFile = async (file, title = "") => {
 };
 
 const filterName = (name = "") => {
-  return name.split(" ").join("_");
+  return name.split(" ").join("_").split(":").join("_");
 };
 
 const getCurrentDate = () => {
