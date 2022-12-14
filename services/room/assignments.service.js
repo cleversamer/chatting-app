@@ -194,6 +194,7 @@ module.exports.createSubmission = async (
     // TODO: Create submission
     const submission = new Submission({
       authorId: user._id,
+      roomId: room._id,
       assignmentId: assignment._id,
     });
 

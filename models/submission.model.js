@@ -1,6 +1,11 @@
 const mongoose = require("mongoose");
 
 const submissionSchema = new mongoose.Schema({
+  roomId: {
+    type: Object,
+    ref: "Room",
+    required: true,
+  },
   assignmentId: {
     type: Object,
     ref: "Assignment",

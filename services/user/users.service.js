@@ -1,6 +1,9 @@
 const { ApiError } = require("../../middleware/apiError");
 const { User } = require("../../models/user.model");
+const { Room } = require("../../models/room.model");
+const { Message } = require("../../models/message.model");
 const { Assignment } = require("../../models/assignment.model");
+const { Submission } = require("../../models/submission.model");
 const bcrypt = require("bcrypt");
 const emailService = require("./email.service");
 const notificationsService = require("./notifications.service");
@@ -60,6 +63,25 @@ module.exports.deleteUser = async (user, userId) => {
       const message = errors.auth.notFound;
       throw new ApiError(statusCode, message);
     }
+
+    if (!deletedUser.createdRooms.length) {
+      console.log("Deleted with no effects");
+      return deletedUser;
+    }
+
+    const { createdRooms } = deletedUser;
+
+    // Delete user's rooms
+    await Room.deleteMany({ _id: { $in: createdRooms } });
+
+    // Delete user rooms' messages
+    await Message.deleteMany({ receiver: { $in: createdRooms } });
+
+    // Delete user rooms' assignments
+    await Assignment.deleteMany({ room: { $in: createdRooms } });
+
+    // Delete user rooms assignments' submissions
+    await Submission.deleteMany({ roomId: { $in: createdRooms } });
 
     return deletedUser;
   } catch (err) {
