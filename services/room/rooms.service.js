@@ -91,6 +91,14 @@ module.exports.searchRooms = async (user, name) => {
       {
         $lookup: {
           from: "users",
+          localField: "members",
+          foreignField: "_id",
+          as: "members",
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
           localField: "author",
           foreignField: "_id",
           as: "author",
@@ -106,6 +114,7 @@ module.exports.searchRooms = async (user, name) => {
           chatDisabled: 1,
           blockList: 1,
           status: 1,
+          members: 1,
           author: {
             _id: 1,
             firstname: 1,
@@ -129,6 +138,14 @@ module.exports.searchRooms = async (user, name) => {
       {
         $lookup: {
           from: "users",
+          localField: "members",
+          foreignField: "_id",
+          as: "members",
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
           localField: "author",
           foreignField: "_id",
           as: "author",
@@ -144,6 +161,7 @@ module.exports.searchRooms = async (user, name) => {
           chatDisabled: 1,
           blockList: 1,
           status: 1,
+          members: 1,
           author: {
             _id: 1,
             firstname: 1,
