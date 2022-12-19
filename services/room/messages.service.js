@@ -96,7 +96,7 @@ module.exports.createMessage = async (
 module.exports.getRoomMessages = async (roomId) => {
   try {
     return await Message.aggregate([
-      { $match: { receiver: mongoose.Types.ObjectId(roomId) } },
+      { $match: { receiver: new mongoose.Types.ObjectId(roomId) } },
       {
         $lookup: {
           from: "users",

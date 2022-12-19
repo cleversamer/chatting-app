@@ -69,6 +69,14 @@ module.exports.createAssignment = async (
   }
 };
 
+module.exports.getAssignment = async (assignmentId) => {
+  try {
+    return await Assignment.findById(assignmentId);
+  } catch (err) {
+    throw err;
+  }
+};
+
 module.exports.getRoomAssignments = async (roomId) => {
   try {
     // Check if room exists

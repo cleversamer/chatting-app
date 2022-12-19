@@ -10,10 +10,15 @@ router.post(
 );
 
 router.get(
-  "/:roomId",
+  "/get/:assignmentId",
   auth("readOwn", "assignment"),
-  assignmentsController.getRoomAssignments
-);
+  assignmentsController.getAssignment
+),
+  router.get(
+    "/:roomId",
+    auth("readOwn", "assignment"),
+    assignmentsController.getRoomAssignments
+  );
 
 router.patch(
   "/addSubmissionTime",
