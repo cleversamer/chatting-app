@@ -29,7 +29,7 @@ module.exports.getAssignment = async (req, res, next) => {
 
     const assignment = await assignemntsService.getAssignment(assignmentId);
 
-    res.status(httpStatus.OK).json();
+    res.status(httpStatus.OK).json(assignment);
   } catch (err) {
     next(err);
   }
