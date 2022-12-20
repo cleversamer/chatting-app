@@ -13,6 +13,7 @@ module.exports.createMessage = async (
   text,
   roomId,
   file,
+  displayName,
   date,
   isReply,
   repliedMessage,
@@ -74,7 +75,7 @@ module.exports.createMessage = async (
     const message = new Message({
       text,
       file: {
-        displayName: mssgFile.originalName,
+        displayName,
         url: mssgFile.path,
       },
       receiver: room._id,

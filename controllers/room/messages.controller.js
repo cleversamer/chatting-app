@@ -6,7 +6,8 @@ const _ = require("lodash");
 module.exports.createMessage = async (req, res, next) => {
   try {
     const user = req.user;
-    let { type, text, roomId, date, isReply, repliedMessage } = req.body;
+    let { type, text, roomId, date, isReply, repliedMessage, displayName } =
+      req.body;
     const file = req?.files?.file;
 
     const message = await messagesService.createMessage(
@@ -15,6 +16,7 @@ module.exports.createMessage = async (req, res, next) => {
       text,
       roomId,
       file,
+      displayName,
       date,
       isReply,
       repliedMessage,
