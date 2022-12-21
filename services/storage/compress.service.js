@@ -1,4 +1,3 @@
-const fs = require("fs");
 const AdmZip = require("adm-zip");
 const httpStatus = require("http-status");
 const errors = require("../../config/errors");
@@ -14,8 +13,8 @@ module.exports.compressFiles = async (title, files = []) => {
 
     files.forEach((file, index) => {
       console.log(`File ${index + 1}:`, file);
-      const path = `${file.path}`;
-      zip.addLocalFolder(path);
+      const path = `../../uploads/${file.path.substring(1)}`;
+      zip.addLocalFile(path);
     });
 
     zip.writeZip(outputFile);

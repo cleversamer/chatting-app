@@ -71,7 +71,35 @@ module.exports.createAssignment = async (
 
 module.exports.getAssignment = async (assignmentId) => {
   try {
-    return await Assignment.findById(assignmentId);
+    const result = await Assignment.aggregate([
+      { $match: { _id: mongoose.Types.ObjectId(assignmentId) } },
+      {
+        $lookup: {
+          from: "rooms",
+          localField: "room",
+          foreignField: "_id",
+          as: "room",
+        },
+      },
+      {
+        $project: {
+          title: 1,
+          file: 1,
+          clientDate: 1,
+          date: 1,
+          submissions: 1,
+          expiresAt: 1,
+          room: {
+            _id: 1,
+            name: 1,
+            status: 1,
+            members: 1,
+          },
+        },
+      },
+    ]);
+
+    return result[0];
   } catch (err) {
     throw err;
   }
@@ -179,7 +207,10 @@ module.exports.createSubmission = async (
     }
 
     // Check if the user is a member in the room
-    if (!room.members.includes(user._id.toString())) {
+    if (
+      !room.members.includes(user._id.toString()) &&
+      room.author.toString() !== user._id.toString()
+    ) {
       const statusCode = httpStatus.UNAUTHORIZED;
       const message = errors.rooms.notJoined;
       throw new ApiError(statusCode, message);
@@ -199,7 +230,6 @@ module.exports.createSubmission = async (
       throw new ApiError(statusCode, message);
     }
 
-    // TODO: Create submission
     const submission = new Submission({
       authorId: user._id,
       roomId: room._id,
@@ -322,7 +352,6 @@ module.exports.downloadAssignmentSubmissions = async (
 
     const files = [];
     submissions.forEach((item) => {
-      // TODO: compress files in a ZIP file
       const submissionFiles = item.files.map((file) => ({
         name: file.displayName,
         path: file.url,
@@ -331,11 +360,10 @@ module.exports.downloadAssignmentSubmissions = async (
       files.push(...submissionFiles);
     });
 
-    // TODO: compress ZIP files into one ZIP file
     const fileName = Math.floor(Math.random() * 10 + 10).toString();
     const compressedFile = await compressService.compressFiles(fileName, files);
 
-    // TODO: return one ZIP file
+    return compressedFile;
   } catch (err) {
     throw err;
   }
