@@ -1,3 +1,4 @@
+const fs = require("fs");
 const AdmZip = require("adm-zip");
 const httpStatus = require("http-status");
 const errors = require("../../config/errors");
@@ -5,11 +6,18 @@ const { ApiError } = require("../../middleware/apiError");
 
 module.exports.compressFiles = async (title, files = []) => {
   try {
-    const fileName = filterName(`${title}_${getCurrentDate()}`);
-
+    // Creating an instance of AdmZip class
     const zip = new AdmZip();
 
+    // Deciding file name
+    const fileName = filterName(`${title}_${getCurrentDate()}`);
     const outputFile = `${fileName}.zip`;
+
+    // Make a directory to include files
+    const dir = `../../uploads/${fileName}`;
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir);
+    }
 
     files.forEach((file, index) => {
       console.log(`File ${index + 1}:`, file);

@@ -14,6 +14,7 @@ module.exports.createAssignment = async (
   roomId,
   minutes,
   file,
+  displayName,
   clientDate
 ) => {
   try {
@@ -51,7 +52,7 @@ module.exports.createAssignment = async (
       title,
       room: room._id,
       file: {
-        displayName: _file.name,
+        displayName: displayName,
         url: _file.path,
       },
       expiresAt: expiryDate,
