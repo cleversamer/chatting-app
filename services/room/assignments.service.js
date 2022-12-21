@@ -71,7 +71,7 @@ module.exports.createAssignment = async (
 
 module.exports.getAssignment = async (assignmentId) => {
   try {
-    const result = await Assignment.aggregate([
+    let result = await Assignment.aggregate([
       { $match: { _id: mongoose.Types.ObjectId(assignmentId) } },
       {
         $lookup: {
@@ -98,6 +98,11 @@ module.exports.getAssignment = async (assignmentId) => {
         },
       },
     ]);
+
+    result = result.map((item) => ({
+      ...item,
+      remainingTime: Assignment.getRemainingTime(item.expiresAt),
+    }));
 
     return result[0];
   } catch (err) {
