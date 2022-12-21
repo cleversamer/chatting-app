@@ -576,7 +576,7 @@ module.exports.deleteRoomMessages = async (user, roomId) => {
 module.exports.addPinnedMessage = async (req) => {
   try {
     const user = req.user;
-    const { type, roomId, text, date } = req.body;
+    const { type, roomId, text, date, displayName } = req.body;
     const file = req?.files?.file;
 
     if (!MESSAGE_TYPES.includes(type)) {
@@ -611,6 +611,7 @@ module.exports.addPinnedMessage = async (req) => {
       text,
       roomId,
       file,
+      displayName,
       date,
       false,
       null,
