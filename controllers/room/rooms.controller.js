@@ -89,7 +89,7 @@ module.exports.createRoom = async (req, res, next) => {
 
     // Shceduling an event to run after 6 months
     const runDate1 = new Date();
-    runDate1.setMinutes(runDate1.getMinutes() + 1);
+    runDate1.setMinutes(runDate1.getMonth() + 6);
     scheduleService.scheduleEvent(runDate1, async () => {
       try {
         await roomsService.resetRoom("admin", room._id);
@@ -100,7 +100,7 @@ module.exports.createRoom = async (req, res, next) => {
 
     // Shceduling an event to run after 6 months
     const runDate2 = new Date();
-    runDate2.setSeconds(runDate2.getSeconds() + 30);
+    runDate2.setSeconds(runDate2.getDay() + 179);
     scheduleService.scheduleEvent(runDate2, async () => {
       try {
         notificationsService.sendPushNotification(
