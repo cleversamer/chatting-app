@@ -193,7 +193,10 @@ module.exports.createSubmission = async (
   assignmentId,
   file1,
   file2,
-  file3
+  file3,
+  displayName1,
+  displayName2,
+  displayName3
 ) => {
   try {
     // Check if room exists
@@ -246,7 +249,7 @@ module.exports.createSubmission = async (
       const fileTitle = `1_${user.firstname}_${user.lastname}`;
       const file = await localStorage.storeFile(file1, fileTitle);
       submission.files.push({
-        displayName: file.originalName,
+        displayName: displayName1,
         url: file.path,
       });
     }
@@ -255,7 +258,7 @@ module.exports.createSubmission = async (
       const fileTitle = `2_${user.firstname}_${user.lastname}`;
       const file = await localStorage.storeFile(file2, fileTitle);
       submission.files.push({
-        displayName: file.originalName,
+        displayName: displayName2,
         url: file.path,
       });
     }
@@ -264,7 +267,7 @@ module.exports.createSubmission = async (
       const fileTitle = `3_${user.firstname}_${user.lastname}`;
       const file = await localStorage.storeFile(file3, fileTitle);
       submission.files.push({
-        displayName: file.originalName,
+        displayName: displayName3,
         url: file.path,
       });
     }

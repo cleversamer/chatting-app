@@ -69,7 +69,8 @@ module.exports.addSubmissionTime = async (req, res, next) => {
 module.exports.createSubmission = async (req, res, next) => {
   try {
     const user = req.user;
-    const { roomId, assignmentId } = req.body;
+    const { roomId, assignmentId, displayName1, displayName2, displayName3 } =
+      req.body;
     const file1 = req?.files?.file1;
     const file2 = req?.files?.file2;
     const file3 = req?.files?.file3;
@@ -80,7 +81,10 @@ module.exports.createSubmission = async (req, res, next) => {
       assignmentId,
       file1,
       file2,
-      file3
+      file3,
+      displayName1,
+      displayName2,
+      displayName3
     );
 
     res.status(httpStatus.CREATED).json(submission);

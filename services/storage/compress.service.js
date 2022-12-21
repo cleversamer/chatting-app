@@ -14,10 +14,10 @@ module.exports.compressFiles = async (title, files = []) => {
     const outputFile = `${fileName}.zip`;
 
     // Make a directory to include files
-    const dir = `../../uploads/${fileName}`;
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir);
-    }
+    // const dir = `../../uploads/${fileName}`;
+    // if (!fs.existsSync(dir)) {
+    //   fs.mkdirSync(dir);
+    // }
 
     files.forEach((file, index) => {
       console.log(`File ${index + 1}:`, file);
