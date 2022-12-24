@@ -4,6 +4,8 @@ const httpStatus = require("http-status");
 const errors = require("../../config/errors");
 const { ApiError } = require("../../middleware/apiError");
 
+// TODO: compress a list of files
+// given an array of files paths
 module.exports.compressFiles = async (title, files = []) => {
   try {
     // Creating an instance of AdmZip class
