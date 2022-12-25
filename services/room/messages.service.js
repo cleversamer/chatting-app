@@ -7,6 +7,8 @@ const errors = require("../../config/errors");
 const httpStatus = require("http-status");
 const roomsService = require("./rooms.service");
 
+// A service function that creates a new message
+// document in the DB
 module.exports.createMessage = async (
   user,
   type,
@@ -20,6 +22,7 @@ module.exports.createMessage = async (
   isPinned
 ) => {
   try {
+    // Check if message type is correct/valid
     if (!MESSAGE_TYPES.includes(type)) {
       const statusCode = httpStatus.BAD_REQUEST;
       const message = errors.message.invalidType;
@@ -86,16 +89,21 @@ module.exports.createMessage = async (
       isPinned,
     });
 
+    // Add replied message in some conditions
     message.repliedMessage = isReply && !isPinned ? repliedMessage : null;
 
+    // Return saved message
     return await message.save();
   } catch (err) {
     throw err;
   }
 };
 
+// A service function that returns all messages in a room
 module.exports.getRoomMessages = async (roomId) => {
   try {
+    // Find all messages for a room
+    // Return messages
     return await Message.aggregate([
       {
         $match: {
@@ -136,16 +144,20 @@ module.exports.getRoomMessages = async (roomId) => {
   }
 };
 
+// A service function that deletes a message
 module.exports.deleteMessage = async (user, messageId) => {
   try {
+    // Transform `messageId` arg to an MongoDB ObjectId type
     messageId = mongoose.Types.ObjectId(messageId);
 
+    // Check if `messageId` arg is a valid ObjectId
     if (!mongoose.isValidObjectId(messageId)) {
       const statusCode = httpStatus.BAD_REQUEST;
       const message = errors.message.invalidId;
       throw new ApiError(statusCode, message);
     }
 
+    // Check if message exists
     const message = await Message.findById(messageId);
     if (!message) {
       const statusCode = httpStatus.NOT_FOUND;
@@ -153,18 +165,22 @@ module.exports.deleteMessage = async (user, messageId) => {
       throw new ApiError(statusCode, message);
     }
 
+    // Find room that includes the message
     const room = await Room.findById(message.receiver);
 
+    // Define conditions
     const isMssgAuthor = message.sender.toString() === user._id.toString();
     const isRoomAdmin = room.author.toString() === user._id.toString();
     const isAuthorized = isMssgAuthor || isRoomAdmin;
 
+    // Check if user is authorized to do this action
     if (!isAuthorized) {
       const statusCode = httpStatus.FORBIDDEN;
       const message = errors.message.notAuthor;
       throw new ApiError(statusCode, message);
     }
 
+    // Delete message and return it
     return await Message.findByIdAndDelete(messageId);
   } catch (err) {
     throw err;

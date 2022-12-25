@@ -40,7 +40,6 @@ module.exports.registerEmail = async (email, user) => {
     await transporter.sendMail(message);
     return true;
   } catch (err) {
-    console.log(err);
     throw err;
   }
 };
@@ -74,7 +73,6 @@ module.exports.forgotPasswordEmail = async (email, user) => {
     await transporter.sendMail(message);
     return true;
   } catch (err) {
-    console.log(err);
     throw err;
   }
 };

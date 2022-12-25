@@ -7,7 +7,9 @@ const allRights = {
   "delete:any": ["*"],
 };
 
+// An object that specifies the rights of each role
 let grantsObject = {
+  // Admin rights
   admin: {
     user: allRights,
     userType: allRights,
@@ -22,6 +24,7 @@ let grantsObject = {
     roomType: allRights,
     notification: allRights,
   },
+  // Teacher rights
   teacher: {
     user: allRights,
     verificationCode: allRights,
@@ -37,6 +40,7 @@ let grantsObject = {
     },
     notification: allRights,
   },
+  // Student rights
   student: {
     user: {
       "read:own": ["*"],
@@ -73,6 +77,7 @@ let grantsObject = {
   },
 };
 
+// Creating an instance of AccessControl class
 const roles = new AccessControl(grantsObject);
 
 module.exports = roles;

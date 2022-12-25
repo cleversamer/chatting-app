@@ -65,7 +65,6 @@ module.exports.deleteUser = async (user, userId) => {
     }
 
     if (!deletedUser.createdRooms.length) {
-      console.log("Deleted with no effects");
       return deletedUser;
     }
 

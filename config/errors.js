@@ -1,3 +1,4 @@
+// Stores error objects that might occurr overall the system
 const system = Object.freeze({
   internal: {
     en: "An un expected error happened on the server",
@@ -29,6 +30,7 @@ const system = Object.freeze({
   },
 });
 
+// Stores errors in authentication middleware
 const auth = Object.freeze({
   notFound: {
     en: "User not found",
@@ -96,6 +98,7 @@ const auth = Object.freeze({
   },
 });
 
+// Stores errors in users middleware
 const user = Object.freeze({
   noUsers: {
     en: "There are no users yet",
@@ -119,6 +122,7 @@ const user = Object.freeze({
   },
 });
 
+// Stores errors in rooms middleware
 const rooms = Object.freeze({
   noRooms: {
     en: "There are no rooms out there",
@@ -174,6 +178,7 @@ const rooms = Object.freeze({
   },
 });
 
+// Stores errors in messages middleware
 const message = Object.freeze({
   invalidId: {
     en: "Invalid message id",
@@ -197,6 +202,7 @@ const message = Object.freeze({
   },
 });
 
+// Stores errors in assignments middleware
 const assignments = Object.freeze({
   notFound: {
     en: "Assignment was not found",
@@ -220,6 +226,8 @@ const assignments = Object.freeze({
   },
 });
 
+// Stores error codes that come from MongoDB server
+// or the app itself.
 const codes = Object.freeze({
   duplicateIndexKey: 11000,
 });

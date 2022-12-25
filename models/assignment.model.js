@@ -1,19 +1,24 @@
 const mongoose = require("mongoose");
 
+// Creating the schema of the assignment document
 const assignmentSchema = new mongoose.Schema({
+  // Title of the assignment
   title: {
     type: String,
     required: true,
   },
+  // An id reference to the room
   room: {
     type: Object,
     ref: "Room",
     required: true,
   },
+  // Number of submissions
   submissions: {
     type: Number,
     default: 0,
   },
+  // Description file of the assignment
   file: {
     displayName: {
       type: String,
@@ -22,37 +27,27 @@ const assignmentSchema = new mongoose.Schema({
       type: String,
     },
   },
+  // Start date object came from the client side
   clientDate: {
     type: String,
-    default: ""
+    default: "",
   },
+  // Start date object assigned when creating an instance
+  // of this model.
   date: {
     type: String,
     required: true,
     default: new Date(),
   },
+  // Expiry date of the assignment
   expiresAt: {
     type: String,
     required: true,
   },
-  // submissions: [
-  //   {
-  //     from: {
-  //       type: Object,
-  //       ref: "users",
-  //       required: true,
-  //     },
-  //     fileUrl: {
-  //       type: String,
-  //     },
-  //     date: {
-  //       type: String,
-  //       required: true,
-  //     },
-  //   },
-  // ],
 });
 
+// Static method:
+// Calculates the difference between current date and some date
 assignmentSchema.statics.getRemainingTime = function (endDate) {
   try {
     const secInMs = 1000;
@@ -104,6 +99,8 @@ assignmentSchema.statics.getRemainingTime = function (endDate) {
   }
 };
 
+// Static method:
+// Calculates the remaining time of this assignment
 assignmentSchema.methods.getRemainingTime = function () {
   try {
     const secInMs = 1000;
@@ -155,6 +152,8 @@ assignmentSchema.methods.getRemainingTime = function () {
   }
 };
 
+// Creating the model
 const Assignment = mongoose.model("Assignment", assignmentSchema);
 
+// Exporting model data
 module.exports = { Assignment };

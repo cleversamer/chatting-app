@@ -9,7 +9,9 @@ const storeFile = async (file, title = "") => {
     const readFile = Buffer.from(file.data, "base64");
 
     const diskName = title
-      ? filterName(`${title}_${getCurrentDate()}`)
+      ? `${filterName(`${title}_${getCurrentDate()}`)}_${crypto
+          .randomUUID()
+          .substring(0, 10)}`
       : crypto.randomUUID();
 
     const nameParts = file.name.split(".");

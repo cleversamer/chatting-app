@@ -1,3 +1,4 @@
+// Stores success messages in authentication middleware
 const auth = {
   verificationCodeSent: {
     en: "Verification code has been sent to your email",

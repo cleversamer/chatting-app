@@ -1,11 +1,8 @@
-const fs = require("fs");
 const AdmZip = require("adm-zip");
 const httpStatus = require("http-status");
 const errors = require("../../config/errors");
 const { ApiError } = require("../../middleware/apiError");
 
-// TODO: compress a list of files
-// given an array of files paths
 module.exports.compressFiles = async (title, files = []) => {
   try {
     // Creating an instance of AdmZip class
@@ -13,25 +10,17 @@ module.exports.compressFiles = async (title, files = []) => {
 
     // Deciding file name
     const fileName = filterName(`${title}_${getCurrentDate()}`);
-    const outputFile = `${fileName}.zip`;
-
-    // Make a directory to include files
-    // const dir = `../../uploads/${fileName}`;
-    // if (!fs.existsSync(dir)) {
-    //   fs.mkdirSync(dir);
-    // }
+    const outputFile = `./uploads/${fileName}.zip`;
 
     files.forEach((file, index) => {
-      console.log(`File ${index + 1}:`, file);
-      const path = `../../uploads/${file.path.substring(1)}`;
+      const path = `./uploads/${file.path.substring(1)}`;
       zip.addLocalFile(path);
     });
 
     zip.writeZip(outputFile);
 
-    console.log(`Created ${outputFile} successfully`);
+    return outputFile;
   } catch (err) {
-    console.log(err.message);
     const statusCode = httpStatus.BAD_REQUEST;
     const message = errors.system.fileUploadError;
     throw new ApiError(statusCode, message);

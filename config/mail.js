@@ -1,3 +1,4 @@
+// Authentication data with the Email Service
 const auth = {
   user: "teachertech2022@gmail.com",
   password: process.env["EMAIL_PRIVATE_KEY"],
