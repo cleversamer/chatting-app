@@ -105,32 +105,33 @@ module.exports.deleteRoomMessages = async (req, res, next) => {
 // A controller function that creates a new room in the DB
 module.exports.createRoom = async (req, res, next) => {
   try {
+    const user = req.user;
+
     // Asking service to create a new room
     const room = await roomsService.createRoom(req);
 
-    // Shceduling an event to run after 6 months
+    // Shceduling an event to run after 135 days
     // This event is all about resetting this room
     const runDate1 = new Date();
-    runDate1.setMinutes(runDate1.getMonth() + 6);
+    runDate1.setMinutes(runDate1.getDay() + 135);
     scheduleService.scheduleEvent(runDate1, async () => {
       try {
         await roomsService.resetRoom("admin", room._id);
       } catch (err) {}
     });
 
-    // Shceduling an event to run after 6 months - 1 day (~ 179 days)
+    // Shceduling an event to run after 134 days
     // This event is all about notifying room's owner that
     // the room will be reseted after 24 hours.
     const runDate2 = new Date();
-    runDate2.setSeconds(runDate2.getDay() + 179);
+    runDate2.setSeconds(runDate2.getDay() + 134);
     scheduleService.scheduleEvent(runDate2, async () => {
       try {
-        // FIXME: specify the right data about the room owner
         notificationsService.sendPushNotification(
           "غرفة test-1",
           "سيتم اعادة تعيين الغرفة خلال 24 ساعة",
           {},
-          "cFdOP1dASfuUqFcCOkPCW0:APA91bE39yCjkac3cRH82iiDqeyB4QxxNPWL4x48trM41HXlLlAN28RlqBWbgPl-cOz_WJ1E6zFuBJ-yKLFIvVvhfj6Qrd1o5GEHo3_BkYkYRsYtVVHUxWIIMOWiv2sfHfkx4HDBjgjd"
+          user.deviceToken
         );
       } catch (err) {}
     });
