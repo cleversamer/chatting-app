@@ -66,6 +66,8 @@ module.exports.deleteRoom = async (roomId) => {
       throw new ApiError(statusCode, message);
     }
 
+    // TODO: 
+
     // Return deleted room
     return room;
   } catch (err) {
