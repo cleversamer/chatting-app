@@ -113,7 +113,7 @@ module.exports.createRoom = async (req, res, next) => {
     // Shceduling an event to run after 135 days
     // This event is all about resetting this room
     const runDate1 = new Date();
-    runDate1.setMinutes(runDate2.getMinutes() + 60 * 24 * 135);
+    runDate1.setMinutes(runDate1.getMinutes() + 60 * 24 * 135);
     scheduleService.scheduleEvent(runDate1, async () => {
       try {
         await roomsService.resetRoom("admin", room._id);
