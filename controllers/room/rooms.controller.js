@@ -24,10 +24,11 @@ module.exports.getAllRooms = async (req, res, next) => {
 // A controller function that deletes a room and reutrns it
 module.exports.deleteRoom = async (req, res, next) => {
   try {
+    const user = req.user;
     const { roomId } = req.body;
 
     // Asking service to delete a room
-    const room = await roomsService.deleteRoom(roomId);
+    const room = await roomsService.deleteRoom(roomId, user);
 
     // Send the data back to the client.
     res.status(httpStatus.OK).json(room);

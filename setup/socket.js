@@ -70,6 +70,16 @@ module.exports = (server) => {
       socket.broadcast.to(roomId).emit("members unblocked", userIds);
     });
 
+    socket.on("delete room", (roomId) => {
+      socket.broadcast.to(roomId).emit("room deleted", roomId);
+    });
+
+    socket.on("send notification", (userIds = [], roomId) => {
+      userIds.forEach((userId) => {
+        socket.broadcast.to(userId).emit("notification received", roomId);
+      });
+    });
+
     // socket.on("disconnect", (socket) => {
     //   const joinedRooms = Array.from(socket.rooms).slice(1);
     //   joinedRooms.forEach((roomId) => socket.leave(roomId));

@@ -54,8 +54,16 @@ module.exports.getAllRooms = async () => {
 };
 
 // A service function that deletes a room by a given id
-module.exports.deleteRoom = async (roomId) => {
+module.exports.deleteRoom = async (roomId, user) => {
   try {
+    const isAuthorized =
+      room.author.toString() === user._id.toString() || user.role === "admin";
+    if (!isAuthorized) {
+      const statusCode = httpStatus.FORBIDDEN;
+      const message = errors.rooms.unauthorized;
+      throw new ApiError(statusCode, message);
+    }
+
     // Find room by id and delete it
     const room = await Room.findByIdAndDelete(roomId);
 
@@ -66,7 +74,7 @@ module.exports.deleteRoom = async (roomId) => {
       throw new ApiError(statusCode, message);
     }
 
-    // TODO: 
+    // TODO:
 
     // Return deleted room
     return room;
