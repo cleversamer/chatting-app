@@ -11,7 +11,7 @@ router
     [auth("createOwn", "room"), validator.createRoomValidator],
     roomsController.createRoom
   )
-  .delete([auth("deleteAny", "roomType")], roomsController.deleteRoom);
+  .delete([auth("deleteOwn", "room")], roomsController.deleteRoom);
 
 router.get("/all", [auth("readAny", "roomType")], roomsController.getAllRooms);
 
