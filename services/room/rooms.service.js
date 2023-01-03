@@ -56,6 +56,14 @@ module.exports.getAllRooms = async () => {
 // A service function that deletes a room by a given id
 module.exports.deleteRoom = async (roomId, user) => {
   try {
+    const room = await Room.findById(roomId);
+    // Check if room does not exist and notify the client
+    if (!room) {
+      const statusCode = httpStatus.NOT_FOUND;
+      const message = errors.rooms.notFound;
+      throw new ApiError(statusCode, message);
+    }
+
     const isAuthorized =
       room.author.toString() === user._id.toString() || user.role === "admin";
     if (!isAuthorized) {
@@ -65,18 +73,8 @@ module.exports.deleteRoom = async (roomId, user) => {
     }
 
     // Find room by id and delete it
-    const room = await Room.findByIdAndDelete(roomId);
+    await Room.findByIdAndDelete(roomId);
 
-    // Check if room does not exist and notify the client
-    if (!room) {
-      const statusCode = httpStatus.NOT_FOUND;
-      const message = errors.rooms.notFound;
-      throw new ApiError(statusCode, message);
-    }
-
-    // TODO:
-
-    // Return deleted room
     return room;
   } catch (err) {
     throw err;
