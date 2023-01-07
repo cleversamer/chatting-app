@@ -1,7 +1,12 @@
 const _ = require("lodash");
 const { ApiError } = require("../../middleware/apiError");
 const { clientSchema } = require("../../models/user.model");
-const { emailService, usersService, roomsService } = require("../../services");
+const {
+  emailService,
+  usersService,
+  roomsService,
+  assignemntsService,
+} = require("../../services");
 const bcrypt = require("bcrypt");
 const errors = require("../../config/errors");
 const httpStatus = require("http-status");
@@ -416,6 +421,25 @@ module.exports.getMyAssignments = async (req, res, next) => {
 
     // Send the data back to the client
     res.status(httpStatus.OK).json(assignments);
+  } catch (err) {
+    // Pass the execution to the next middleware function
+    // with the error object.
+    // The error often comes from used services.
+    next(err);
+  }
+};
+
+// A controller function that returns user's assignments
+module.exports.getMyActiveAssignments = async (req, res, next) => {
+  try {
+    const user = req.user;
+
+    const assignments = await assignemntsService.getRoomsActiveAssignments(
+      user.joinedRooms
+    );
+
+    // Send the data back to the client
+    res.status(httpStatus.OK).json({ assignments });
   } catch (err) {
     // Pass the execution to the next middleware function
     // with the error object.

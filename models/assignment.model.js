@@ -152,6 +152,10 @@ assignmentSchema.methods.getRemainingTime = function () {
   }
 };
 
+assignmentSchema.methods.isExpired = function () {
+  return new Date(this.expiresAt) - new Date() <= 0;
+};
+
 // Creating the model
 const Assignment = mongoose.model("Assignment", assignmentSchema);
 

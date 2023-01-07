@@ -445,3 +445,44 @@ module.exports.getMySubmissionStatus = async (user, assignmentId) => {
     throw err;
   }
 };
+
+module.exports.getRoomsActiveAssignments = async (roomsList = []) => {
+  try {
+    let assignments = await Assignment.aggregate([
+      { $match: { room: { $in: roomsList } } },
+      {
+        $lookup: {
+          from: "rooms",
+          localField: "room",
+          foreignField: "_id",
+          as: "room",
+        },
+      },
+      {
+        $project: {
+          title: 1,
+          file: 1,
+          clientDate: 1,
+          date: 1,
+          submissions: 1,
+          expiresAt: 1,
+          room: {
+            _id: 1,
+            name: 1,
+            status: 1,
+            members: 1,
+          },
+        },
+      },
+    ]);
+
+    assignments = assignments.filter((assignment) => assignment.isExpired());
+
+    return assignments.map((item) => ({
+      ...item,
+      remainingTime: Assignment.getRemainingTime(item.expiresAt),
+    }));
+  } catch (err) {
+    throw err;
+  }
+};

@@ -1,5 +1,5 @@
 const { ApiError } = require("../../middleware/apiError");
-const { roomsService } = require("../../services");
+const { roomsService, assignemntsService } = require("../../services");
 const scheduleService = require("../../services/system/schedule.service");
 const notificationsService = require("../../services/user/notifications.service");
 const errors = require("../../config/errors");
@@ -322,6 +322,20 @@ module.exports.toggleChatDisabled = async (req, res, next) => {
     // Pass the execution to the next middleware function
     // with the error object.
     // The error often comes from used services.
+    next(err);
+  }
+};
+
+module.exports.getRoomActiveAssignments = async (req, res, next) => {
+  try {
+    const { roomId } = req.params;
+
+    const assignments = await assignemntsService.getRoomsActiveAssignments([
+      roomId,
+    ]);
+
+    res.status(httpStatus.OK).json({ assignments });
+  } catch (err) {
     next(err);
   }
 };

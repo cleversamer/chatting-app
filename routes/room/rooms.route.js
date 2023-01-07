@@ -15,12 +15,6 @@ router
 
 router.get("/all", [auth("readAny", "roomType")], roomsController.getAllRooms);
 
-// router.get(
-//   "/suggested",
-//   [auth("readAny", "room")],
-//   roomsController.getSuggestedRooms
-// );
-
 router.post(
   "/add-pinned-message",
   [auth("updateOwn", "room")],
@@ -77,6 +71,11 @@ router.patch(
   "/toggle-chat-disabled",
   auth("updateOwn", "room"),
   roomsController.toggleChatDisabled
+);
+
+router.get(
+  "/:roomId/active-assignments",
+  roomsController.getRoomActiveAssignments
 );
 
 module.exports = router;

@@ -66,4 +66,10 @@ router.get(
   usersController.getMyAssignments
 );
 
+router.get(
+  "/my-active-assignments",
+  [auth("readOwn", "assignment")],
+  usersController.getMyActiveAssignments
+);
+
 module.exports = router;

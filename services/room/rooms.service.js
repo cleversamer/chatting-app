@@ -279,6 +279,7 @@ module.exports.getMappedRooms = async (roomIds = []) => {
     // Returns any room that matches one of the given ids
     return await Room.aggregate([
       { $match: { _id: { $in: roomIds } } },
+      { $sort: { _id: -1 } },
       {
         $lookup: {
           from: "users",
