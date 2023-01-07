@@ -448,6 +448,8 @@ module.exports.getMySubmissionStatus = async (user, assignmentId) => {
 
 module.exports.getRoomsActiveAssignments = async (roomsList = []) => {
   try {
+    roomsList = roomsList.map((room) => mongoose.Types.ObjectId(room));
+
     let assignments = await Assignment.aggregate([
       { $match: { room: { $in: roomsList } } },
       {
@@ -476,7 +478,9 @@ module.exports.getRoomsActiveAssignments = async (roomsList = []) => {
       },
     ]);
 
-    assignments = assignments.filter((assignment) => assignment.isExpired());
+    assignments = assignments.filter(
+      (assignment) => new Date(assignment.expiresAt) - new Date() > 0
+    );
 
     return assignments.map((item) => ({
       ...item,
