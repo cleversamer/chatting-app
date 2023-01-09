@@ -716,7 +716,8 @@ module.exports.joinRoom = async (req) => {
 
     // Check if user is already a member of the room
     const isAlreadyJoined =
-      user.joinedRooms.includes(room._id) && room.members.includes(user._id);
+      user.joinedRooms.includes(room._id.toString()) &&
+      room.members.includes(user._id.toString());
     if (isAlreadyJoined) {
       const statusCode = httpStatus.BAD_REQUEST;
       const message = errors.rooms.alreadyJoined;

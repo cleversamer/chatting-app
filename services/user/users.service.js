@@ -116,6 +116,7 @@ module.exports.validateToken = (token) => {
 
 module.exports.unjoinUsersFromRoom = async (userIds, roomId) => {
   try {
+    userIds = userIds.map((userId) => mongoose.Types.ObjectId(userId));
     await User.updateMany(
       { _id: { $in: userIds } },
       { $pull: { joinedRooms: mongoose.Types.ObjectId(roomId) } },
