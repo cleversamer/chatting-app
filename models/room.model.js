@@ -73,6 +73,8 @@ const roomSchema = new mongoose.Schema(
 // Creating a text index based on `name` field
 roomSchema.index({ name: "text" });
 
+roomSchema.index({ author: -1 });
+
 // Creating room model
 const Room = mongoose.model("Room", roomSchema);
 

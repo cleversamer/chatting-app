@@ -78,6 +78,8 @@ const messageSchema = new mongoose.Schema(
   { minimize: false }
 );
 
+messageSchema.index({ receiver: -1 });
+
 // Creating the message model
 const Message = mongoose.model("Message", messageSchema);
 

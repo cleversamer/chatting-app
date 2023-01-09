@@ -156,6 +156,8 @@ assignmentSchema.methods.isExpired = function () {
   return new Date(this.expiresAt) - new Date() <= 0;
 };
 
+assignmentSchema.index({ room: -1 });
+
 // Creating the model
 const Assignment = mongoose.model("Assignment", assignmentSchema);
 

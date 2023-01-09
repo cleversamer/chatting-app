@@ -32,6 +32,10 @@ const submissionSchema = new mongoose.Schema({
   },
 });
 
+submissionSchema.index({ roomId: -1 });
+
+submissionSchema.index({ assignmentId: -1 });
+
 // Creating the submission model
 const Submission = mongoose.model("Submission", submissionSchema);
 
