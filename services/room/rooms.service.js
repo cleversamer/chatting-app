@@ -78,6 +78,13 @@ module.exports.deleteRoom = async (roomId, user) => {
     // Delete room assets
     await this.deleteRoomAssets(roomId);
 
+    // Delete room id from user's createdRooms array
+    const author = await User.findById(room.author);
+    author.createdRooms = author.createdRooms.filter(
+      (roomId) => roomId.toString() !== room._id.toString()
+    );
+    await author.save();
+
     // Find room by id and delete it
     await room.delete();
 
