@@ -46,17 +46,11 @@ const getCurrentDate = () => {
   return date;
 };
 
-const deleteFile = async (file) => {
+const deleteFile = async (filePath) => {
   try {
-    if (!file || !file.name || !file.path) {
-      const statusCode = httpStatus.BAD_REQUEST;
-      const message = errors.system.invalidFile;
-      throw new ApiError(statusCode, message);
-    }
-
-    fs.unlink(`./uploads${file.path}`, (err) => {
+    fs.unlink(`./uploads${filePath}`, (err) => {
       if (err) {
-        throw err;
+        // console.log("err", err);
       }
     });
 

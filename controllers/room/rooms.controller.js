@@ -117,7 +117,7 @@ module.exports.createRoom = async (req, res, next) => {
     runDate1.setMinutes(runDate1.getMinutes() + 60 * 24 * 135);
     scheduleService.scheduleEvent(runDate1, async () => {
       try {
-        await roomsService.resetRoom("admin", room._id);
+        await roomsService.deleteRoom(room._id, { role: "admin" });
       } catch (err) {}
     });
 
@@ -128,12 +128,9 @@ module.exports.createRoom = async (req, res, next) => {
     runDate2.setMinutes(runDate2.getMinutes() + 60 * 24 * 134);
     scheduleService.scheduleEvent(runDate2, async () => {
       try {
-        notificationsService.sendPushNotification(
-          "غرفة test-1",
-          "سيتم اعادة تعيين الغرفة خلال 24 ساعة",
-          {},
-          user.deviceToken
-        );
+        const title = "سيتم إعادة تعيين الغرفة خلال 7 أيام";
+        user.addNotification(title, null, null, runDate2);
+        await user.save();
       } catch (err) {}
     });
 

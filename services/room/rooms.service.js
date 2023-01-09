@@ -1,11 +1,14 @@
 const { ApiError } = require("../../middleware/apiError");
 const { Room } = require("../../models/room.model");
 const { Message } = require("../../models/message.model");
+const { Assignment } = require("../../models/assignment.model");
+const { Submission } = require("../../models/submission.model");
 const { User } = require("../../models/user.model");
 const { MESSAGE_TYPES } = require("../../models/message.model");
 const errors = require("../../config/errors");
 const httpStatus = require("http-status");
 const messagesService = require("./messages.service");
+const localStorage = require("../storage/localStorage.service");
 const mongoose = require("mongoose");
 const usersService = require("../user/users.service");
 
@@ -72,10 +75,11 @@ module.exports.deleteRoom = async (roomId, user) => {
       throw new ApiError(statusCode, message);
     }
 
+    // Delete room assets
+    await this.deleteRoomAssets(roomId);
+
     // Find room by id and delete it
     await Room.findByIdAndDelete(roomId);
-
-    // TODO:
 
     return room;
   } catch (err) {
@@ -553,27 +557,14 @@ module.exports.resetRoom = async (user, roomId) => {
     }
 
     // Check if user is the author of the room
-    // OR the user is an admin.
-    if (user !== "admin" && room.author.toString() !== user._id.toString()) {
+    if (room.author.toString() !== user._id.toString()) {
       const statusCode = httpStatus.UNAUTHORIZED;
       const message = errors.rooms.unauthorized;
       throw new ApiError(statusCode, message);
     }
 
-    // Unjoin all memebers from this room
-    await usersService.unjoinUsersFromRoom(room.members, roomId);
-
-    // Delete any message belongs to the room
-    await Message.deleteMany({ receiver: room._id });
-
-    // Delete pinned messages
-    room.pinnedMessages = [];
-
-    // Delete room members
-    room.members = [];
-
-    // Save the room to the DB
-    await room.save();
+    // Delete room assets
+    await this.deleteRoomAssets(room._id);
 
     // Get the room
     const mappedRoom = await this.getMappedRooms([room._id]);
@@ -836,6 +827,72 @@ module.exports.toggleChatDisabled = async (roomId, user) => {
     // Save the room to the DB
     // Return the room
     return await room.save();
+  } catch (err) {
+    throw err;
+  }
+};
+
+module.exports.deleteRoomAssets = async (roomId) => {
+  try {
+    // Check if room exists
+    const room = await Room.findById(roomId);
+    if (!room) {
+      const statusCode = httpStatus.NOT_FOUND;
+      const message = errors.rooms.notFound;
+      throw new ApiError(statusCode, message);
+    }
+
+    // Unjoin all memebers from this room
+    await usersService.unjoinUsersFromRoom(room.members, roomId);
+
+    // Delete room members
+    room.members = [];
+
+    // Find room's messages
+    const messages = await Message.find({ receiver: room._id });
+
+    messages.forEach(async (message) => {
+      const filePath = message?.file?.url;
+      if (filePath) {
+        await localStorage.deleteFile(filePath);
+      }
+    });
+
+    // Delete any message belongs to the room
+    await Message.deleteMany({ receiver: room._id });
+
+    // Delete pinned messages
+    room.pinnedMessages = [];
+
+    // Save room to the DB
+    await room.save();
+
+    // Find room's assignments
+    const assignments = await Assignment.find({ room: room._id });
+
+    assignments.forEach(async (assignment) => {
+      // Delete assignment's file
+      await localStorage.deleteFile(assignment.file.url);
+
+      // Get assignment submissions
+      const submissions = await Submission.find({
+        assignmentId: assignment._id,
+      });
+
+      // Delete submissions' files
+      submissions.forEach(async (submission) => {
+        // Delete submission's files
+        submission.files.forEach(async (file) => {
+          await localStorage.deleteFile(file.url);
+        });
+      });
+    });
+
+    // Delete room's assignments
+    await Assignment.deleteMany({ room: room._id });
+
+    // Delete room's submissions
+    await Submission.deleteMany({ roomId: room._id });
   } catch (err) {
     throw err;
   }
