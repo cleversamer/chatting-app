@@ -116,12 +116,15 @@ module.exports.validateToken = (token) => {
 
 module.exports.unjoinUsersFromRoom = async (userIds, roomId) => {
   try {
-    userIds = userIds.map((userId) => mongoose.Types.ObjectId(userId));
-    await User.updateMany(
-      { _id: { $in: userIds } },
-      { $pull: { joinedRooms: mongoose.Types.ObjectId(roomId) } },
-      { new: true }
-    );
+    const users = await User.find({ _id: { $in: userIds } });
+
+    users.forEach(async (user) => {
+      user.joinedRooms = user.joinedRooms.filter(
+        (value) => value.toString() !== roomId.toString()
+      );
+
+      await user.save();
+    });
   } catch (err) {
     throw err;
   }

@@ -769,11 +769,8 @@ module.exports.deleteMembers = async (user, roomId, members) => {
       (roomId) => !members.includes(roomId.toString())
     );
 
-    // Delete room from users
-    await User.updateMany(
-      { _id: { $in: members } },
-      { $pull: { rooms: mongoose.Types.ObjectId(roomId) } }
-    );
+    // Unjoin users from the room
+    await usersService.unjoinUsersFromRoom(members, roomId);
 
     // Save the room to the DB
     // Return the room
