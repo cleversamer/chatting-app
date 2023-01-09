@@ -1,11 +1,10 @@
 const { ApiError } = require("../../middleware/apiError");
 const { User } = require("../../models/user.model");
 const { Room } = require("../../models/room.model");
-const { Message } = require("../../models/message.model");
 const { Assignment } = require("../../models/assignment.model");
-const { Submission } = require("../../models/submission.model");
 const bcrypt = require("bcrypt");
 const emailService = require("./email.service");
+const roomsService = require("../room/rooms.service");
 const notificationsService = require("./notifications.service");
 const errors = require("../../config/errors");
 const httpStatus = require("http-status");
@@ -70,17 +69,18 @@ module.exports.deleteUser = async (user, userId) => {
 
     const { createdRooms } = deletedUser;
 
-    // Delete user's rooms
-    await Room.deleteMany({ _id: { $in: createdRooms } });
+    // Find user's rooms
+    const rooms = Room.find({ _id: { $in: createdRooms } });
 
-    // Delete user rooms' messages
-    await Message.deleteMany({ receiver: { $in: createdRooms } });
+    // Delete user's rooms and their data
+    rooms.forEach(async (room) => {
+      await roomsService.deleteRoom(roomId, { role: "admin" });
+    });
 
-    // Delete user rooms' assignments
-    await Assignment.deleteMany({ room: { $in: createdRooms } });
-
-    // Delete user rooms assignments' submissions
-    await Submission.deleteMany({ roomId: { $in: createdRooms } });
+    // Delete user's avatar picture
+    if (deletedUser.avatarUrl) {
+      await localStorage.deleteFile(deletedUser.avatarUrl);
+    }
 
     return deletedUser;
   } catch (err) {
@@ -152,6 +152,11 @@ module.exports.updateProfile = async (req) => {
     }
 
     if (avatar) {
+      // Delete old avatar
+      if (user.avatarUrl) {
+        await localStorage.deleteFile(user.avatarUrl);
+      }
+
       const _file = await localStorage.storeFile(avatar);
       user.avatarUrl = _file.path;
     }

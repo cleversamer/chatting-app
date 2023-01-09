@@ -1,4 +1,6 @@
 const { assignemntsService } = require("../../services");
+const scheduleService = require("../../services/system/schedule.service");
+const localStorage = require("../../services/storage/localStorage.service");
 const httpStatus = require("http-status");
 
 // A controller function for creating a new assignment in the DB
@@ -18,6 +20,14 @@ module.exports.createAssignment = async (req, res, next) => {
       displayName,
       clientDate
     );
+
+    // Delete assignment and its files after 30 days
+    const runDate = new Date();
+    runDate.setMinutes(runDate.getMinutes() + 1440 * 30); // PRODUCTION
+    // runDate.setMinutes(runDate.getMinutes() + 1); // TEST
+    scheduleService.scheduleEvent(runDate, async () => {
+      await assignemntsService.deleteAssignment(assignment._id);
+    });
 
     // Send the data back to the client.
     res.status(httpStatus.CREATED).json(assignment);
@@ -161,16 +171,25 @@ module.exports.downloadAssignmentSubmissions = async (req, res, next) => {
     const { roomId, assignmentId } = req.params;
 
     // Asking serivce to compress submissions' files and return a ZIP file
-    const zipFilePath = await assignemntsService.downloadAssignmentSubmissions(
+    const zipFile = await assignemntsService.downloadAssignmentSubmissions(
       user,
       assignmentId,
       roomId
     );
 
+    const zipFilePath = zipFile.split("uploads")[1];
+
+    // Delete zip file after 3 minutes
+    const runDate = new Date();
+    runDate.setMinutes(runDate.getMinutes() + 3);
+    scheduleService.scheduleEvent(runDate, async () => {
+      await localStorage.deleteFile(zipFilePath);
+    });
+
     // Send the file back to the client
     res.status(httpStatus.CREATED).json({
       type: "file/zip",
-      path: zipFilePath.split("uploads")[1],
+      path: zipFilePath,
     });
   } catch (err) {
     // Pass the execution to the next middleware function

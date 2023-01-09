@@ -13,12 +13,13 @@ router.get(
   "/get/:assignmentId",
   auth("readOwn", "assignment"),
   assignmentsController.getAssignment
-),
-  router.get(
-    "/:roomId",
-    auth("readOwn", "assignment"),
-    assignmentsController.getRoomAssignments
-  );
+);
+
+router.get(
+  "/:roomId",
+  auth("readOwn", "assignment"),
+  assignmentsController.getRoomAssignments
+);
 
 router.patch(
   "/addSubmissionTime",

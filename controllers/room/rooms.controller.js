@@ -1,7 +1,6 @@
 const { ApiError } = require("../../middleware/apiError");
 const { roomsService, assignemntsService } = require("../../services");
 const scheduleService = require("../../services/system/schedule.service");
-const notificationsService = require("../../services/user/notifications.service");
 const errors = require("../../config/errors");
 const httpStatus = require("http-status");
 

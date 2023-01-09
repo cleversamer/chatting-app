@@ -79,7 +79,7 @@ module.exports.deleteRoom = async (roomId, user) => {
     await this.deleteRoomAssets(roomId);
 
     // Find room by id and delete it
-    await Room.findByIdAndDelete(roomId);
+    await room.delete();
 
     return room;
   } catch (err) {
@@ -594,8 +594,17 @@ module.exports.deleteRoomMessages = async (user, roomId) => {
       throw new ApiError(statusCode, message);
     }
 
-    // Deletes all messages belong to the room
-    await Message.deleteMany({ receiver: room._id });
+    // Find all messages belong to the room
+    const messages = await Message.find({ receiver: room._id });
+
+    // Delete all messages and their files
+    messages.forEach(async (message) => {
+      if (message.file.url) {
+        await localStorage.deleteFile(message.file.url);
+      }
+
+      await message.delete();
+    });
 
     // Get the room
     const mappedRoom = await this.getMappedRooms([room._id]);

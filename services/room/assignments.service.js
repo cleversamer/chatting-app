@@ -490,3 +490,39 @@ module.exports.getRoomsActiveAssignments = async (roomsList = []) => {
     throw err;
   }
 };
+
+module.exports.deleteAssignment = async (assignmentId) => {
+  try {
+    // Find assignment
+    const assignment = await Assignment.findById(assignmentId);
+
+    // Check if assignment exist
+    if (!assignment) {
+      const statusCode = httpStatus.NOT_FOUND;
+      const message = errors.assignments.notFound;
+      throw new ApiError(statusCode, message);
+    }
+
+    // Delete assignment's file
+    await localStorage.deleteFile(assignment.file.url);
+
+    // Find assignment's submissions
+    const submissions = await Submission.find({ assignmentId: assignment._id });
+
+    // Delete submissions and their files
+    submissions.forEach(async (submission) => {
+      // Delete submission's files
+      submission.files.forEach(async (file) => {
+        await localStorage.deleteFile(file.url);
+      });
+
+      // Delete submission
+      await submission.delete();
+    });
+
+    // Delete assignment
+    await assignment.delete();
+  } catch (err) {
+    throw err;
+  }
+};

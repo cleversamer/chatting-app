@@ -1,5 +1,6 @@
 const { CLIENT_SCHEMA } = require("../../models/message.model");
 const { messagesService } = require("../../services");
+const localStorage = require("../../services/storage/localStorage.service");
 const httpStatus = require("http-status");
 const _ = require("lodash");
 
@@ -62,6 +63,11 @@ module.exports.deleteMessage = async (req, res, next) => {
 
     // Asking service to delete a message
     const message = await messagesService.deleteMessage(user, messageId);
+
+    // Delete message file after 3 minutes
+    if (message.file.url) {
+      await localStorage.deleteFile(message.file.url);
+    }
 
     // Send the data back to the client.
     res.status(httpStatus.OK).json(message);
