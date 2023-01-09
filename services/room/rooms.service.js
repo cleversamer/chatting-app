@@ -75,6 +75,8 @@ module.exports.deleteRoom = async (roomId, user) => {
     // Find room by id and delete it
     await Room.findByIdAndDelete(roomId);
 
+    // TODO:
+
     return room;
   } catch (err) {
     throw err;
