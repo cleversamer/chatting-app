@@ -118,7 +118,7 @@ module.exports.unjoinUsersFromRoom = async (userIds, roomId) => {
   try {
     await User.updateMany(
       { _id: { $in: userIds } },
-      { $pull: { rooms: mongoose.Types.ObjectId(roomId) } },
+      { $pull: { joinedRooms: mongoose.Types.ObjectId(roomId) } },
       { new: true }
     );
   } catch (err) {
