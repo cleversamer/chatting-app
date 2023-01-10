@@ -42,17 +42,11 @@ module.exports.getAllUsers = async (user, role) => {
   }
 };
 
-module.exports.deleteUser = async (user, userId) => {
+module.exports.deleteUser = async (userId) => {
   try {
     if (!mongoose.isValidObjectId(userId)) {
       const statusCode = httpStatus.BAD_REQUEST;
       const message = errors.system.invalidMongoId;
-      throw new ApiError(statusCode, message);
-    }
-
-    if (user._id.toString() === userId.toString()) {
-      const statusCode = httpStatus.FORBIDDEN;
-      const message = errors.auth.deleteItself;
       throw new ApiError(statusCode, message);
     }
 
@@ -74,7 +68,7 @@ module.exports.deleteUser = async (user, userId) => {
 
     // Delete user's rooms and their data
     rooms.forEach(async (room) => {
-      await roomsService.deleteRoom(roomId, { role: "admin" });
+      await roomsService.deleteRoom(room._id, { role: "admin" });
     });
 
     // Delete user's avatar picture

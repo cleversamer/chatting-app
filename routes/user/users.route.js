@@ -48,6 +48,12 @@ router
   .get([auth("readAny", "userType")], usersController.getAllUsers)
   .delete([auth("deleteAny", "userType")], usersController.deleteUser);
 
+router.delete(
+  "/delete-my-account",
+  auth("deleteOwn", "user"),
+  usersController.deleteMyAccount
+);
+
 router.post(
   "/send-notification",
   auth("createAny", "notification"),

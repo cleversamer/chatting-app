@@ -327,11 +327,28 @@ module.exports.getAllUsers = async (req, res, next) => {
 // A controller function that deletes a user
 module.exports.deleteUser = async (req, res, next) => {
   try {
-    const user = req.user;
     const { userId } = req.body;
 
     // Asking service to delete the user
-    const deletedUser = await usersService.deleteUser(user, userId);
+    const deletedUser = await usersService.deleteUser(userId);
+
+    // Send the data back to the client
+    res.status(httpStatus.OK).json(deletedUser);
+  } catch (err) {
+    // Pass the execution to the next middleware function
+    // with the error object.
+    // The error often comes from used services.
+    next(err);
+  }
+};
+
+// A controller function that deletes a user
+module.exports.deleteMyAccount = async (req, res, next) => {
+  try {
+    const user = req.user;
+
+    // Asking service to delete the user
+    const deletedUser = await usersService.deleteUser(user._id);
 
     // Send the data back to the client
     res.status(httpStatus.OK).json(deletedUser);

@@ -44,6 +44,7 @@ let grantsObject = {
   student: {
     user: {
       "read:own": ["*"],
+      "delete:own": ["*"],
     },
     verificationCode: {
       "update:own": ["*"],
