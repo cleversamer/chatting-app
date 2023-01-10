@@ -120,6 +120,10 @@ const user = Object.freeze({
     en: "You're not a member in any room",
     ar: "أنت لست عضوا في أي غرفة",
   },
+  reachedMaximumRooms: {
+    en: "You can't own more than 10 rooms",
+    ar: "لا يمكنك إنشاء أكثر من 10 غرف",
+  },
 });
 
 // Stores errors in rooms middleware

@@ -428,6 +428,14 @@ module.exports.createRoom = async (req) => {
     const user = req.user;
     const { name, status, code } = req.body;
 
+    // Check if user has 10 rooms (The maximun number of rooms
+    // a user can create)
+    if (user.createdRooms.length === 10) {
+      const statusCode = httpStatus.FORBIDDEN;
+      const message = errors.user.reachedMaximumRooms;
+      throw new ApiError(statusCode, message);
+    }
+
     // Create the schema of the private room
     const privateRoomSchema = {
       name,
