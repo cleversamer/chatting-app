@@ -1,11 +1,12 @@
 const _ = require("lodash");
 const { ApiError } = require("../../middleware/apiError");
-const { clientSchema } = require("../../models/user.model");
+const { User, clientSchema } = require("../../models/user.model");
 const {
   emailService,
   usersService,
   roomsService,
   assignemntsService,
+  excelService,
 } = require("../../services");
 const bcrypt = require("bcrypt");
 const errors = require("../../config/errors");
@@ -461,6 +462,26 @@ module.exports.getMyActiveAssignments = async (req, res, next) => {
     // Pass the execution to the next middleware function
     // with the error object.
     // The error often comes from used services.
+    next(err);
+  }
+};
+
+module.exports.exportUsersToExcel = async (req, res, next) => {
+  try {
+    const users = await User.find().sort({ _id: -1 });
+
+    // Get the path to the excel file
+    const filePath = await excelService.exportUsersToExcelFile(users);
+
+    // Create the response object
+    const response = {
+      type: "file/xlsx",
+      path: filePath,
+    };
+
+    // Send response back to the client
+    res.status(httpStatus.CREATED).json(response);
+  } catch (err) {
     next(err);
   }
 };

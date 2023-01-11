@@ -28,6 +28,10 @@ const system = Object.freeze({
     en: "Error uploading file",
     ar: "حصل خطأ عند رفع الملف",
   },
+  errorExportingExcel: {
+    en: "Error exporting excel file",
+    ar: "حصل خطأ عند تصدير ملف الاكسل",
+  },
 });
 
 // Stores errors in authentication middleware

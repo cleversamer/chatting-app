@@ -3,6 +3,7 @@ module.exports.messagesService = require("./room/messages.service");
 module.exports.roomsService = require("./room/rooms.service");
 
 module.exports.localStorage = require("./storage/localStorage.service");
+module.exports.excelService = require("./storage/excel.service");
 
 module.exports.authService = require("./user/auth.service");
 module.exports.emailService = require("./user/email.service");

@@ -78,4 +78,10 @@ router.get(
   usersController.getMyActiveAssignments
 );
 
+router.get(
+  "/export",
+  auth("readAny", "user"),
+  usersController.exportUsersToExcel
+);
+
 module.exports = router;
