@@ -59,7 +59,7 @@ module.exports.getAllRooms = async () => {
 // A service function that deletes a room by a given id
 module.exports.deleteRoom = async (roomId, user) => {
   try {
-    const room = await Room.findByIdAndDelete(roomId);
+    const room = await Room.findById(roomId);
     // Check if room does not exist and notify the client
     if (!room) {
       const statusCode = httpStatus.NOT_FOUND;
@@ -84,6 +84,8 @@ module.exports.deleteRoom = async (roomId, user) => {
       (roomId) => roomId.toString() !== room._id.toString()
     );
     await author.save();
+
+    await Room.findByIdAndDelete(roomId);
 
     return room;
   } catch (err) {

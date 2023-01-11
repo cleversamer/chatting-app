@@ -69,7 +69,7 @@ module.exports.deleteUser = async (userId) => {
       try {
         await roomsService.deleteRoom(room._id, { role: "admin" });
       } catch (err) {
-        console.log("error happened:", err.message);
+        //
       }
     });
 
@@ -77,9 +77,6 @@ module.exports.deleteUser = async (userId) => {
     if (user.avatarUrl) {
       await localStorage.deleteFile(user.avatarUrl);
     }
-
-    // Delete user
-    await user.delete();
 
     return user;
   } catch (err) {
