@@ -50,7 +50,7 @@ module.exports.deleteUser = async (userId) => {
       throw new ApiError(statusCode, message);
     }
 
-    const user = await User.findById(userId);
+    const user = await User.findByIdAndDelete(userId);
     if (!user) {
       const statusCode = httpStatus.NOT_FOUND;
       const message = errors.auth.notFound;
@@ -61,20 +61,17 @@ module.exports.deleteUser = async (userId) => {
       return user;
     }
 
-    const { createdRooms } = user;
-
     // Find user's rooms
     const rooms = await Room.find({ _id: { $in: createdRooms } });
 
     // Delete user's rooms and their data
     rooms.forEach(async (room) => {
       try {
-        await roomsService.deleteRoomAssets(room._id);
-      } catch (err) {}
+        await roomsService.deleteRoom(room._id, { role: "admin" });
+      } catch (err) {
+        console.log("error happened:", err.message);
+      }
     });
-
-    // Delete user's rooms
-    await Room.deleteMany({ _id: { $in: createdRooms } });
 
     // Delete user's avatar picture
     if (user.avatarUrl) {
