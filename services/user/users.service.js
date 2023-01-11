@@ -68,9 +68,11 @@ module.exports.deleteUser = async (userId) => {
 
     // Delete user's rooms and their data
     rooms.forEach(async (room) => {
-      await roomsService.deleteRoom(room._id, user);
-      await Room.findByIdAndDelete(room._id);
+      await roomsService.deleteRoomAssets(room._id);
     });
+
+    // Delete user's rooms
+    await Room.deleteMany({ _id: { $in: createdRooms } });
 
     // Delete user's avatar picture
     if (user.avatarUrl) {
