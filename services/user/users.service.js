@@ -68,7 +68,9 @@ module.exports.deleteUser = async (userId) => {
 
     // Delete user's rooms and their data
     rooms.forEach(async (room) => {
-      await roomsService.deleteRoomAssets(room._id);
+      try {
+        await roomsService.deleteRoomAssets(room._id);
+      } catch (err) {}
     });
 
     // Delete user's rooms

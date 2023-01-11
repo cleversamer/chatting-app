@@ -68,7 +68,7 @@ module.exports.deleteRoom = async (roomId, user) => {
     }
 
     const isAuthorized =
-      room.author.toString() === user._id.toString() || user.role === "admin";
+      room.author.toString() === user?._id?.toString() || user.role === "admin";
     if (!isAuthorized) {
       const statusCode = httpStatus.FORBIDDEN;
       const message = errors.rooms.unauthorized;
