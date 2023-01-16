@@ -9,8 +9,8 @@ const system = Object.freeze({
     ar: "الرابط غير مدعوم",
   },
   largeFile: {
-    en: "Max file size is 1MB",
-    ar: "أقصى حجم للملف هو 1 ميجا بايت",
+    en: "You reached the maximum file uploads limit 5MB",
+    ar: "لقد وصلت الحد الأقصى لرفع الملفات وهو 5 ميجابايت",
   },
   noFile: {
     en: "Submission file is not included",
