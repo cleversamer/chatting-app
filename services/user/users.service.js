@@ -62,7 +62,7 @@ module.exports.deleteUser = async (userId) => {
     }
 
     // Find user's rooms
-    const rooms = await Room.find({ _id: { $in: createdRooms } });
+    const rooms = await Room.find({ _id: { $in: user.createdRooms } });
 
     // Delete user's rooms and their data
     rooms.forEach(async (room) => {
