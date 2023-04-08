@@ -5,7 +5,7 @@ const auth = require("../../middleware/auth");
 
 router.post(
   "/",
-  [auth("createOwn", "assignment")],
+  auth("createOwn", "assignment"),
   assignmentsController.createAssignment
 );
 
@@ -23,25 +23,25 @@ router.get(
 
 router.patch(
   "/addSubmissionTime",
-  [auth("createOwn", "assignment")],
+  auth("createOwn", "assignment"),
   assignmentsController.addSubmissionTime
 );
 
 router.post(
   "/submit",
-  [auth("createOwn", "submission")],
+  auth("createOwn", "submission"),
   assignmentsController.createSubmission
 );
 
 router.get(
   "/:id/submissions",
-  [auth("readAny", "submission")],
+  auth("readAny", "submission"),
   assignmentsController.getAssignmentSubmissions
 );
 
 router.get(
   "/download/:roomId/:assignmentId",
-  [auth("readAny", "submission")],
+  auth("readAny", "submission"),
   assignmentsController.downloadAssignmentSubmissions
 );
 
