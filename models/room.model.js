@@ -30,7 +30,7 @@ const roomSchema = new mongoose.Schema(
     },
     // Reference to room's author/owner (a user id)
     author: {
-      type: Object,
+      type: mongoose.Types.ObjectId,
       ref: "User",
       required: true,
     },

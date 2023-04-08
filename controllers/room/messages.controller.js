@@ -8,7 +8,7 @@ const _ = require("lodash");
 module.exports.createMessage = async (req, res, next) => {
   try {
     const user = req.user;
-    let { type, text, roomId, date, isReply, repliedMessage, displayName } =
+    let { type, text, roomId, date, isReply, repliedMessageId, displayName } =
       req.body;
     const file = req?.files?.file;
 
@@ -22,7 +22,7 @@ module.exports.createMessage = async (req, res, next) => {
       displayName,
       date,
       isReply,
-      repliedMessage,
+      repliedMessageId,
       false
     );
 

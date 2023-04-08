@@ -9,7 +9,7 @@ const assignmentSchema = new mongoose.Schema({
   },
   // An id reference to the room
   room: {
-    type: Object,
+    type: mongoose.Types.ObjectId,
     ref: "Room",
     required: true,
   },

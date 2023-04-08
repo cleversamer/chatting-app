@@ -4,19 +4,19 @@ const mongoose = require("mongoose");
 const submissionSchema = new mongoose.Schema({
   // A reference to room
   roomId: {
-    type: Object,
+    type: mongoose.Types.ObjectId,
     ref: "Room",
     required: true,
   },
   // A reference to assignment
   assignmentId: {
-    type: Object,
+    type: mongoose.Types.ObjectId,
     ref: "Assignment",
     required: true,
   },
   // A reference to author (user)
   authorId: {
-    type: Object,
+    type: mongoose.Types.ObjectId,
     ref: "User",
     required: true,
   },

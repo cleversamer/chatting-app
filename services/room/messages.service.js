@@ -18,7 +18,7 @@ module.exports.createMessage = async (
   displayName,
   date,
   isReply,
-  repliedMessage,
+  repliedMessageIdId,
   isPinned
 ) => {
   try {
@@ -90,7 +90,7 @@ module.exports.createMessage = async (
     });
 
     // Add replied message in some conditions
-    message.repliedMessage = isReply && !isPinned ? repliedMessage : null;
+    message.repliedMessageId = isReply && !isPinned ? repliedMessageId : null;
 
     // Return saved message
     return await message.save();
@@ -122,7 +122,7 @@ module.exports.getRoomMessages = async (roomId) => {
         $project: {
           _id: 1,
           type: 1,
-          repliedMessage: 1,
+          repliedMessageId: 1,
           isReply: 1,
           isPinned: 1,
           text: 1,
