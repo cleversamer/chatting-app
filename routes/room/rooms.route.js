@@ -86,4 +86,16 @@ router.get(
   roomsController.getRoomActiveAssignments
 );
 
+router.post(
+  "/switch-to-public",
+  auth("updateOwn", "room"),
+  roomsController.switchRoomToPublic
+);
+
+router.post(
+  "/switch-to-private",
+  auth("updateOwn", "room"),
+  roomsController.switchRoomToPrivate
+);
+
 module.exports = router;

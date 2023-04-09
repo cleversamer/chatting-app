@@ -354,3 +354,29 @@ module.exports.getRoomActiveAssignments = async (req, res, next) => {
     next(err);
   }
 };
+
+module.exports.switchRoomToPublic = async (req, res, next) => {
+  try {
+    const user = req.user;
+    const { roomId } = req.body;
+
+    const room = await roomsService.switchRoomToPublic(user, roomId);
+
+    res.status(httpStatus.CREATED).json(room);
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports.switchRoomToPrivate = async (req, res, next) => {
+  try {
+    const user = req.user;
+    const { roomId } = req.body;
+
+    const room = await roomsService.switchRoomToPrivate(user, roomId);
+
+    res.status(httpStatus.CREATED).json(room);
+  } catch (err) {
+    next(err);
+  }
+};
