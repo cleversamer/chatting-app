@@ -12,11 +12,12 @@ const localStorage = require("../storage/localStorage.service");
 const mongoose = require("mongoose");
 const usersService = require("../user/users.service");
 
-// A service function that returns all rooms
-// in the system
+// A service function that returns all
+// rooms in the system
 module.exports.getAllRooms = async () => {
   try {
-    const rooms = await Room.aggregate([
+    const pinnedRooms = await Room.aggregate([
+      { $match: { isPinned: true } },
       { $sort: { _id: -1 } },
       {
         $lookup: {
@@ -42,15 +43,44 @@ module.exports.getAllRooms = async () => {
       },
     ]);
 
+    const rooms = await Room.aggregate([
+      { $match: { isPinned: false } },
+      { $sort: { _id: -1 } },
+      {
+        $lookup: {
+          from: "users",
+          localField: "author",
+          foreignField: "_id",
+          as: "author",
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          showName: 1,
+          members: { $size: "$members" },
+          status: 1,
+          author: {
+            _id: 1,
+            firstname: 1,
+            lastname: 1,
+          },
+        },
+      },
+    ]);
+
+    const resultRooms = [...pinnedRooms, ...rooms];
+
     // Check if there are no rooms
-    if (!rooms || !rooms.length) {
+    if (!resultRooms || !resultRooms.length) {
       const statusCode = httpStatus.NOT_FOUND;
       const message = errors.rooms.noRooms;
       throw new ApiError(statusCode, message);
     }
 
     // Return rooms
-    return rooms;
+    return resultRooms;
   } catch (err) {
     throw err;
   }
@@ -1000,6 +1030,52 @@ module.exports.switchRoomToPrivate = async (user, roomId) => {
 
     // Update room's visibility
     room.status = "private";
+
+    // Save the room to the DB
+    await room.save();
+
+    return room;
+  } catch (err) {
+    throw err;
+  }
+};
+
+// A service function that marks room's name as visible/invisible
+module.exports.pinRoom = async (roomId) => {
+  try {
+    // Check if room exists
+    const room = await Room.findById(roomId);
+    if (!room) {
+      const statusCode = httpStatus.NOT_FOUND;
+      const message = errors.rooms.notFound;
+      throw new ApiError(statusCode, message);
+    }
+
+    // Update room's visibility
+    room.isPinned = true;
+
+    // Save the room to the DB
+    await room.save();
+
+    return room;
+  } catch (err) {
+    throw err;
+  }
+};
+
+// A service function that marks room's name as visible/invisible
+module.exports.unpinRoom = async (roomId) => {
+  try {
+    // Check if room exists
+    const room = await Room.findById(roomId);
+    if (!room) {
+      const statusCode = httpStatus.NOT_FOUND;
+      const message = errors.rooms.notFound;
+      throw new ApiError(statusCode, message);
+    }
+
+    // Update room's visibility
+    room.isPinned = false;
 
     // Save the room to the DB
     await room.save();

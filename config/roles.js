@@ -23,6 +23,7 @@ let grantsObject = {
     profile: allRights,
     roomType: allRights,
     notification: allRights,
+    pinnedRoom: allRights,
   },
   // Teacher rights
   teacher: {
@@ -39,6 +40,9 @@ let grantsObject = {
       "update:own": ["*"],
     },
     notification: allRights,
+    pinnedRoom: {
+      "read:any": ["*"],
+    },
   },
   // Student rights
   student: {
@@ -75,6 +79,9 @@ let grantsObject = {
     },
     notification: {
       "read:own": ["*"],
+    },
+    pinnedRoom: {
+      "read:any": ["*"],
     },
   },
 };

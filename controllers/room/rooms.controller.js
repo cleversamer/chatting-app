@@ -380,3 +380,27 @@ module.exports.switchRoomToPrivate = async (req, res, next) => {
     next(err);
   }
 };
+
+module.exports.pinRoom = async (req, res, next) => {
+  try {
+    const { roomId } = req.body;
+
+    const room = await roomsService.pinRoom(roomId);
+
+    res.status(httpStatus.CREATED).json(room);
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports.unpinRoom = async (req, res, next) => {
+  try {
+    const { roomId } = req.body;
+
+    const room = await roomsService.unpinRoom(roomId);
+
+    res.status(httpStatus.CREATED).json(room);
+  } catch (err) {
+    next(err);
+  }
+};

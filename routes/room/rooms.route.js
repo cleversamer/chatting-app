@@ -98,4 +98,12 @@ router.post(
   roomsController.switchRoomToPrivate
 );
 
+router.post("/pin", auth("updateAny", "pinnedRoom"), roomsController.pinRoom);
+
+router.post(
+  "/unpin",
+  auth("updateAny", "pinnedRoom"),
+  roomsController.unpinRoom
+);
+
 module.exports = router;

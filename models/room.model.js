@@ -23,6 +23,10 @@ const roomSchema = new mongoose.Schema(
       unique: true,
       trim: true,
     },
+    isPinned: {
+      type: Boolean,
+      default: false,
+    },
     // Marks room's name as visible
     showName: {
       type: Boolean,
