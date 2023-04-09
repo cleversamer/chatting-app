@@ -78,3 +78,22 @@ module.exports.deleteMessage = async (req, res, next) => {
     next(err);
   }
 };
+
+// A controller function that deletes a message
+module.exports.viewMessage = async (req, res, next) => {
+  try {
+    const user = req.user;
+    const { messageId } = req.body;
+
+    // Asking service to delete a message
+    const message = await messagesService.viewMessage(user, messageId);
+
+    // Send the data back to the client.
+    res.status(httpStatus.OK).json(message);
+  } catch (err) {
+    // Pass the execution to the next middleware function
+    // with the error object.
+    // The error often comes from used services.
+    next(err);
+  }
+};

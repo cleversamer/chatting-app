@@ -69,6 +69,11 @@ const messageSchema = new mongoose.Schema(
         type: String,
       },
     },
+    // Number of views for this message
+    noOfViews: {
+      type: Number,
+      default: 0,
+    },
     // Message's creation date
     date: {
       type: String,

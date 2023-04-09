@@ -47,6 +47,10 @@ module.exports = (server) => {
       socket.broadcast.to(roomId).emit("message deleted", messageId);
     });
 
+    socket.on("view message", (roomId, messageId) => {
+      socket.broadcast.to(roomId).emit("message viewed", messageId);
+    });
+
     socket.on("delete pinned message", (roomId, messageId) => {
       socket.to(roomId).emit("pinned message deleted", messageId);
     });
