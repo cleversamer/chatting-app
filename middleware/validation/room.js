@@ -29,6 +29,16 @@ const createRoomValidator = [
   handler,
 ];
 
+const validateChangeRoomName = [
+  check("name")
+    .trim()
+    .isLength({ min: 1, max: 64 })
+    .withMessage(errors.rooms.invalidName),
+
+  handler,
+];
+
 module.exports = {
   createRoomValidator,
+  validateChangeRoomName,
 };

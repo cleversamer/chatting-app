@@ -8,8 +8,8 @@ router
   .route("/")
   .get(auth("readAny", "room"), roomsController.getAllPublicRooms)
   .post(
-    auth("createOwn", "room"),
     validator.createRoomValidator,
+    auth("createOwn", "room"),
     roomsController.createRoom
   )
   .delete(auth("deleteOwn", "room"), roomsController.deleteRoom);
@@ -72,6 +72,13 @@ router.patch(
   "/toggle-chat-disabled",
   auth("updateOwn", "room"),
   roomsController.toggleChatDisabled
+);
+
+router.patch(
+  "/change-room-name",
+  validator.validateChangeRoomName,
+  auth("updateOwn", "room"),
+  roomsController.changeRoomName
 );
 
 router.get(

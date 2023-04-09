@@ -322,6 +322,25 @@ module.exports.toggleChatDisabled = async (req, res, next) => {
   }
 };
 
+// A controller function that marks room chatting as enabled/disabled
+module.exports.changeRoomName = async (req, res, next) => {
+  try {
+    const user = req.user;
+    const { roomId, name } = req.body;
+
+    // Asking service to mark room chatting as enabled/disabled
+    const room = await roomsService.changeRoomName(roomId, user, name);
+
+    // Send the data back to the client.
+    res.status(httpStatus.OK).json(room);
+  } catch (err) {
+    // Pass the execution to the next middleware function
+    // with the error object.
+    // The error often comes from used services.
+    next(err);
+  }
+};
+
 module.exports.getRoomActiveAssignments = async (req, res, next) => {
   try {
     const { roomId } = req.params;

@@ -853,6 +853,37 @@ module.exports.toggleChatDisabled = async (roomId, user) => {
   }
 };
 
+// A service function that marks room chatting as enables/disables
+// for room members
+module.exports.changeRoomName = async (roomId, user, name) => {
+  try {
+    // Check if room exists
+    const room = await Room.findById(roomId);
+    if (!room) {
+      const statusCode = httpStatus.NOT_FOUND;
+      const message = errors.rooms.notFound;
+      throw new ApiError(statusCode, message);
+    }
+
+    // Check if user is the author of the room
+    if (room.author.toString() !== user._id.toString()) {
+      const statusCode = httpStatus.FORBIDDEN;
+      const message = errors.rooms.unauthorized;
+      throw new ApiError(statusCode, message);
+    }
+
+    // Change room name
+    room.name = name;
+
+    // Save the room to the DB
+    await room.save();
+
+    return room;
+  } catch (err) {
+    throw err;
+  }
+};
+
 module.exports.deleteRoomAssets = async (roomId) => {
   try {
     // Check if room exists
