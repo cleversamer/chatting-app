@@ -9,7 +9,11 @@ router.post(
   messagesController.createMessage
 );
 
-router.get("/room/:id", messagesController.getRoomMessages);
+router.get(
+  "/room/:id",
+  auth("readOwn", "message"),
+  messagesController.getRoomMessages
+);
 
 router.delete(
   "/delete",

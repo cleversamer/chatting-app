@@ -58,6 +58,7 @@ let grantsObject = {
     },
     message: {
       "create:own": ["*"],
+      "read:own": ["*"],
       "update:own": ["*"],
       "delete:own": ["*"],
     },

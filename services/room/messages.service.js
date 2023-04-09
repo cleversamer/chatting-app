@@ -15,10 +15,10 @@ module.exports.createMessage = async (
   text,
   roomId,
   file,
-  displayName,
+  fileName,
   date,
   isReply,
-  repliedMessageIdId,
+  repliedMessageId,
   isPinned
 ) => {
   try {
@@ -78,7 +78,7 @@ module.exports.createMessage = async (
     const message = new Message({
       text,
       file: {
-        displayName,
+        displayName: fileName,
         url: mssgFile.path,
       },
       receiver: room._id,
