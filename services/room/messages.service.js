@@ -144,13 +144,18 @@ module.exports.getRoomMessages = async (roomId) => {
         $project: {
           _id: 1,
           type: 1,
-          repliedMessageId: 1,
           isReply: 1,
           isPinned: 1,
           text: 1,
           file: 1,
           date: 1,
           receiver: 1,
+          repliedMessage: {
+            _id: 1,
+            type: 1,
+            text: 1,
+            file: 1,
+          },
           viewers: {
             _id: 1,
             firstname: 1,
