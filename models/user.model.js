@@ -144,9 +144,7 @@ userSchema.methods.verifyEmail = function () {
 // Generates a bearer authentication token
 userSchema.methods.genAuthToken = function () {
   const body = { sub: this._id.toHexString(), email: this.email };
-  const token = jwt.sign(body, process.env["JWT_PRIVATE_KEY"], {
-    expiresIn: "1d",
-  });
+  const token = jwt.sign(body, process.env["JWT_PRIVATE_KEY"]);
 
   return token;
 };
