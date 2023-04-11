@@ -15,6 +15,7 @@ const CLIENT_SCHEMA = [
   "text",
   "file",
   "date",
+  "viewers",
 ];
 
 // Creating the schema of the message document

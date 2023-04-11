@@ -119,6 +119,14 @@ module.exports.getRoomMessages = async (roomId) => {
         },
       },
       {
+        $lookup: {
+          from: "users",
+          localField: "viewers",
+          foreignField: "_id",
+          as: "viewers",
+        },
+      },
+      {
         $project: {
           _id: 1,
           type: 1,
@@ -129,6 +137,11 @@ module.exports.getRoomMessages = async (roomId) => {
           file: 1,
           date: 1,
           receiver: 1,
+          viewers: {
+            _id: 1,
+            firstname: 1,
+            lastname: 1,
+          },
           sender: {
             _id: 1,
             avatarUrl: 1,
