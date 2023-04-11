@@ -7,7 +7,7 @@ const MESSAGE_TYPES = ["text", "audio", "file", "image", "video"];
 const CLIENT_SCHEMA = [
   "_id",
   "type",
-  "repliedMessageId",
+  "repliedMessage",
   "isReply",
   "isPinned",
   "sender",
@@ -29,7 +29,7 @@ const messageSchema = new mongoose.Schema(
       required: true,
     },
     // Replied message object
-    repliedMessageId: {
+    repliedMessage: {
       type: mongoose.Types.ObjectId,
       ref: "Message",
     },

@@ -90,10 +90,16 @@ module.exports.createMessage = async (
     });
 
     // Add replied message in some conditions
-    message.repliedMessageId = isReply && !isPinned ? repliedMessageId : null;
+    message.repliedMessage = isReply && !isPinned ? repliedMessageId : null;
 
     // Return saved message
-    return await message.save();
+    await message.save();
+
+    if (mongoose.isValidObjectId(repliedMessageId)) {
+      message.repliedMessage = await Message.findById(repliedMessageId);
+    }
+
+    return message;
   } catch (err) {
     throw err;
   }
@@ -124,6 +130,14 @@ module.exports.getRoomMessages = async (roomId) => {
           localField: "viewers",
           foreignField: "_id",
           as: "viewers",
+        },
+      },
+      {
+        $lookup: {
+          from: "messages",
+          localField: "repliedMessage",
+          foreignField: "_id",
+          as: "repliedMessage",
         },
       },
       {
