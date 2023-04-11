@@ -70,9 +70,9 @@ const messageSchema = new mongoose.Schema(
       },
     },
     // Number of views for this message
-    noOfViews: {
-      type: Number,
-      default: 0,
+    viewers: {
+      type: Array,
+      default: [],
     },
     // Message's creation date
     date: {

@@ -201,28 +201,16 @@ module.exports.viewMessage = async (user, messageId) => {
     }
 
     // Check if message exists
-    const message = await Message.findById(messageId);
+    const message = await Message.findByIdAndUpdate(
+      messageId,
+      { $addToSet: { viewers: user._id } },
+      { new: true }
+    );
     if (!message) {
       const statusCode = httpStatus.NOT_FOUND;
       const message = errors.message.notFound;
       throw new ApiError(statusCode, message);
     }
-
-    // Define conditions
-    const isMssgAuthor = message.sender.toString() === user._id.toString();
-
-    // Check if user is authorized to do this action
-    if (!isMssgAuthor) {
-      const statusCode = httpStatus.FORBIDDEN;
-      const message = errors.message.notAuthor;
-      throw new ApiError(statusCode, message);
-    }
-
-    // Add a view to the message
-    message.noOfViews = message.noOfViews + 1;
-
-    // Save message to the DB
-    await message.save();
 
     return message;
   } catch (err) {
