@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const clientSchema = [
   "_id",
   "name",
+  "isPinned",
   "showName",
   "author",
   "pinnedMessages",

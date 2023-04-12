@@ -31,6 +31,7 @@ module.exports.getAllRooms = async () => {
         $project: {
           _id: 1,
           name: 1,
+          isPinned: 1,
           showName: 1,
           members: { $size: "$members" },
           status: 1,
@@ -58,6 +59,7 @@ module.exports.getAllRooms = async () => {
         $project: {
           _id: 1,
           name: 1,
+          isPinned: 1,
           showName: 1,
           members: { $size: "$members" },
           status: 1,
@@ -183,6 +185,7 @@ module.exports.searchRooms = async (user, name) => {
         $project: {
           _id: 1,
           name: 1,
+          isPinned: 1,
           showName: 1,
           pinnedMessages: 1,
           messages: 1,
@@ -232,6 +235,7 @@ module.exports.searchRooms = async (user, name) => {
         $project: {
           _id: 1,
           name: 1,
+          isPinned: 1,
           showName: 1,
           pinnedMessages: 1,
           messages: 1,
@@ -358,6 +362,7 @@ module.exports.getMappedRooms = async (roomIds = []) => {
         $project: {
           _id: 1,
           name: 1,
+          isPinned: 1,
           showName: 1,
           messages: 1,
           chatDisabled: 1,
@@ -425,6 +430,7 @@ module.exports.getAllPublicRooms = async (skip) => {
         $project: {
           _id: 1,
           name: 1,
+          isPinned: 1,
           showName: 1,
           pinnedMessages: 1,
           messages: 1,
