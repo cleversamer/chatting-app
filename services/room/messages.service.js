@@ -7,6 +7,134 @@ const errors = require("../../config/errors");
 const httpStatus = require("http-status");
 const roomsService = require("./rooms.service");
 
+const createTextMessage = async (
+  user,
+  room,
+  text,
+  date,
+  isReply,
+  repliedMessageId,
+  isPinned
+) => {
+  try {
+    // Create the message
+    const message = new Message({
+      text,
+      receiver: room._id,
+      sender: user._id,
+      type: "text",
+      date,
+      isReply: isReply && !isPinned,
+      isPinned,
+    });
+
+    // Save message to the DB
+    await message.save();
+
+    // Check if this message is a reply message
+    // and add the replied message object to it.
+    const isReplyMssg = isReply && mongoose.isValidObjectId(repliedMessageId);
+    if (isReplyMssg) {
+      message.repliedMessage = await Message.findById(repliedMessageId);
+    } else {
+      message.repliedMessage = null;
+    }
+
+    return message;
+  } catch (err) {
+    throw err;
+  }
+};
+
+const createFileMessage = async (
+  user,
+  type,
+  text,
+  room,
+  file,
+  fileName,
+  date,
+  isReply,
+  repliedMessageId,
+  isPinned
+) => {
+  try {
+    const mssgFile = file ? await localStorage.storeFile(file) : {};
+
+    // Create the message
+    const message = new Message({
+      text,
+      file: {
+        displayName: fileName,
+        url: mssgFile.path,
+      },
+      receiver: room._id,
+      sender: user._id,
+      type,
+      date,
+      isReply: isReply && !isPinned,
+      isPinned,
+    });
+
+    // Return saved message
+    await message.save();
+
+    // Check if this message is a reply message
+    // and add the replied message object to it.
+    const isReplyMssg = isReply && mongoose.isValidObjectId(repliedMessageId);
+    if (isReplyMssg) {
+      message.repliedMessage = await Message.findById(repliedMessageId);
+    } else {
+      message.repliedMessage = null;
+    }
+
+    return message;
+  } catch (err) {
+    throw err;
+  }
+};
+
+const createPollMessage = async (
+  user,
+  text,
+  room,
+  date,
+  isReply,
+  repliedMessageId,
+  isPinned,
+  options
+) => {
+  try {
+    // Create the message
+    const message = new Message({
+      text,
+      receiver: room._id,
+      sender: user._id,
+      type: "poll",
+      date,
+      isReply: isReply && !isPinned,
+      isPinned,
+      options,
+    });
+
+    // Return saved message
+    await message.save();
+
+    // Check if this message is a reply message
+    // and add the replied message object to it.
+    const isReplyMssg = isReply && mongoose.isValidObjectId(repliedMessageId);
+    if (isReplyMssg) {
+      message.repliedMessage = await Message.findById(repliedMessageId);
+    } else {
+      message.repliedMessage = null;
+    }
+
+    return message;
+  } catch (err) {
+    throw err;
+  }
+};
+
 // A service function that creates a new message
 // document in the DB
 module.exports.createMessage = async (
@@ -19,16 +147,10 @@ module.exports.createMessage = async (
   date,
   isReply,
   repliedMessageId,
-  isPinned
+  isPinned,
+  options
 ) => {
   try {
-    // Check if message type is correct/valid
-    if (!MESSAGE_TYPES.includes(type)) {
-      const statusCode = httpStatus.BAD_REQUEST;
-      const message = errors.message.invalidType;
-      throw new ApiError(statusCode, message);
-    }
-
     // Check if room exists
     const room = await roomsService.findRoomById(roomId);
     if (!room) {
@@ -44,6 +166,13 @@ module.exports.createMessage = async (
     if (notRoomMember) {
       const statusCode = httpStatus.BAD_REQUEST;
       const message = errors.rooms.notJoined;
+      throw new ApiError(statusCode, message);
+    }
+
+    // Check if message type is correct/valid
+    if (!MESSAGE_TYPES.includes(type)) {
+      const statusCode = httpStatus.BAD_REQUEST;
+      const message = errors.message.invalidType;
       throw new ApiError(statusCode, message);
     }
 
@@ -63,41 +192,103 @@ module.exports.createMessage = async (
     }
 
     // Check if there's file in case of the message is not a text message
-    if (type !== "text" && !file) {
+    if (["audio", "file", "image", "video"].includes(type) && !file) {
       const statusCode = httpStatus.BAD_REQUEST;
       const message = errors.message.noFile;
       throw new ApiError(statusCode, message);
     }
 
-    // Store file in case it exists and message type is not text
-    const fileTypes = ["audio", "file", "image", "video"];
-    const isFile = type && fileTypes.includes(type) && file;
-    const mssgFile = isFile ? await localStorage.storeFile(file) : {};
+    switch (type) {
+      case "text":
+        return await createTextMessage(
+          user,
+          room,
+          text,
+          date,
+          isReply,
+          repliedMessageId,
+          isPinned
+        );
 
-    // Create the message
-    const message = new Message({
-      text,
-      file: {
-        displayName: fileName,
-        url: mssgFile.path,
-      },
-      receiver: room._id,
-      sender: user._id,
-      type,
-      date,
-      isReply: isReply && !isPinned,
-      isPinned,
-    });
+      case "audio":
+      case "file":
+      case "image":
+      case "video":
+        return await createFileMessage(
+          user,
+          type,
+          text,
+          room,
+          file,
+          fileName,
+          date,
+          isReply,
+          repliedMessageId,
+          isPinned
+        );
 
-    // Add replied message in some conditions
-    message.repliedMessage = isReply && !isPinned ? repliedMessageId : null;
+      case "poll":
+        return await createPollMessage(
+          user,
+          text,
+          room,
+          date,
+          isReply,
+          repliedMessageId,
+          isPinned,
+          options
+        );
 
-    // Return saved message
-    await message.save();
-
-    if (mongoose.isValidObjectId(repliedMessageId)) {
-      message.repliedMessage = await Message.findById(repliedMessageId);
+      default:
+        return null;
     }
+  } catch (err) {
+    throw err;
+  }
+};
+
+module.exports.createVote = async (user, messageId, optionIndex) => {
+  try {
+    // Check if message ID is a valid document ID
+    if (!mongoose.isValidObjectId(messageId)) {
+      const statusCode = httpStatus.BAD_REQUEST;
+      const message = errors.message.invalidId;
+      throw new ApiError(statusCode, message);
+    }
+
+    // Check if message exists
+    const message = await Message.findById(messageId);
+    if (!message) {
+      const statusCode = httpStatus.NOT_FOUND;
+      const message = errors.message.notFound;
+      throw new ApiError(statusCode, message);
+    }
+
+    // Check if message is a poll
+    if (message.type !== "poll") {
+      const statusCode = httpStatus.BAD_REQUEST;
+      const message = errors.message.notPoll;
+      throw new ApiError(statusCode, message);
+    }
+
+    // Check if the user is a member in the room
+    const isMember = user.memberOf(message.receiver);
+    if (!isMember) {
+      const statusCode = httpStatus.BAD_REQUEST;
+      const message = errors.rooms.notJoined;
+      throw new ApiError(statusCode, message);
+    }
+
+    // Add vote to poll message
+    const isAdded = message.addVote(user._id, optionIndex);
+    if (!isAdded) {
+      const statusCode = httpStatus.BAD_REQUEST;
+      const message = errors.system.internal;
+      throw new ApiError(statusCode, message);
+    }
+
+    // Save message to the DB
+    await message.save();
 
     return message;
   } catch (err) {
@@ -110,7 +301,7 @@ module.exports.getRoomMessages = async (roomId) => {
   try {
     // Find all messages for a room
     // Return messages
-    return await Message.aggregate([
+    const messages = await Message.aggregate([
       {
         $match: {
           receiver: new mongoose.Types.ObjectId(roomId),
@@ -141,6 +332,14 @@ module.exports.getRoomMessages = async (roomId) => {
         },
       },
       {
+        $lookup: {
+          from: "users",
+          localField: "votes.userId",
+          foreignField: "_id",
+          as: "voters",
+        },
+      },
+      {
         $project: {
           _id: 1,
           type: 1,
@@ -148,8 +347,15 @@ module.exports.getRoomMessages = async (roomId) => {
           isPinned: 1,
           text: 1,
           file: 1,
+          options: 1,
           date: 1,
           receiver: 1,
+          votes: 1,
+          voters: {
+            _id: 1,
+            firstname: 1,
+            lastname: 1,
+          },
           repliedMessage: {
             _id: 1,
             type: 1,
@@ -171,6 +377,22 @@ module.exports.getRoomMessages = async (roomId) => {
         },
       },
     ]);
+
+    return messages.map((message) => {
+      if (message.type !== "poll") {
+        delete message.voters;
+        return message;
+      }
+
+      message.votes.map((vote, index) => {
+        delete vote.userId;
+        vote.user = message.voters[index];
+        return vote;
+      });
+
+      delete message.voters;
+      return message;
+    });
   } catch (err) {
     throw err;
   }

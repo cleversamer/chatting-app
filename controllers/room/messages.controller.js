@@ -8,8 +8,16 @@ const _ = require("lodash");
 module.exports.createMessage = async (req, res, next) => {
   try {
     const user = req.user;
-    let { type, text, roomId, date, isReply, repliedMessageId, fileName } =
-      req.body;
+    let {
+      type,
+      text,
+      roomId,
+      date,
+      isReply,
+      repliedMessageId,
+      fileName,
+      options,
+    } = req.body;
     const file = req?.files?.file;
 
     // Asking service to create a new message
@@ -23,7 +31,32 @@ module.exports.createMessage = async (req, res, next) => {
       date,
       isReply,
       repliedMessageId,
-      false
+      false,
+      options
+    );
+
+    // Send the data back to the client.
+    res.status(httpStatus.OK).json(_.pick(message, CLIENT_SCHEMA));
+  } catch (err) {
+    // Pass the execution to the next middleware function
+    // with the error object.
+    // The error often comes from used services.
+    next(err);
+  }
+};
+
+// A controller function to vote to a poll message
+module.exports.createVote = async (req, res, next) => {
+  try {
+    const user = req.user;
+    const { messageId } = req.params;
+    const { optionIndex } = req.body;
+
+    // Asking service to vote for a poll message
+    const message = await messagesService.createVote(
+      user,
+      messageId,
+      optionIndex
     );
 
     // Send the data back to the client.

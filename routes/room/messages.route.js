@@ -9,6 +9,12 @@ router.post(
   messagesController.createMessage
 );
 
+router.post(
+  "/:messageId/poll/vote",
+  auth("createOwn", "message"),
+  messagesController.createVote
+);
+
 router.get(
   "/room/:id",
   auth("readOwn", "message"),

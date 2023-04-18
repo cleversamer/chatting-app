@@ -208,6 +208,10 @@ const message = Object.freeze({
     en: "You're not message's owner",
     ar: "أنت لست صاحب الرسالة",
   },
+  notPoll: {
+    en: "This is not a poll message",
+    ar: "هذه ليست رسالة توصيت",
+  },
 });
 
 // Stores errors in assignments middleware

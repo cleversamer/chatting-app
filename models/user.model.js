@@ -175,6 +175,18 @@ userSchema.methods.seeNotifications = function () {
   }));
 };
 
+userSchema.methods.memberOf = function (roomId) {
+  const isCreatedRoom =
+    this.createdRooms.findIndex((id) => id.toString() === roomId.toString()) >=
+    0;
+
+  const isJoinedRoom =
+    this.joinedRooms.findIndex((id) => id.toString() === roomId.toString()) >=
+    0;
+
+  return isCreatedRoom || isJoinedRoom;
+};
+
 // Creating user model
 const User = mongoose.model("User", userSchema);
 

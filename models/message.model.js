@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 // An enum of message types
-const MESSAGE_TYPES = ["text", "audio", "file", "image", "video"];
+const MESSAGE_TYPES = ["text", "audio", "file", "image", "video", "poll"];
 
 // Name of fields that will be sent back to the client
 const CLIENT_SCHEMA = [
@@ -14,6 +14,8 @@ const CLIENT_SCHEMA = [
   "receiver",
   "text",
   "file",
+  "options",
+  "votes",
   "date",
   "viewers",
 ];
@@ -70,7 +72,31 @@ const messageSchema = new mongoose.Schema(
         type: String,
       },
     },
-    // Number of views for this message
+    // Options of the poll (in case of the type of this message is a poll)
+    options: [
+      {
+        type: String,
+        minLength: 1,
+        maxLength: 256,
+        required: true,
+        trim: true,
+      },
+    ],
+    // Array of voters
+    votes: [
+      {
+        userId: {
+          type: mongoose.Types.ObjectId,
+          ref: "User",
+          required: true,
+        },
+        optionIndex: {
+          type: Number,
+          required: true,
+        },
+      },
+    ],
+    // Array of users that have seen this message
     viewers: {
       type: Array,
       default: [],
@@ -86,6 +112,35 @@ const messageSchema = new mongoose.Schema(
 );
 
 messageSchema.index({ receiver: -1 });
+
+messageSchema.methods.addVote = function (userId, optionIndex) {
+  try {
+    optionIndex = parseInt(optionIndex);
+    if (typeof optionIndex !== "number") {
+      return false;
+    }
+
+    if (optionIndex >= this.options.length || optionIndex < 0) {
+      return false;
+    }
+
+    // Find the index of a prev vote for this user ID
+    const userPrevVoteIndex = this.votes.findIndex(
+      (v) => v.userId.toString() === userId.toString()
+    );
+
+    // Check if the user has a prev vote
+    if (userPrevVoteIndex >= 0) {
+      this.votes[userPrevVoteIndex].optionIndex = optionIndex;
+    } else {
+      this.votes.unshift({ userId, optionIndex });
+    }
+
+    return true;
+  } catch (err) {
+    return false;
+  }
+};
 
 // Creating the message model
 const Message = mongoose.model("Message", messageSchema);
