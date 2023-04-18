@@ -17,6 +17,8 @@ const createTextMessage = async (
   isPinned
 ) => {
   try {
+    const isReplyMssg = isReply && mongoose.isValidObjectId(repliedMessageId);
+
     // Create the message
     const message = new Message({
       text,
@@ -26,6 +28,7 @@ const createTextMessage = async (
       date,
       isReply: isReply && !isPinned,
       isPinned,
+      repliedMessage: isReplyMssg ? repliedMessageId : null,
     });
 
     // Save message to the DB
@@ -33,7 +36,6 @@ const createTextMessage = async (
 
     // Check if this message is a reply message
     // and add the replied message object to it.
-    const isReplyMssg = isReply && mongoose.isValidObjectId(repliedMessageId);
     if (isReplyMssg) {
       message.repliedMessage = await Message.findById(repliedMessageId);
     } else {
@@ -60,6 +62,7 @@ const createFileMessage = async (
 ) => {
   try {
     const mssgFile = file ? await localStorage.storeFile(file) : {};
+    const isReplyMssg = isReply && mongoose.isValidObjectId(repliedMessageId);
 
     // Create the message
     const message = new Message({
@@ -73,6 +76,7 @@ const createFileMessage = async (
       type,
       date,
       isReply: isReply && !isPinned,
+      repliedMessage: isReplyMssg ? repliedMessageId : null,
       isPinned,
     });
 
@@ -81,7 +85,6 @@ const createFileMessage = async (
 
     // Check if this message is a reply message
     // and add the replied message object to it.
-    const isReplyMssg = isReply && mongoose.isValidObjectId(repliedMessageId);
     if (isReplyMssg) {
       message.repliedMessage = await Message.findById(repliedMessageId);
     } else {
@@ -105,6 +108,8 @@ const createPollMessage = async (
   options
 ) => {
   try {
+    const isReplyMssg = isReply && mongoose.isValidObjectId(repliedMessageId);
+
     // Create the message
     const message = new Message({
       text,
@@ -113,6 +118,7 @@ const createPollMessage = async (
       type: "poll",
       date,
       isReply: isReply && !isPinned,
+      repliedMessage: isReplyMssg ? repliedMessageId : null,
       isPinned,
       options,
     });
@@ -122,7 +128,6 @@ const createPollMessage = async (
 
     // Check if this message is a reply message
     // and add the replied message object to it.
-    const isReplyMssg = isReply && mongoose.isValidObjectId(repliedMessageId);
     if (isReplyMssg) {
       message.repliedMessage = await Message.findById(repliedMessageId);
     } else {
