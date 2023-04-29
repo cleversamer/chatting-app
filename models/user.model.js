@@ -101,11 +101,12 @@ const userSchema = new mongoose.Schema(
     resetPasswordCode: {
       code: {
         type: String,
+        default: "",
       },
       expiresAt: {
         type: String,
+        default: "",
       },
-      default: { code: "", expiresAt: "" },
     },
   },
   { minimize: false }
