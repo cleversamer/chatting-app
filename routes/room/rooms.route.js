@@ -106,4 +106,10 @@ router.post(
   roomsController.unpinRoom
 );
 
+router.post(
+  "/members/search",
+  auth("updateOwn", "room"),
+  roomsController.searchRoomMembers
+);
+
 module.exports = router;

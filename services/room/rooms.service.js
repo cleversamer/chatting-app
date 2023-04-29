@@ -1091,3 +1091,38 @@ module.exports.unpinRoom = async (roomId) => {
     throw err;
   }
 };
+
+module.exports.searchRoomMembers = async (user, roomId, searchText) => {
+  try {
+    // Check if room exists
+    const room = await Room.findById(roomId);
+    if (!room) {
+      const statusCode = httpStatus.NOT_FOUND;
+      const message = errors.rooms.notFound;
+      throw new ApiError(statusCode, message);
+    }
+
+    // Check if user is the author of the room
+    if (room.author.toString() !== user._id.toString()) {
+      const statusCode = httpStatus.FORBIDDEN;
+      const message = errors.rooms.unauthorized;
+      throw new ApiError(statusCode, message);
+    }
+
+    if (!searchText) {
+      return [];
+    }
+
+    const members = await User.find({
+      _id: { $in: room.members },
+      $or: [
+        { firstname: { $regex: searchText, $options: "i" } },
+        { lastname: { $regex: searchText, $options: "i" } },
+      ],
+    });
+
+    return members;
+  } catch (err) {
+    throw err;
+  }
+};

@@ -3,6 +3,8 @@ const { roomsService, assignemntsService } = require("../../services");
 const scheduleService = require("../../services/system/schedule.service");
 const errors = require("../../config/errors");
 const httpStatus = require("http-status");
+const { clientSchema: userSchema } = require("../../models/user.model");
+const _ = require("lodash");
 
 // A controller function that returns all rooms inside
 module.exports.getAllRooms = async (req, res, next) => {
@@ -400,6 +402,25 @@ module.exports.unpinRoom = async (req, res, next) => {
     const room = await roomsService.unpinRoom(roomId);
 
     res.status(httpStatus.CREATED).json(room);
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports.searchRoomMembers = async (req, res, next) => {
+  try {
+    const user = req.user;
+    const { roomId, searchText } = req.body;
+
+    const members = await roomsService.searchRoomMembers(
+      user,
+      roomId,
+      searchText
+    );
+
+    res
+      .status(httpStatus.OK)
+      .json({ members: members.map((member) => _.pick(member, userSchema)) });
   } catch (err) {
     next(err);
   }
