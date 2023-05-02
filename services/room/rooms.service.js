@@ -129,7 +129,7 @@ module.exports.deleteRoom = async (roomId, user) => {
 module.exports.findRoomById = async (roomId) => {
   try {
     // Transform `roomId` arg to an ObjectId type
-    roomId = new mongoose.Types.ObjectId(roomId);
+    roomId = mongoose.Types.ObjectId(roomId);
 
     // Return room
     return await Room.findById(roomId);

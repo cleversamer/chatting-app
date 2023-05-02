@@ -309,7 +309,7 @@ module.exports.getRoomMessages = async (roomId) => {
     const messages = await Message.aggregate([
       {
         $match: {
-          receiver: new mongoose.Types.ObjectId(roomId),
+          receiver: mongoose.Types.ObjectId(roomId),
         },
       },
       {
