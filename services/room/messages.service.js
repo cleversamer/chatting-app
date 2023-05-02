@@ -309,7 +309,7 @@ module.exports.getRoomMessages = async (roomId) => {
     const messages = await Message.aggregate([
       {
         $match: {
-          receiver: mongoose.Types.ObjectId(roomId),
+          receiver: new mongoose.Types.ObjectId(roomId),
         },
       },
       {
@@ -407,7 +407,7 @@ module.exports.getRoomMessages = async (roomId) => {
 module.exports.deleteMessage = async (user, messageId) => {
   try {
     // Transform `messageId` arg to an MongoDB ObjectId type
-    messageId = mongoose.Types.ObjectId(messageId);
+    messageId = new mongoose.Types.ObjectId(messageId);
 
     // Check if `messageId` arg is a valid ObjectId
     if (!mongoose.isValidObjectId(messageId)) {
@@ -450,7 +450,7 @@ module.exports.deleteMessage = async (user, messageId) => {
 module.exports.viewMessage = async (user, messageId) => {
   try {
     // Transform `messageId` arg to an MongoDB ObjectId type
-    messageId = mongoose.Types.ObjectId(messageId);
+    messageId = new mongoose.Types.ObjectId(messageId);
 
     // Check if `messageId` arg is a valid ObjectId
     if (!mongoose.isValidObjectId(messageId)) {

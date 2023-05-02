@@ -129,7 +129,7 @@ module.exports.deleteRoom = async (roomId, user) => {
 module.exports.findRoomById = async (roomId) => {
   try {
     // Transform `roomId` arg to an ObjectId type
-    roomId = mongoose.Types.ObjectId(roomId);
+    roomId = new mongoose.Types.ObjectId(roomId);
 
     // Return room
     return await Room.findById(roomId);
@@ -319,7 +319,7 @@ module.exports.getRoomMembers = async (user, roomId) => {
 module.exports.getMappedRooms = async (roomIds = []) => {
   // Map `roomIds` arg and transform all its elements
   // to valid MongoId objects
-  roomIds = roomIds.map((i) => mongoose.Types.ObjectId(i));
+  roomIds = roomIds.map((i) => new mongoose.Types.ObjectId(i));
 
   try {
     // Returns any room that matches one of the given ids

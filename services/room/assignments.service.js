@@ -79,7 +79,7 @@ module.exports.getAssignment = async (assignmentId) => {
   try {
     // Get assignment by id
     let result = await Assignment.aggregate([
-      { $match: { _id: mongoose.Types.ObjectId(assignmentId) } },
+      { $match: { _id: new mongoose.Types.ObjectId(assignmentId) } },
       {
         $lookup: {
           from: "rooms",
@@ -134,7 +134,7 @@ module.exports.getRoomAssignments = async (roomId) => {
 
     // Fins assignments and sort them from latest to oldest
     let assignments = await Assignment.find({
-      room: mongoose.Types.ObjectId(roomId),
+      room: new mongoose.Types.ObjectId(roomId),
     }).sort({ _id: -1 });
 
     // Map assignments
@@ -433,7 +433,7 @@ module.exports.getMySubmissionStatus = async (user, assignmentId) => {
     // Mongoose query criteria
     const criteria = {
       authorId: user._id,
-      assignmentId: mongoose.Types.ObjectId(assignmentId),
+      assignmentId: new mongoose.Types.ObjectId(assignmentId),
     };
 
     // Find user's submission to the specified assignment
@@ -448,7 +448,7 @@ module.exports.getMySubmissionStatus = async (user, assignmentId) => {
 
 module.exports.getRoomsActiveAssignments = async (roomsList = []) => {
   try {
-    roomsList = roomsList.map((room) => mongoose.Types.ObjectId(room));
+    roomsList = roomsList.map((room) => new mongoose.Types.ObjectId(room));
 
     let assignments = await Assignment.aggregate([
       { $match: { room: { $in: roomsList } } },
