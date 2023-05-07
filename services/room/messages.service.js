@@ -120,7 +120,10 @@ const createPollMessage = async (
       isReply: isReply && !isPinned,
       repliedMessage: isReplyMssg ? repliedMessageId : null,
       isPinned,
-      options,
+      options: options.map((opt) => ({
+        title: opt,
+        votes: 0,
+      })),
     });
 
     // Return saved message

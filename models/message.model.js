@@ -75,11 +75,17 @@ const messageSchema = new mongoose.Schema(
     // Options of the poll (in case of the type of this message is a poll)
     options: [
       {
-        type: String,
-        minLength: 1,
-        maxLength: 256,
-        required: true,
-        trim: true,
+        title: {
+          type: String,
+          minLength: 1,
+          maxLength: 256,
+          required: true,
+          trim: true,
+        },
+        votes: {
+          type: Number,
+          default: 0,
+        },
       },
     ],
     // Array of voters
@@ -129,12 +135,12 @@ messageSchema.methods.addVote = function (userId, optionIndex) {
       (v) => v.userId.toString() === userId.toString()
     );
 
-    // Check if the user has a prev vote
     if (userPrevVoteIndex >= 0) {
-      this.votes[userPrevVoteIndex].optionIndex = optionIndex;
-    } else {
-      this.votes.unshift({ userId, optionIndex });
+      return false;
     }
+
+    this.votes.unshift({ userId, optionIndex });
+    this.options[optionIndex].votes = this.options[optionIndex].votes + 1;
 
     return true;
   } catch (err) {
