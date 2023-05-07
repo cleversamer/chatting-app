@@ -1094,16 +1094,16 @@ module.exports.unpinRoom = async (roomId) => {
 
 module.exports.searchRoomMembers = async (user, roomId, searchText) => {
   try {
-    if (!searchText) {
-      return [];
-    }
-
     const members = await this.getRoomMembers(user, roomId);
+
+    if (!searchText) {
+      return members;
+    }
 
     return members.filter(
       (member) =>
-        member.firstName.includes(searchText) ||
-        member.lastName.includes(searchText)
+        member.firstname.includes(searchText) ||
+        member.lastname.includes(searchText)
     );
   } catch (err) {
     throw err;
