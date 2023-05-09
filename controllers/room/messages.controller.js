@@ -59,8 +59,13 @@ module.exports.createVote = async (req, res, next) => {
       optionIndex
     );
 
+    const response = {
+      message: _.pick(message, CLIENT_SCHEMA),
+      userId: user._id,
+    };
+
     // Send the data back to the client.
-    res.status(httpStatus.OK).json(_.pick(message, CLIENT_SCHEMA));
+    res.status(httpStatus.OK).json(response);
   } catch (err) {
     // Pass the execution to the next middleware function
     // with the error object.
