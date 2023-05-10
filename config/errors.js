@@ -212,6 +212,10 @@ const message = Object.freeze({
     en: "This is not a poll message",
     ar: "هذه ليست رسالة توصيت",
   },
+  alreadyVoted: {
+    en: "You have already added a vote for this poll",
+    ar: "لقد قمت بالتوصيت مسبقًا",
+  },
 });
 
 // Stores errors in assignments middleware

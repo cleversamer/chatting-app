@@ -264,6 +264,8 @@ module.exports.createVote = async (user, messageId, optionIndex) => {
       throw new ApiError(statusCode, message);
     }
 
+    messageId = new mongoose.Types.ObjectId(messageId);
+
     // Check if message exists
     const message = await Message.findById(messageId);
     if (!message) {
@@ -291,7 +293,7 @@ module.exports.createVote = async (user, messageId, optionIndex) => {
     const isAdded = message.addVote(user._id, optionIndex);
     if (!isAdded) {
       const statusCode = httpStatus.BAD_REQUEST;
-      const message = errors.system.internal;
+      const message = errors.message.alreadyVoted;
       throw new ApiError(statusCode, message);
     }
 
