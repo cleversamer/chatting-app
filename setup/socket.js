@@ -31,8 +31,8 @@ module.exports = (server) => {
       socket.broadcast.to(roomId).emit("stop typing", user);
     });
 
-    socket.on("vote poll", (roomId, message) => {
-      socket.broadcast.to(roomId).emit("poll voted", message);
+    socket.on("vote poll", (roomId, message, userId) => {
+      socket.broadcast.to(roomId).emit("poll voted", message, userId);
     });
 
     socket.on("new message", (roomId, message) => {
