@@ -61,7 +61,11 @@ module.exports.createVote = async (req, res, next) => {
 
     const response = {
       message: _.pick(message, CLIENT_SCHEMA),
-      userId: user._id,
+      user: {
+        _id: user._id,
+        firstname: user.firstname,
+        lastname: user.lastname,
+      },
     };
 
     // Send the data back to the client.
