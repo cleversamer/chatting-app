@@ -260,6 +260,7 @@ module.exports.getMyAssignments = async (user) => {
   try {
     let assignments = await Assignment.aggregate([
       { $match: { room: { $in: user.createdRooms } } },
+      { $sort: { _id: -1 } },
       {
         $lookup: {
           from: "rooms",
