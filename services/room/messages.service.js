@@ -307,8 +307,14 @@ module.exports.createVote = async (user, messageId, optionIndex) => {
 };
 
 // A service function that returns all messages in a room
-module.exports.getRoomMessages = async (roomId) => {
+module.exports.getRoomMessages = async (user, roomId) => {
   try {
+    // Mark all room messages as seen by the user
+    await Message.updateMany(
+      { receiver: new mongoose.Types.ObjectId(roomId) },
+      { $addToSet: { viewers: user._id } }
+    );
+
     // Find all messages for a room
     // Return messages
     const messages = await Message.aggregate([
@@ -452,32 +458,32 @@ module.exports.deleteMessage = async (user, messageId) => {
 };
 
 // A service function that deletes a message
-module.exports.viewMessage = async (user, messageId) => {
-  try {
-    // Transform `messageId` arg to an MongoDB ObjectId type
-    messageId = new mongoose.Types.ObjectId(messageId);
+// module.exports.viewMessage = async (user, messageId) => {
+//   try {
+//     // Transform `messageId` arg to an MongoDB ObjectId type
+//     messageId = new mongoose.Types.ObjectId(messageId);
 
-    // Check if `messageId` arg is a valid ObjectId
-    if (!mongoose.isValidObjectId(messageId)) {
-      const statusCode = httpStatus.BAD_REQUEST;
-      const message = errors.message.invalidId;
-      throw new ApiError(statusCode, message);
-    }
+//     // Check if `messageId` arg is a valid ObjectId
+//     if (!mongoose.isValidObjectId(messageId)) {
+//       const statusCode = httpStatus.BAD_REQUEST;
+//       const message = errors.message.invalidId;
+//       throw new ApiError(statusCode, message);
+//     }
 
-    // Check if message exists
-    const message = await Message.findByIdAndUpdate(
-      messageId,
-      { $addToSet: { viewers: user._id } },
-      { new: true }
-    );
-    if (!message) {
-      const statusCode = httpStatus.NOT_FOUND;
-      const message = errors.message.notFound;
-      throw new ApiError(statusCode, message);
-    }
+//     // Check if message exists
+//     const message = await Message.findByIdAndUpdate(
+//       messageId,
+//       { $addToSet: { viewers: user._id } },
+//       { new: true }
+//     );
+//     if (!message) {
+//       const statusCode = httpStatus.NOT_FOUND;
+//       const message = errors.message.notFound;
+//       throw new ApiError(statusCode, message);
+//     }
 
-    return message;
-  } catch (err) {
-    throw err;
-  }
-};
+//     return message;
+//   } catch (err) {
+//     throw err;
+//   }
+// };

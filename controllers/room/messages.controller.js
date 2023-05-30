@@ -82,10 +82,11 @@ module.exports.createVote = async (req, res, next) => {
 // to the room with the specified id
 module.exports.getRoomMessages = async (req, res, next) => {
   try {
+    const user = req.user;
     const roomId = req.params.id;
 
     // Asking service to get all messages that belong to the given room
-    const messages = await messagesService.getRoomMessages(roomId);
+    const messages = await messagesService.getRoomMessages(user, roomId);
 
     // Send the data back to the client.
     res.status(httpStatus.OK).json({ messages });
@@ -121,21 +122,21 @@ module.exports.deleteMessage = async (req, res, next) => {
   }
 };
 
-// A controller function that deletes a message
-module.exports.viewMessage = async (req, res, next) => {
-  try {
-    const user = req.user;
-    const { messageId } = req.body;
+// // A controller function that deletes a message
+// module.exports.viewMessage = async (req, res, next) => {
+//   try {
+//     const user = req.user;
+//     const { messageId } = req.body;
 
-    // Asking service to delete a message
-    const message = await messagesService.viewMessage(user, messageId);
+//     // Asking service to delete a message
+//     const message = await messagesService.viewMessage(user, messageId);
 
-    // Send the data back to the client.
-    res.status(httpStatus.OK).json(message);
-  } catch (err) {
-    // Pass the execution to the next middleware function
-    // with the error object.
-    // The error often comes from used services.
-    next(err);
-  }
-};
+//     // Send the data back to the client.
+//     res.status(httpStatus.OK).json(message);
+//   } catch (err) {
+//     // Pass the execution to the next middleware function
+//     // with the error object.
+//     // The error often comes from used services.
+//     next(err);
+//   }
+// };

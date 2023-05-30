@@ -27,10 +27,10 @@ router.delete(
   messagesController.deleteMessage
 );
 
-router.post(
-  "/view-message",
-  auth("readOwn", "message"),
-  messagesController.viewMessage
-);
+// router.post(
+//   "/view-message",
+//   auth("readOwn", "message"),
+//   messagesController.viewMessage
+// );
 
 module.exports = router;
