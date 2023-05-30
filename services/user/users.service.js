@@ -295,3 +295,16 @@ module.exports.getMyAssignments = async (user) => {
     throw err;
   }
 };
+
+module.exports.searchTeachers = async (searchTerm) => {
+  try {
+    return await User.find({
+      $or: [
+        { firstname: { $regex: RegExp(searchTerm, "i") } },
+        { lastname: { $regex: RegExp(searchTerm, "i") } },
+      ],
+    });
+  } catch (err) {
+    throw err;
+  }
+};

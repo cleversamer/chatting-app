@@ -81,4 +81,10 @@ router.get(
   usersController.exportUsersToExcel
 );
 
+router.get(
+  "/teachers/search",
+  auth("readAny", "user"),
+  usersController.searchTeachers
+);
+
 module.exports = router;
