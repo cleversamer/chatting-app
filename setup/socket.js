@@ -79,6 +79,10 @@ module.exports = (server) => {
       socket.broadcast.to(roomId).emit("room deleted", roomId);
     });
 
+    socket.on("new assignment", (roomId, assignment) => {
+      socket.broadcast.to(roomId).emit("assignment added", assignment);
+    });
+
     socket.on("send notification", (userIds = [], roomId) => {
       userIds.forEach((userId) => {
         socket.broadcast.to(userId).emit("notification received", roomId);
