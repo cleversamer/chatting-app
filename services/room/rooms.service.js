@@ -404,9 +404,37 @@ module.exports.getAllPublicRooms = async (skip) => {
     // Transform `skip` arg to integer type
     skip = parseInt(skip);
 
+    const pinnedRooms = await Room.aggregate([
+      { $match: { isPinned: true } },
+      { $sort: { _id: -1 } },
+      {
+        $lookup: {
+          from: "users",
+          localField: "author",
+          foreignField: "_id",
+          as: "author",
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          isPinned: 1,
+          showName: 1,
+          members: { $size: "$members" },
+          status: 1,
+          author: {
+            _id: 1,
+            firstname: 1,
+            lastname: 1,
+          },
+        },
+      },
+    ]);
+
     // Return 10 rooms in descending order
-    return await Room.aggregate([
-      { $match: { status: "public" } },
+    const allRooms = await Room.aggregate([
+      { $match: { status: "public", isPinned: false } },
       { $skip: skip },
       { $sort: { _id: -1 } },
       { $limit: 10 },
@@ -452,6 +480,18 @@ module.exports.getAllPublicRooms = async (skip) => {
         },
       },
     ]);
+
+    const resultRooms = [...pinnedRooms, ...allRooms];
+
+    // Check if there are no rooms
+    if (!resultRooms || !resultRooms.length) {
+      const statusCode = httpStatus.NOT_FOUND;
+      const message = errors.rooms.noRooms;
+      throw new ApiError(statusCode, message);
+    }
+
+    // Return rooms
+    return resultRooms;
   } catch (err) {
     throw err;
   }
