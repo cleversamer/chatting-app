@@ -501,3 +501,19 @@ module.exports.searchTeachers = async (req, res, next) => {
     next(err);
   }
 };
+
+module.exports.searchStudents = async (req, res, next) => {
+  try {
+    const { searchTerm } = req.query;
+
+    const teachers = await usersService.searchStudents(searchTerm);
+
+    const response = {
+      teachers: teachers.map((teacher) => _.pick(teacher, clientSchema)),
+    };
+
+    res.status(httpStatus.OK).json(response);
+  } catch (err) {
+    next(err);
+  }
+};

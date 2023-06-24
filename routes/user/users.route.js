@@ -87,4 +87,10 @@ router.get(
   usersController.searchTeachers
 );
 
+router.get(
+  "/students/search",
+  auth("readAny", "user"),
+  usersController.searchStudents
+);
+
 module.exports = router;
