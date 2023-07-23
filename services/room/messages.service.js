@@ -369,6 +369,7 @@ module.exports.getRoomMessages = async (user, roomId) => {
           votes: 1,
           voters: {
             _id: 1,
+            avatarUrl: 1,
             firstname: 1,
             lastname: 1,
           },
@@ -380,6 +381,7 @@ module.exports.getRoomMessages = async (user, roomId) => {
           },
           viewers: {
             _id: 1,
+            avatarUrl: 1,
             firstname: 1,
             lastname: 1,
           },

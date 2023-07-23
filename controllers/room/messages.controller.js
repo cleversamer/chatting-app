@@ -63,6 +63,7 @@ module.exports.createVote = async (req, res, next) => {
       message: _.pick(message, CLIENT_SCHEMA),
       user: {
         _id: user._id,
+        avatarUrl: user.avatarUrl,
         firstname: user.firstname,
         lastname: user.lastname,
       },
