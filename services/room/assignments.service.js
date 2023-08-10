@@ -517,11 +517,11 @@ module.exports.deleteAssignment = async (assignmentId) => {
       });
 
       // Delete submission
-      await submission.delete();
+      await submission.deleteOne();
     });
 
     // Delete assignment
-    await assignment.delete();
+    await assignment.deleteOne();
   } catch (err) {
     throw err;
   }

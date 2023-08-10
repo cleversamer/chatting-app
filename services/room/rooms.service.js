@@ -693,7 +693,7 @@ module.exports.deleteRoomMessages = async (user, roomId) => {
         await localStorage.deleteFile(message.file.url);
       }
 
-      await message.delete();
+      await message.deleteOne();
     });
 
     // Get the room
