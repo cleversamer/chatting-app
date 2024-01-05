@@ -2,7 +2,7 @@ repo_name: cleversamerr/chatting-app
 report_id: 89f200a9935586ea2e1b57cf447a7f0e
 version: 0.1
 repo_type: Public
-timestamp: '2023-12-24T12:42:48+00:00'
+timestamp: '2024-01-05T08:16:15+00:00'
 requested_by: cleversamerr
 provider: github
 branch: main
@@ -17,6 +17,7 @@ tools:
   category: Languages & Frameworks
   sub_category: Languages
   image_url: https://img.stackshare.io/service/1209/javascript.jpeg
+  detection_source_url: https://github.com/cleversamerr/chatting-app
   detection_source: Repo Metadata
 - name: ExpressJS
   description: Sinatra inspired web development framework for node.js -- insanely
@@ -41,6 +42,7 @@ tools:
   category: Application Hosting
   sub_category: Realtime Backend / API
   image_url: https://img.stackshare.io/service/116/cZLxNFZS.jpg
+  detection_source_url: https://github.com/cleversamerr/chatting-app/blob/main/package.json
   detection_source: package.json
   last_updated_by: Samer A
   last_updated_on: 2022-11-29 12:49:39.000000000 Z
@@ -80,6 +82,7 @@ tools:
   category: Build, Test, Deploy
   sub_category: Server Configuration and Automation
   image_url: https://img.stackshare.io/service/8067/default_90dcb1286af7685c68df319c764b80704df1155b.png
+  detection_source_url: https://github.com/cleversamerr/chatting-app/blob/main/package.json
   detection_source: package.json
   last_updated_by: Samer A
   last_updated_on: 2022-08-27 08:45:20.000000000 Z
@@ -91,6 +94,7 @@ tools:
   category: Build, Test, Deploy
   sub_category: Version Control System
   image_url: https://img.stackshare.io/service/1046/git.png
+  detection_source_url: https://github.com/cleversamerr/chatting-app
   detection_source: Repo Metadata
 - name: nodemon
   description: A simple monitor script for use during development of a node.js app
@@ -114,6 +118,7 @@ tools:
   category: Build, Test, Deploy
   sub_category: Front End Package Manager
   image_url: https://img.stackshare.io/service/1120/lejvzrnlpb308aftn31u.png
+  detection_source_url: https://github.com/cleversamerr/chatting-app/blob/main/package.json
   detection_source: package.json
   last_updated_by: Samer A
   last_updated_on: 2022-08-27 08:45:20.000000000 Z
@@ -138,6 +143,7 @@ tools:
   category: Communications
   sub_category: Transactional Email
   image_url: https://img.stackshare.io/service/2862/qr2-jCLr.jpg
+  detection_source_url: https://github.com/cleversamerr/chatting-app/blob/main/package.json
   detection_source: package.json
   last_updated_by: Samer A
   last_updated_on: 2022-08-27 11:00:05.000000000 Z
@@ -150,6 +156,7 @@ tools:
   category: Application Utilities
   sub_category: User Management and Authentication
   image_url: https://ucarecdn.com/8f3cac0e-b146-4f0f-878c-680a6671d804/
+  detection_source_url: https://github.com/cleversamerr/chatting-app/blob/main/package.json
   detection_source: package.json
   last_updated_by: Samer A
   last_updated_on: 2022-08-27 08:45:20.000000000 Z
@@ -163,6 +170,7 @@ tools:
   category: Communications
   sub_category: Open Source Email Templates
   image_url: https://img.stackshare.io/no-img-open-source.png
+  detection_source_url: https://github.com/cleversamerr/chatting-app/blob/main/package.json
   detection_source: package.json
   last_updated_by: Samer A
   last_updated_on: 2022-08-27 11:00:05.000000000 Z
